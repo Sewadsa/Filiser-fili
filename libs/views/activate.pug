@@ -1,0 +1,13 @@
+extend main
+block content
+	#activate_page.box
+		#bo
+			if data.error && data.code==1
+				.tit #{data.msg}
+			else if data.error && data.code==2
+				.tit Wystąpił błąd.
+			else 
+				.tit Konto pomyślnie aktywowane
+				.tit2 Możesz się teraz zalogować.
+
+			

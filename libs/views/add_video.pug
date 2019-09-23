@@ -1,0 +1,45 @@
+extend main
+block content
+	.container
+		#add_video.box
+			h2.pageTitle Dodajesz 
+				span.green Filmik
+
+			#left_side
+				.info(style="margin-bottom: 15px; line-height: 18px;") Wklej link do Youtube i wybierz kategorie.
+				.err
+				form#addVideoForm(style="margin-top: 15px;")
+					fieldset
+						.line
+							label.lab Link do youtube:
+							input.input(type="text" name="link" placeholder="Pole wymagane" tabindex="2" id="yt_link")
+
+						.line
+							label.lab Tytuł (jeśli inny niż na youtube):
+							input.input(type="text" name="title" placeholder="Pole opcjonalne" tabindex="3")
+								
+
+						.line
+							label.lab Kategorie:
+							select.multi_select(name="genres" multiple tabindex="4")
+								each item in VIDEO_GENRES_LIST
+									option(value=item) #{item}
+							label.infos Maksymalnie 3 kategorie. Zaznacz trzymając CTRL.
+
+						.line
+							label.lab Opis:
+							textarea.area(name="desc" placeholder="Pole wymagane" tabindex="5" style="width: 345px;")
+
+						.bo
+							span(class="cssload-loader")
+								span(class="cssload-loader-inner")
+							input.btn(type="submit" value="Dodaj")
+
+
+			#right_side
+
+			.clear
+
+
+
+		

@@ -1,0 +1,39 @@
+extend main
+block content
+	#edit_poster_page.box
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.4.1/cropper.min.js")
+		link(rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.4.1/cropper.min.css")
+		style.
+			img#image { max-width: 100%; }
+		.container
+			section
+				h2.sectionTitle Edytuj okładkę
+				.clear
+
+				.sectionBox
+					#first
+						label.btn(for="file_input" style="margin-top: 15px; float:left;") Wybierz okładkę
+						.clear
+						input.file_input(type="file" name="file_input" id="file_input" hidden)
+
+					form#editPosterForm(style="display: none; margin-top: 25px;")
+						fieldset
+							input(type="hidden" name="_id" value=_id)
+							input(type="hidden" name="type" value=type)
+							input(type="hidden" name="data" value="" id="editPosterData")
+
+							div(style="width: 770px; height: 770px; float: left; overflow: hidden;")
+								img(id="image-to-crop" src="" style="width: 770px; height: 770px;")
+
+							div(id="prev" style="float: left;  width: 220px; height: 220px; overflow: hidden;")
+							.err 
+
+							input.but(type="submit" value="Zatwierdź" style="float: left; margin-left: 15px; margin-top: 15px;")
+							.clear
+
+					
+
+
+
+
+

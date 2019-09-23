@@ -1,0 +1,56 @@
+#modalBG
+	#login_page
+		.form_step
+			.tit Zaloguj się do Fili.cc
+			.err 
+			form#loginUserForm
+				fieldset
+					input.input(type="text" name="username" placeholder="Nazwa użytkownika lub e-mail" tabindex="2" style="margin-top: 15px;")
+					input.input(type="password" name="pass" placeholder="Hasło" tabindex="3" style="margin-top: 20px;")
+					.checker(style="margin-top: 20px; margin-left: 3px;")
+						input(type="checkbox" id="checker" class="checkbox_s" name="remember")
+						label.checkbox(for="checker")
+							i.fa(class="fa-check")
+					.inf(style="margin-top: 22px;") Zapamiętaj mnie.
+					.clear
+					#recaptchaLogin(style="margin-top: 20px;")
+					.bo
+						span(class="cssload-loader")
+							span(class="cssload-loader-inner")
+						input.btn(type="submit" value="Zaloguj się" tabindex="4" style="margin-top: 20px;")
+					.info2
+						.greenLink(style="cursor:pointer;" class="registerBtn") Utwórz konto
+					.info3
+						.greenLink(style="cursor:pointer;" class="remindBtn") Zapomniałeś hasła?
+
+					if login_captcha_required
+						script.
+							MAIN.loginCaptchaObj = grecaptcha.render('recaptchaLogin', {
+								sitekey: '!{RECAPTCHA_SITE_KEY}',
+								theme: 'dark',
+								size: '!{is_mobile?'compact':'normal'}',
+								'expired-callback': function(){
+									grecaptcha.reset(MAIN.loginCaptchaObj);
+								},
+								'tabindex' : 6,
+							});
+					else
+						script.
+							var interval = setInterval(function(){
+								var value = document.getElementById('login_page').getElementsByClassName('err')[0].innerHTML;
+								if(value=='Wypełnij recaptcha.'){
+									clearInterval(interval);
+									MAIN.loginCaptchaObj = grecaptcha.render('recaptchaLogin', {
+										sitekey: '!{RECAPTCHA_SITE_KEY}',
+										theme: 'dark',
+										size: '!{is_mobile?'compact':'normal'}',
+										'expired-callback': function(){
+											grecaptcha.reset(MAIN.loginCaptchaObj);
+										},
+										'tabindex' : 6,
+									});
+								}
+							}, 1000);
+							
+							
+			

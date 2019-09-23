@@ -1,0 +1,69 @@
+NUM_OF_PROCESS = 2;
+
+HOST = IP = '';
+HOSTNAME = '';
+IMG_HOSTNAME = '';
+PORT = 80;
+PORT_SSL = 443;
+SECRET = '';
+DATABASE = {
+	url: 'mongodb://[LOGIN]:[PASSWORD]@127.0.0.1:17027/filiser',
+	options: { useNewUrlParser: true, auto_reconnect: true, keepAlive: true, connectTimeoutMS: 5000, useCreateIndex: true, useUnifiedTopology: true },
+}
+SMTP = {
+	host: '',
+	user: '',
+	pass: ''
+}
+
+
+
+VERSION = '2.0.17';
+
+//process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+BASE_URL = 'https://'+HOSTNAME;
+if(PORT!=80){
+	BASE_URL+=+':'+PORT;
+}
+
+SENDGRID_API_KEY = '';
+
+FACEBOOK_PAGE_URL = 'https://www.facebook.com/filiserpl';
+
+DEFAULT_PAGE_DESC = 'Lubisz oglądać wideo przez internet? To nasz serwis został stworzony właśnie dla Ciebie! Fili.cc to katalog linków do filmów i seriali online. Strona jest całkowicie darmowa i dostępna dla wszystkich.';
+DEFAULT_PAGE_KEYWORDS = 'filmy,seriale,seriale online,filmy online,vod,katalog,darmowe,linki,filmy za darmo,seriale za darmo,premiery, premiery filmowe';
+
+INFAKT_API_KEY = '';
+
+TPAY_ID = 28425;
+TPAY_WYN_URL = BASE_URL+'/platnosc_wyn';
+TPAY_POW_URL = BASE_URL+'/?pay=true';
+TPAY_POW_URL_BLAD = BASE_URL+'/?pay=false';
+TPAY_SECURE_CODE = '';
+
+P24_ID = 0;
+P24_WYN_URL = BASE_URL+'/platnosc_wyn';
+P24_POW_URL = BASE_URL+'/?pay=true';
+P24_CRC = '';
+
+RUSHP_ID = 79;
+RUSHP_HASH = '';
+RUSHP_WYN_URL = BASE_URL+'/platnosc_wyn';
+RUSHP_POW_URL = BASE_URL+'/';
+RUSHP_HASH_DIRECT_BILLING = ''
+RUSHP_LOGIN_DIRECT_BILLING= 'fili.cc'
+RUSHP_PASS_DIRECT_BILLING= ''
+RUSHP_ID_DIRECT_BILLING = 0;
+
+RECAPTCHA_SITE_KEY = '';
+RECAPTCHA_SITE_SECRET = '';
+
+SHOWMAX_ADS_ENABLED = true;
+SHOWMAX_DEFAULT_AD_URL = '';
+SHOWMAX_DEFAULT_AD_750x_URL = '';
+SHOWMAX_DEFAULT_AD_320x_URL = '';
+
+PREMIUM_STOP = false;
+
+MAX_WACHING_USERS = 2;

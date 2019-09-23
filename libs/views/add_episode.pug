@@ -1,0 +1,18 @@
+#modalBG
+	#add_episode_page(style="margin-top: 128px;")
+		.form_step
+			.tit Dodaj odcinek
+			.err 
+			form#addEpisodeForm
+				fieldset
+					input.input(type="text" name="title" placeholder="Tytuł odcinka" tabindex="2" autofocus style="margin-top: 15px;")
+					span.tit3(style="margin-top: 7px;") To pole możesz pozostawić puste,<br>jeśli serial nie ma nazw odcinków.
+					input.input(type="text" name="season_num" placeholder="Sezon (liczba)" tabindex="3" style="margin-top: 20px;")
+					input.input(type="text" name="episode_num" placeholder="Odcinek (liczba)" tabindex="4" style="margin-top: 20px;")
+					input(type="hidden" name="code" value=""+code)
+					span.tit3(style="margin-top: 7px;") Odcinek jest łączony?<br>Wpisz numery odcinków po myślniku np. 1-2
+					.bo
+						span(class="cssload-loader")
+							span(class="cssload-loader-inner")
+						input.btn(type="submit" value="Dodaj" tabindex="4" style="margin-top: 20px;")
+			

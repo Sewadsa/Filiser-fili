@@ -1,0 +1,120 @@
+extend main
+block content
+	.container
+		#user_page.box
+			if is_mobile
+				if !(user_status.code==3 && user_status.data.premium)
+					div(style="width: 100%; margin-bottom: 20px;" class="ad ads reklama")
+						center
+							div(class="spolecznoscinet" id="spolecznosci-3541")
+
+				section.profile_bg
+					.avatar
+						img(src=(user.avatar==''?IMG_HOSTNAME+'/assets/img/default_avatar.jpg':IMG_HOSTNAME+user.avatar) width="80" height="80" alt="Avatar")
+					.block
+						h2.name #{user.username}
+						if user.last_activity
+							.tim Ostatnio: #{MOMENT(user.last_activity).fromNow()}
+						else
+							.tim Ostatnio: Brak danych
+						//-.type(class=(user.type=='ADMIN'?'adm':user.type=='MODERATOR'?'mod':'')) #{user.type=='ADMIN'?'Administrator':user.type=='MODERATOR'?'Moderator':'Użytkownik'}
+						if PREMIUM && user.premium_expire
+							.type #{MOMENT(user.premium_expire).isAfter(MOMENT())?'Konto premium':'Konto podstawowe'} 
+						else 
+							.type Konto podstawowe
+				if user_status.code==3
+						if user_status.data.username==user.username
+							section.change_av_bg
+								h2.sec_title Zamień zdjęcie profilowe
+								.t Zmiana nie jest dostępna na twoim urządzeniu. Zaloguj się na komputerze.
+
+
+				section.stats_bg
+					span.t Dodane filmy: #{movies_count}
+					span.t Dodane seriale: #{series_count}
+					span.t Dodane odcinki: #{episodes_count}
+					span.t Dodane linki: #{local_restriction?'0':links_count}
+
+				if movies.length>0
+					section.movies_bg
+						h2.sec_title Ostatnio dodane filmy
+
+						ul
+							each item in movies
+								li
+									a(href="/film/"+item.url+'/'+item.num)
+										.poster
+											img(src=IMG_HOSTNAME+item.poster width="132" height="132" alt=(item.title!=item.title_org?item.title+' / '+item.title_org:item.title) title=(item.title!=item.title_org?item.title+' / '+item.title_org:item.title))
+
+							.clear
+				if series.length>0
+					section.series_bg
+						h2.sec_title Ostatnio dodane seriale
+
+						ul
+							each item in series
+								li
+									a(href="/serial/"+item.url+'/'+item.num)
+										.poster
+											img(src=IMG_HOSTNAME+item.poster width="132" height="132" alt=(item.title!=item.title_org?item.title+' / '+item.title_org:item.title) title=(item.title!=item.title_org?item.title+' / '+item.title_org:item.title))
+
+							.clear
+
+			else
+				if !(user_status.code==3 && user_status.data.premium)
+					div(style="width: 100%; margin-bottom: 20px;" class="ad ads reklama")
+						center
+							div(class="spolecznoscinet" id="spolecznosci-3535")
+
+				section.profile_bg
+					.avatar
+						img(src=(user.avatar==''?IMG_HOSTNAME+'/assets/img/default_avatar.jpg':IMG_HOSTNAME+user.avatar) width="94" height="94" alt="Avatar")
+					h2.name #{user.username}
+					if user.last_activity
+						.tim Ostatnio widziany: #{MOMENT(user.last_activity).fromNow()}
+					else
+						.tim Ostatnio widziany: Brak danych
+					//-.type(class=(user.type=='ADMIN'?'adm':user.type=='MODERATOR'?'mod':'')) #{user.type=='ADMIN'?'Administrator':user.type=='MODERATOR'?'Moderator':'Użytkownik'}
+					if PREMIUM && user.premium_expire
+						.type #{MOMENT(user.premium_expire).isAfter(MOMENT())?'Konto premium':'Konto podstawowe'} 
+					else 
+						.type Konto podstawowe
+				if user_status.code==3
+						if user_status.data.username==user.username
+							section.change_av_bg
+								h2.sec_title Zamień zdjęcie profilowe
+								.t Obrazek powinien mieć wymiary co najmniej 200x200 px. Obsługiwane rozszerzenia: png, jpg, gif. Maksymalny rozmiar pliku 1MB.
+								label.btn(for="aw_file_input") Wybierz plik
+								input(class="aw_file_input" type="file" name="aw_file_input" id="aw_file_input" hidden)
+
+
+				section.stats_bg
+					span.t Dodane filmy: #{movies_count}
+					span.t Dodane seriale: #{series_count}
+					span.t Dodane odcinki: #{episodes_count}
+					span.t Dodane linki: #{local_restriction?'0':links_count}
+
+				if movies.length>0
+					section.movies_bg
+						h2.sec_title Ostatnio dodane filmy
+
+						ul
+							each item in movies
+								li
+									a(href="/film/"+item.url+'/'+item.num)
+										.poster
+											img(src=IMG_HOSTNAME+item.poster width="132" height="132" alt=(item.title!=item.title_org?item.title+' / '+item.title_org:item.title) title=(item.title!=item.title_org?item.title+' / '+item.title_org:item.title))
+
+							.clear
+				if series.length>0
+					section.series_bg
+						h2.sec_title Ostatnio dodane seriale
+
+						ul
+							each item in series
+								li
+									a(href="/serial/"+item.url+'/'+item.num)
+										.poster
+											img(src=IMG_HOSTNAME+item.poster width="132" height="132" alt=(item.title!=item.title_org?item.title+' / '+item.title_org:item.title) title=(item.title!=item.title_org?item.title+' / '+item.title_org:item.title))
+
+							.clear

@@ -1,0 +1,12 @@
+doctype
+html(lang="pl")
+	head
+		meta(charset="utf-8")
+		meta(http-equiv="X-UA-Compatible" content="IE=edge")
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js")
+	body
+		script.
+			var socket = io('wss://test.fili.cc:3000');
+			socket.on('connect', function(){ console.log('connect'); });
+			socket.on('event', function(data){ console.log(data); });
+			socket.on('disconnect', function(){ console.log('disconnect'); });

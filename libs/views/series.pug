@@ -1,0 +1,281 @@
+extend main
+block content
+	- if(user_status.code==3){
+	- 	var isOwnSeries = String(series.user._id) == String(user_status.data._id);
+	- 	var isModAdmin = user_status.data.type == "ADMIN" || user_status.data.type == "MODERATOR"
+	- 	}
+
+	if is_mobile
+		#series_page.box(data-code=""+series._id)
+			.container
+				if !(user_status.code==3 && user_status.data.premium)
+					div(style="width: 100%; margin-bottom: 20px;" class="ad ads reklama")
+						center
+							div(class="spolecznoscinet" id="spolecznosci-3541")
+
+
+				img#poster(src=IMG_HOSTNAME+series.poster width="53" height="53" alt="Okładka" title="Okładka do Serialu")
+				h2.title(title=series.title) !{series.title}
+				if series.title!=series.title_org || isModAdmin
+					h3.title_org(title=series.title_org) !{series.title_org}
+				.clear
+
+				.favBtn(style="margin-top: 10px;" class=(user_status.code!=3?'loginBtn':'setFavBtn') selected=(isSeriesFav?'':null))
+					i(class="fa fa-heart-o" aria-hidden="true" title="Dodaj do ulubionych")
+					i(class="fa fa-heart" aria-hidden="true" title="Usuń z ulubionych")
+					.info Dodaj do ulubionych
+				.clear
+
+				//- TODO: implement this feature in logix
+				//-if series.seasons.length > 1
+				//-	#fast-links
+				//-		.selectLink Polecane odcinki:
+				//-		a.p_btn(href="#") s01e01
+				//-		a.p_btn(href="#") Najnowszy s14e21
+				//-		a.p_btn(href="#") Ostatnio obejrzany s13e02
+				//-		a.p_btn(href="#") Ostatni sezon s14
+				//-		.clear
+
+				- var genres = '';
+				- for (var i = 0, len = series.genres.length; i < len; i++) {
+				-	var uppered = series.genres[i].charAt(0).toUpperCase() + series.genres[i].slice(1);
+				- 	if(i==0) genres+= uppered;
+				- 	else genres+= ', '+uppered;
+				- }	
+
+				span#genres-date Premiera: #{series.year}, #{genres}
+
+				section#des
+					h2#sub_title Opis serialu:
+					p#desc #{series.desc.replace(/\u00a0/g, " ")}
+
+				#seasons_list
+					if series.seasons.length==0
+						.no_data Brak odcinków. 
+					else
+						- var seasons = series.seasons;
+						- var leng = seasons.length;
+						if(leng>8)
+							.selectSeason Wybierz sezon:
+						#btns
+							- var isUsedFirst = false;
+							- var style = '';
+							- var shortSeason = false;
+							- var fullshortSeason = false;
+							- if(leng>8){ style+='padding: 0 10px;'; shortSeason = true; }
+							- if(leng>19) fullshortSeason = true;
+							- if(leng>22){ style+='padding: 0 4px;'; }
+							- if(leng>33){ style+='padding: 0 3px;font-size:12px;margin-left:1px'; }
+
+							- for(var i = 0, len = seasons.length; i < len; i++){
+								if! fullshortSeason
+									.l_btn(class=(isUsedFirst?'':'l_active') data-season-num=seasons[i].season_num style=style) #{!shortSeason?'Sezon ':'S'}#{seasons[i].season_num}
+								else
+									.l_btn(class=(isUsedFirst?'':'l_active') data-season-num=seasons[i].season_num style=style) #{seasons[i].season_num}
+							- 	if(i==0) isUsedFirst = true;
+							- }
+							.clear
+						#episodes
+							- var isUsedFirst = false;
+							- for(var i = 0, len = seasons.length; i < len; i++){
+								- 	var episodes = seasons[i].episodes;
+								ul(style=(isUsedFirst?'display:none':'') data-season-num=seasons[i].season_num)
+									each episode in episodes
+										li.line(data-ref=""+episode._id)
+											if user_status.code==3
+												.checker
+													input(type="checkbox" id=i+'_'+episode.episode_num class="checkbox_s" checked=(episode.viewedByYou))
+													label.checkbox(for=i+'_'+episode.episode_num title="Odcinek obejrzany?")
+														i.fa(class="fa-check")
+												a(href='/serial/'+series.url+'/s'+pad(seasons[i].season_num)+'e'+pad(episode.episode_num)+(episode.episode_num_alter?'-e'+pad(episode.episode_num_alter):'')+'/'+episode.url+'/'+episode.num)
+													.episodeNum Odcinek #{episode.episode_num}#{episode.episode_num_alter?'-'+episode.episode_num_alter:''}:
+													.episodeName !{episode.title}
+											else
+												a(href='/serial/'+series.url+'/s'+pad(seasons[i].season_num)+'e'+pad(episode.episode_num)+(episode.episode_num_alter?'-e'+pad(episode.episode_num_alter):'')+'/'+episode.url+'/'+episode.num)
+													.episodeNum Odcinek #{episode.episode_num}#{episode.episode_num_alter?'-'+episode.episode_num_alter:''}:
+													.episodeName !{episode.title}
+											.rightSide
+												if episode.report=='' && false
+													i.fa(class="fa-warning reportEpisodeBtn" title="Zgłoś ten odcinek")
+												//-if isModAdmin
+												//-	i.fa(class="fa-edit" title="Edytuj ten odcinek")
+
+											.clear
+									
+
+								- 		isUsedFirst = true;
+							- }
+
+				if !(user_status.code==3 && user_status.data.premium)
+					div(style="width: 100%; margin-top: 20px;" class="ad ads reklama")
+						center
+							div(class="spolecznoscinet" id="spolecznosci-3543")
+
+	else
+		#series_page.box(data-code=""+series._id)
+			.container
+				section#left_side(style="margin-right: 7px")
+					img#poster(src=IMG_HOSTNAME+series.poster width="53" height="53" alt="Okładka" title="Okładka do Serialu")
+					h2.title(title=series.title) !{series.title}
+					if isModAdmin
+						input#titleEdit(type="text" onblur="MAIN.changeInputTitle(this)")
+					if series.title!=series.title_org || isModAdmin
+						h3.title_org(title=series.title_org) !{series.title_org}
+						if isModAdmin
+							input#titleOrgEdit(type="text" onblur="MAIN.changeInputTitleOrg(this)")
+					.clear
+
+					
+					.favBtn(style="margin-top: 10px;" class=(user_status.code!=3?'loginBtn':'setFavBtn') selected=(isSeriesFav?'':null))
+						i(class="fa fa-heart-o" aria-hidden="true" title="Dodaj do ulubionych")
+						i(class="fa fa-heart" aria-hidden="true" title="Usuń z ulubionych")
+						.info Dodaj do ulubionych
+					
+					if series.status!='COPY' && !series.promotion
+						.but(style="margin-top: 10px; margin-left: 10px;" class=(user_status.code!=3?'loginBtn':'addEpisodeBtn')) Dodaj odcinek
+					if isModAdmin
+						button.but(id="setSeriesPremium" disabled=(series.status=='PREMIUM'?'disabled':false) style="margin-top: 10px; margin-left: 10px;") Ustaw premium
+						a.but(href="/edit-poster?id="+series._id+"&type=series" style="margin-top: 10px; margin-left: 10px;") Zmień okładke
+						a.but(href="/import-odcinki/"+series.num style="margin-top: 10px; margin-left: 10px;" target="_blank") Importuj odcinki
+					.clear(style="margin-bottom: 25px")
+
+					if !(user_status.code==3 && user_status.data.premium)
+						if series.seasons.length>1
+							div(style="margin: 20px auto; width: 820px; overflow: hidden;" class="ad ads reklama")
+								center
+									div(class="spolecznoscinet" id="spolecznosci-3533")
+
+					#seasons_list(style="margin-top: 0px")
+						if series.seasons.length==0
+							.no_data Brak odcinków. 
+						else
+							- var seasons = series.seasons;
+							- var leng = seasons.length;
+							if(leng>8)
+								.selectSeason Wybierz sezon:
+							#btns
+								- var isUsedFirst = false;
+								- var style = '';
+								- var shortSeason = false;
+								- var fullshortSeason = false;
+								- if(leng>8){ style+='padding: 0 10px;'; shortSeason = true; }
+								- if(leng>19) fullshortSeason = true;
+								- if(leng>22){ style+='padding: 0 4px;'; }
+								- if(leng>33){ style+='padding: 0 3px;font-size:12px;margin-left:1px'; }
+
+								- for(var i = 0, len = seasons.length; i < len; i++){
+									if! fullshortSeason
+										.l_btn(class=(isUsedFirst?'':'l_active') data-season-num=seasons[i].season_num style=style) #{!shortSeason?'Sezon ':'S'}#{seasons[i].season_num}
+									else
+										.l_btn(class=(isUsedFirst?'':'l_active') data-season-num=seasons[i].season_num style=style) #{seasons[i].season_num}
+								- 	if(i==0) isUsedFirst = true;
+								- }
+								.clear
+							#episodes
+								- var isUsedFirst = false;
+								- for(var i = 0, len = seasons.length; i < len; i++){
+									- 	var episodes = seasons[i].episodes;
+									ul(style=(isUsedFirst?'display:none':'') data-season-num=seasons[i].season_num)
+										//-if user_status.code==3
+										//-	li.firstLine
+										//-		a.greenLink(class="addLinksMass" href="" target="_blank") Dodaj linki masowo
+
+										if isModAdmin
+											li.firstLine
+												a.greenLink(class="importLinksMass" href="/import/"+series._id+'/'+seasons[i].season_num target="_blank") Importuj linki
+												a.greenLink(class="addLinksMass" href="/dodaj-linki-masowo/"+series._id+'/'+seasons[i].season_num target="_blank") Dodaj linki masowo
+										each episode in episodes
+											li.line(data-ref=""+episode._id)
+												if user_status.code==3
+													.checker
+														input(type="checkbox" id=i+'_'+episode.episode_num class="checkbox_s" checked=(episode.viewedByYou))
+														label.checkbox(for=i+'_'+episode.episode_num title="Odcinek obejrzany?")
+															i.fa(class="fa-check")
+													a.episodeNum(href='/serial/'+series.url+'/s'+pad(seasons[i].season_num)+'e'+pad(episode.episode_num)+(episode.episode_num_alter?'-e'+pad(episode.episode_num_alter):'')+'/'+episode.url+'/'+episode.num) Odcinek #{episode.episode_num}#{episode.episode_num_alter?'-'+episode.episode_num_alter:''}:
+													a.episodeName(href='/serial/'+series.url+'/s'+pad(seasons[i].season_num)+'e'+pad(episode.episode_num)+(episode.episode_num_alter?'-e'+pad(episode.episode_num_alter):'')+'/'+episode.url+'/'+episode.num) !{episode.title}
+												else
+													a.episodeNum(href='/serial/'+series.url+'/s'+pad(seasons[i].season_num)+'e'+pad(episode.episode_num)+(episode.episode_num_alter?'-e'+pad(episode.episode_num_alter):'')+'/'+episode.url+'/'+episode.num) Odcinek #{episode.episode_num}#{episode.episode_num_alter?'-'+episode.episode_num_alter:''}:
+													a.episodeName(href='/serial/'+series.url+'/s'+pad(seasons[i].season_num)+'e'+pad(episode.episode_num)+(episode.episode_num_alter?'-e'+pad(episode.episode_num_alter):'')+'/'+episode.url+'/'+episode.num) !{episode.title}
+												.rightSide
+													if episode.report=='' && false
+														i.fa(class="fa-warning reportEpisodeBtn" title="Zgłoś ten odcinek")
+													//-if isModAdmin
+													//-	i.fa(class="fa-edit" title="Edytuj ten odcinek")
+
+												.clear
+										
+
+									- 		isUsedFirst = true;
+								- }
+								
+
+
+
+				#right_side(style="margin-left: 7px; width: 336px;")
+					#info_box
+						- var genres = '';
+						- for (var i = 0, len = series.genres.length; i < len; i++) {
+						-	var uppered = series.genres[i].charAt(0).toUpperCase() + series.genres[i].slice(1);
+						- 	if(i==0) genres+= uppered;
+						- 	else genres+= ', '+uppered;
+						- }
+
+						span#genres2(style="padding-top: 0px;") #{genres}
+						span#date(style="padding-bottom: 17px;" title="Rok premiery filmu") Premiera: #{series.year}
+
+						if(user_status.code==3 && series.votedByYou)
+							#rate_this Twoja ocena: #{series.votedByYou}
+						else
+							#rate_this Oceń ten serial:
+						- var rate = series.rate;
+						#star_rate2
+							- var fullStars = Math.floor(rate);
+							- var starsAdded = fullStars;
+							- var i_star = 1;
+
+							- for(var i = 0; i < fullStars; i++) {
+								i.fa(class="fa-star" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star" title="Oceń na "+i_star)
+								- i_star++;
+							- }
+
+							- if(starsAdded<5){
+								- var polowka = rate-fullStars;
+								- if(polowka>=0.5){
+									- starsAdded++;
+									i.fa(class="fa-star-half-o" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star-half-o" title="Oceń na "+i_star)
+									- i_star++;
+								- }else{
+									- starsAdded++;
+									i.fa(class="fa-star-o" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star-o" title="Oceń na "+i_star)
+									- i_star++;
+								- }
+							- }
+
+							- if(starsAdded<5){
+								- for(var i = 0; i < 5-starsAdded; i++) {
+									i.fa(class="fa-star-o" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star-o" title="Oceń na "+i_star)
+									- i_star++;
+								- }
+							- }
+						#rate #{(Math.round(series.rate * 100)/100).toFixed(1)+' / 5.0'}
+						if user_status.code==3
+							#votes Głosów: #{series.votes_count?series.votes_count:0}
+						.clear
+
+					section#desc_box
+						h3#sub_title Opis serialu:
+						if isModAdmin
+							.editDesc
+								i.fa(class="fa-edit" title="Edytuj opis")
+						.clear
+						if isModAdmin
+							textarea.area(id="areaDescEdit" onkeyup="MAIN.resizeArea(this)" onblur="MAIN.changeAreaDesc(this)")
+						p#desc #{series.desc}
+					.clear
+
+					if !(user_status.code==3 && user_status.data.premium)
+						div.sticky_ad(style="margin: 20px 0;" class="ad ads reklama")
+							center
+								div(class="spolecznoscinet" id="spolecznosci-3537")
+
+				.clear

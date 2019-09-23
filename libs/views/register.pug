@@ -1,0 +1,35 @@
+#modalBG
+	#register_page
+		.form_step
+			.tit Utwórz konto w Fili.cc
+			.err 
+			form#createUserForm
+				fieldset.fieldset
+					input.input(type="text" name="username" placeholder="Nazwa użytkownika" tabindex="2" style="margin-top: 15px;")
+					input.input(type="text" name="email" placeholder="E-mail" tabindex="3" style="margin-top: 20px;")
+					input.input(type="password" name="pass" placeholder="Hasło" tabindex="4" style="margin-top: 20px;")
+					.termz
+						input(type="checkbox" name="reg" tabindex="5")
+						.terms Oświadczam, że zapoznałem się z 
+							a.greenLink(href="/regulamin" target="_blank") Regulaminem 
+							| i akceptuję go w całości.
+						.clear
+					#recaptchaRegister(style="margin-top: 20px;")
+					.bo
+						span(class="cssload-loader")
+							span(class="cssload-loader-inner")
+						input.btn(type="submit" value="Utwórz konto" tabindex="7" style="margin-top: 20px;")
+					.info Masz już konto? 
+						.greenLink(style="cursor:pointer;" class="loginBtn") Zaloguj się 
+					script.
+						MAIN.registerCaptchaObj = grecaptcha.render('recaptchaRegister', {
+							sitekey: '!{RECAPTCHA_SITE_KEY}',
+							theme: 'dark',
+							size: '!{is_mobile?'compact':'normal'}',
+							'expired-callback': function(){
+								grecaptcha.reset(MAIN.registerCaptchaObj);
+							},
+							'tabindex' : 6,
+						});
+
+			

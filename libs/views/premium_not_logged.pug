@@ -1,0 +1,348 @@
+extend main
+block content
+	#premium_page.box
+		.container
+			section
+				h2.sectionTitle Konto premium
+				.clear
+
+				if PREMIUM_STOP
+					.sectionBox
+						span.titl(style="padding-bottom: 8px;") Przerwa techniczna.
+				else
+					.sectionBox
+						if is_mobile
+							.hdr
+								.lft
+									script(src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js")
+									
+									script(src="/assets/libs/player/video.min.3.js")
+									script(src="/assets/libs/player/videojs-ie8.min.3.js")
+									link(href="/assets/libs/player/video-js.min.css" rel="stylesheet")
+									link(href="/assets/libs/player/olvideo.css" rel="stylesheet")
+									script(src="/assets/libs/player/videojs-chromecast.min.js")
+									link(href="/assets/libs/player/videojs-chromecast.css" rel="stylesheet")
+
+									script(src="/assets/libs/player/videojs-download-button.min.js")
+									link(href="/assets/libs/player/videojs-download-button.css" rel="stylesheet")
+									
+									script(src="/assets/libs/player/videojs.hotkeys.min.js")
+
+
+									video(id="video-player" class="video-js vjs-default-skin vjs-big-play-centered vjs-16-9" controls preload="none")
+
+
+									script.
+										var player = videojs(document.getElementById('video-player'), {
+											controls: true,
+											sources: [{
+												type : 'video/mp4',
+												src : 'https://zgdat09.fili.cc/preview.mp4'
+											}],
+											chromecast:{
+												metadata:{
+													title: 'Big Buck Bunny',
+													subtitle: 'Big Buck Bunny',
+												}
+											}
+										}, function(){
+											this.downloadButton();
+											this.hotkeys({
+												volumeStep: 0.2,
+												seekStep: 5,
+												enableModifiersForNumbers: false,
+												enableVolumeScroll: false
+											})
+
+										});
+								.rght
+									div(style="font-size: 16px; padding-bottom: 10px;")
+										<i class="fa fa-arrow-left" aria-hidden="true"></i> Przetestuj przed zakupem.
+									span.titl(style="padding-bottom: 8px;") Posiadając konto premium otrzymujesz dostęp do playera, który:
+									span.ex.
+										- buforuje się szybciej<br>
+										- nie zawiera reklam<br>
+										- zapamiętuje aktualny czas (możesz kontynuuować oglądanie później)<br>
+										- obsługuje Chromecast / AndroidTV (możesz oglądać na telewizorze)<br>
+										- zezwala na pobranie wideo<br>
+										- obsługuje skróty klawiszowe<br>
+									span.titl(style="padding-bottom: 8px; padding-top: 8px;") Dodatkowo w ramach premium:
+									span.ex.
+										- brak reklam na całej stronie*<br>
+										- brak limitów
+						
+							span.uwaga *Nie dotyczy takich hostingów jak openload i streamango, których właścicielami są inne podmioty.<br>Player premium dostępny jest tylko w wersjach językowych: polski, dubbing pl, lektor pl i napisy pl.<br>Nie gwarantujemy dostępności w każdym filmie i odcinku.
+
+							//-span.titl(style="padding-top: 26px;" class="loginBtn") <span style="color: #20da24; cursor: pointer;">Zaloguj się,</span> aby poznać cennik.
+
+							form#payMethod1
+								input(type="hidden" name="amount" value="")
+								input(type="hidden" name="description" value="")
+
+								span.titl(style="padding-top: 26px;") Cennik przy płatności przelewem, blik lub paypal:
+
+								section#przelewBox
+									.item
+										.daysBox
+											.num 5
+											.type DNI
+										.costT w cenie
+										.cost 4,99 zł z VAT
+										.selectz
+											input.but(type="button" class="select_ loginBtn" value="WYBIERAM" data-cost="4.99")
+											.clear
+									.item
+										.daysBox
+											.num 15
+											.type DNI
+										.costT w cenie
+										.cost 8,99 zł z VAT
+										.selectz
+											input.but(type="button" class="select_ loginBtn" value="WYBIERAM" data-cost="8.99")
+											.clear
+									.item
+										.daysBox
+											.num 30
+											.type DNI
+										.costT w cenie
+										.cost 14,99 zł z VAT
+										.selectz
+											input.but(type="button" class="select_ loginBtn" value="WYBIERAM" data-cost="14.99")
+											.clear
+									.item
+										.daysBox
+											.num 100
+											.type DNI
+										.costT w cenie
+										.cost 39,99 zł z VAT
+										.selectz
+											input.but(type="button" class="select_ loginBtn" value="WYBIERAM" data-cost="39.99")
+											.clear
+									.clear
+							span.titl(style="padding-top: 36px; border-top: 1px solid #272727") Cennik przy płatności SMS premium:
+
+							section#smsBox
+								.item
+									.daysBox
+										.num 3
+										.type DNI
+									.costT w cenie
+									.cost 6,15 zł z VAT
+									.sms
+										.line1 SMS o TREŚCI:
+										.line2 SIM.FILI
+										.line3 NA NUMER: <span class="gree">7555</span>
+									.clear
+								.item
+									.daysBox
+										.num 15
+										.type DNI
+									.costT w cenie
+									.cost 17,22 zł z VAT
+									.sms
+										.line1 SMS o TREŚCI:
+										.line2 SIM.FILI
+										.line3 NA NUMER: <span class="gree">91455</span>
+									.clear
+								.item
+									.daysBox
+										.num 30
+										.type DNI
+									.costT w cenie
+									.cost 30,75 zł z VAT
+									.sms
+										.line1 SMS o TREŚCI:
+										.line2 SIM.FILI
+										.line3 NA NUMER: <span class="gree">92555</span>
+									.clear
+								.item(style="height: auto; display:block;")
+									form#payMethod2
+										.codeBlock
+											.t Wpisz otrzymany kod<br>w SMS zwrotnym.
+											.inputBlock
+												input.input(type="text" name="code")
+										//- .codeBlock
+										//- 	.t Wybierz numer na,<br>który wysłałeś SMS.
+										//- 	.inputBlock
+										//- 		select.select(name="number")
+										//- 			option(value="7555") 7555 - 6,15zł
+										//- 			option(value="91455") 91455 - 17,22zł
+										//- 			option(value="92555") 92555 - 30,75zł
+										.codeBlock
+											input.but(type="submit" value="Aktywuj" id="activateBtn")
+										.clear
+								.clear
+								
+						else
+							.lft
+								script(src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js")
+									
+								script(src="/assets/libs/player/video.min.3.js")
+								script(src="/assets/libs/player/videojs-ie8.min.3.js")
+								link(href="/assets/libs/player/video-js.min.css" rel="stylesheet")
+								link(href="/assets/libs/player/olvideo.css" rel="stylesheet")
+								script(src="/assets/libs/player/videojs-chromecast.min.js")
+								link(href="/assets/libs/player/videojs-chromecast.css" rel="stylesheet")
+
+								script(src="/assets/libs/player/videojs-download-button.min.js")
+								link(href="/assets/libs/player/videojs-download-button.css" rel="stylesheet")
+								
+								script(src="/assets/libs/player/videojs.hotkeys.min.js")
+
+
+								video(id="video-player" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="none" width="520" height="293")
+
+
+								script.
+									var player = videojs(document.getElementById('video-player'), {
+										controls: true,
+										sources: [{
+											type : 'video/mp4',
+											src : 'https://zgdat09.fili.cc/preview.mp4'
+										}],
+										chromecast:{
+											metadata:{
+												title: 'Big Buck Bunny',
+												subtitle: 'Big Buck Bunny',
+											}
+										}
+									}, function(){
+										this.downloadButton();
+										this.hotkeys({
+											volumeStep: 0.2,
+											seekStep: 5,
+											enableModifiersForNumbers: false,
+											enableVolumeScroll: false
+										})
+
+									});
+							.rght
+								span.titl(style="padding-bottom: 8px;") Posiadając konto premium otrzymujesz dostęp do playera, który:
+								span.ex.
+									- buforuje się szybciej<br>
+									- nie zawiera reklam<br>
+									- zapamiętuje aktualny czas (możesz kontynuuować oglądanie później)<br>
+									- obsługuje Chromecast / AndroidTV (możesz oglądać na telewizorze)<br>
+									- zezwala na pobranie wideo<br>
+									- obsługuje skróty klawiszowe<br>
+								span.titl(style="padding-bottom: 8px; padding-top: 8px;") Dodatkowo w ramach premium:
+								span.ex.
+									- brak reklam na całej stronie*<br>
+									- brak limitów<br><br><br>
+								div(style="font-size: 16px;")
+									<i class="fa fa-arrow-left" aria-hidden="true"></i> Przetestuj przed zakupem.
+
+							.clear
+
+							span.uwaga *Nie dotyczy takich hostingów jak openload i streamango, których właścicielami są inne podmioty.<br>Player premium dostępny jest tylko w wersjach językowych: polski, dubbing pl, lektor pl i napisy pl.<br>Nie gwarantujemy dostępności w każdym filmie i odcinku.
+							
+
+							//-span.titl(style="padding-top: 26px;" class="loginBtn") <span style="color: #20da24; cursor: pointer;">Zaloguj się,</span> aby poznać cennik.
+
+							form#payMethod1
+								input(type="hidden" name="amount" value="")
+								input(type="hidden" name="description" value="")
+
+								span.titl(style="padding-top: 26px;") Cennik przy płatności przelewem, blik lub paypal:
+
+								section#przelewBox
+									.item
+										.daysBox
+											.num 5
+											.type DNI
+										.costT w cenie
+										.cost 4,99 zł z VAT
+										.selectz
+											input.but(type="button" class="select_ loginBtn" value="WYBIERAM" data-cost="4.99")
+											.clear
+									.item
+										.daysBox
+											.num 15
+											.type DNI
+										.costT w cenie
+										.cost 8,99 zł z VAT
+										.selectz
+											input.but(type="button" class="select_ loginBtn" value="WYBIERAM" data-cost="8.99")
+											.clear
+									.item
+										.daysBox
+											.num 30
+											.type DNI
+										.costT w cenie
+										.cost 14,99 zł z VAT
+										.selectz
+											input.but(type="button" class="select_ loginBtn" value="WYBIERAM" data-cost="14.99")
+											.clear
+									.item
+										.daysBox
+											.num 100
+											.type DNI
+										.costT w cenie
+										.cost 39,99 zł z VAT
+										.selectz
+											input.but(type="button" class="select_ loginBtn" value="WYBIERAM" data-cost="39.99")
+											.clear
+									.clear
+
+
+
+
+							span.titl(style="padding-top: 36px; border-top: 1px solid #272727") Cennik przy płatności SMS premium:
+
+							section#smsBox
+								.item
+									.daysBox
+										.num 3
+										.type DNI
+									.costT w cenie
+									.cost 6,15 zł z VAT
+									.sms
+										.line1 SMS o TREŚCI:
+										.line2 SIM.FILI
+										.line3 NA NUMER: <span class="gree">7555</span>
+									.clear
+								.item
+									.daysBox
+										.num 15
+										.type DNI
+									.costT w cenie
+									.cost 17,22 zł z VAT
+									.sms
+										.line1 SMS o TREŚCI:
+										.line2 SIM.FILI
+										.line3 NA NUMER: <span class="gree">91455</span>
+									.clear
+								.item
+									.daysBox
+										.num 30
+										.type DNI
+									.costT w cenie
+									.cost 30,75 zł z VAT
+									.sms
+										.line1 SMS o TREŚCI:
+										.line2 SIM.FILI
+										.line3 NA NUMER: <span class="gree">92555</span>
+									.clear
+								.item
+									form#payMethod2
+										.codeBlock
+											.t Wpisz otrzymany kod<br>w SMS zwrotnym.
+											.inputBlock
+												input.input(type="text" name="code")
+										//- .codeBlock(style="width: 200px;")
+										//- 	.t Wybierz numer na,<br>który wysłałeś SMS.
+										//- 	.inputBlock
+										//- 		select.select(name="number")
+										//- 			option(value="7555") 7555 - 6,15zł
+										//- 			option(value="91455") 91455 - 17,22zł
+										//- 			option(value="92555") 92555 - 30,75zł
+										.codeBlock(style="width: 115px;")
+											input.but(style="margin-top: 35px; margin-left: 14px;" type="submit" value="Aktywuj" id="activateBtn")
+										.clear
+								.clear
+
+
+
+
+
+

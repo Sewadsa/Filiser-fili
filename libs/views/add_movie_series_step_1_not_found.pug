@@ -1,0 +1,19 @@
+extend main
+block content
+	.container
+		#add_movie_series_fo.box
+			h2.pageTitle(style="float:left") Znalezione 
+				span.green filmy i seriale
+
+			form(action="/dodaj-film-serial" method="POST" style="float:right;")
+				input.input(type="text" name="name" placeholder="Wklej inny link lub nazwę" tabindex="2" style="float: left; width: 200px; height:24px;")
+				input.btn(type="submit" value="Szukaj" tabindex="3" style="float: left; margin-left: 7px;")
+			.clear
+
+			span(style="color: red; line-height: 22px;") Film lub serial nie może zostać dodany.<br>Istnieje już ukryty w bazie i został zablokowany przed ponownym dodaniem.
+			.clear
+				
+
+
+
+		

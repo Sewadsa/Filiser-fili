@@ -1,0 +1,96 @@
+extend main
+block content
+	#videos_page.box
+		.container
+			#left_side
+				section#years(style="margin-bottom: 20px;")
+					h2.sectionTitle Kategorie
+					.clear
+
+					.sectionBox
+						.gBox
+							ul
+								each kat in status.kats
+									li(data-gen=kat+"" class=(status.katsEnabled.indexOf(kat)!=-1?'active':'')) #{kat}
+								.clear
+						.but(class='showResults') Pokaż wyniki
+						.clear
+
+				if !(user_status.code==3 && user_status.data.premium)
+					div(style="width: 300px; margin: 0px auto;")
+						script(src="https://rtbnowads.com/publisher/emit.php?page_id=398&id=2")
+
+			#right_side
+				section#allVideos
+					h2.sectionTitle Wszystkie filmiki
+					
+					.sortBox
+						a(href=(encodeURI(status.url))+'&sort_by=date'+(status.sort_by=='date' && status.type==-1?'&type=asc':'&type=desc'))
+							.l_btn(class=(status.sort_by=='date'?'l_active':'') title="Sortuj według daty dodania/aktualizacji")
+								i.fa(class="fa-calendar")
+								i.fa(style=(status.sort_by=='date' && status.type==-1?'visibility: hidden;':'') class="fa-sort-up")
+								i.fa(style=(status.sort_by=='date' && status.type==1?'visibility: hidden':'') class="fa-sort-desc")
+						a(href=(encodeURI(status.url))+'&sort_by=views'+(status.sort_by=='views' && status.type==-1?'&type=asc':'&type=desc'))
+							.l_btn(class=(status.sort_by=='views'?'l_active':'') title="Sortuj według pełnych wyświetleń")
+								i.fa(class="fa-eye")
+								i.fa(style=(status.sort_by=='views' && status.type==-1?'visibility: hidden;':'') class="fa-sort-up")
+								i.fa(style=(status.sort_by=='views' && status.type==1?'visibility: hidden':'') class="fa-sort-desc")
+						a(href=(encodeURI(status.url))+'&sort_by=rate'+(status.sort_by=='rate' && status.type==-1?'&type=asc':'&type=desc'))
+							.l_btn(class=(status.sort_by=='rate'?'l_active':'') title="Sortuj według ocen")
+								i.fa(class="fa-star")
+								i.fa(style=(status.sort_by=='rate' && status.type==-1?'visibility: hidden;':'') class="fa-sort-up")
+								i.fa(style=(status.sort_by=='rate' && status.type==1?'visibility: hidden;':'') class="fa-sort-desc")
+					.clear
+
+					.sectionBox
+						if status.maxPage>0
+							each video in videos
+								section.itemVideo
+									a(href="/filmik/"+video.url+'/'+video.num)
+										.poster
+											img(src=video.poster width="254" height="143" alt=video.title)
+
+											if video.rate && video.rate!=0
+												span.rate
+													i(class="fa fa-star" aria-hidden="true")
+													span.num #{video.rate.toFixed(1)+' / 5'}
+											if video.views && video.views!=0
+												span.views
+													i(class="fa fa-eye" aria-hidden="true")
+													span.num #{liczba_to_tekst(video.views)}
+									h3.title !{epipsis_text.apply(video.title, [70, true])}
+
+							.clear
+						else
+							.no Brak wyników.
+
+						if status.maxPage>0
+							.pagineteBox
+								if status.page>1
+									a.pBtn(href=encodeURI(status.urlPages+'&page='+(status.page-1)) style="padding: 0 10px;") Poprzednia
+									a.pBtn(href=encodeURI(status.urlPages+'&page=1')) 1
+
+									each num in [status.page-3, status.page-2, status.page-1]
+										if num>1
+											a.pBtn(href=encodeURI(status.urlPages+'&page='+num)) #{num}
+
+								if status.maxPage>1
+									.pBtn(class="pAcitve") #{status.page}
+
+								if(status.page<status.maxPage)
+									each num in [status.page+1, status.page+2, status.page+3]
+										if num<status.maxPage
+											a.pBtn(href=encodeURI(status.urlPages+'&page='+num)) #{num}
+
+
+
+								if(status.page!=status.maxPage)
+									a.pBtn(href=encodeURI(status.urlPages+'&page='+status.maxPage)) #{status.maxPage}
+
+
+								if status.page<status.maxPage
+									a.pBtn(href=encodeURI(status.urlPages+'&page='+(status.page+1)) style="padding: 0 10px;") Następna
+								.clear
+
+
+			.clear

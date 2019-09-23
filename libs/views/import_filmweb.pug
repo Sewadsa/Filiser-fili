@@ -1,0 +1,28 @@
+extend main
+block content
+	#import_filmweb_page.box
+		.container
+			section
+				h2.sectionTitle Importuj odcinki
+				.clear
+
+				.sectionBox
+					.inBox
+						.tit #{series.title==series.title_org?series.title:series.title+' / '+series.title_org}
+						input.input(type="text" id="filmwebEpisodesUrl" placeholder="Wklej link do odcinków z filmweb.pl" style="margin: 20px auto;")
+
+						.err
+
+						form#importFilmwebForm(style="display:none")
+							fieldset
+								.imported
+								input(type="text" name="code" value=""+series._id hidden)
+								input.o_btn(type="submit" style="margin-top: 10px;" value="Dodaj odcinki")
+
+						.tit(style="margin-top: 40px; text-align: left;" id="results2") Wyniki
+							ul#results
+
+
+
+
+

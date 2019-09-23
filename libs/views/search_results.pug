@@ -1,0 +1,75 @@
+extend main
+block content
+	.container
+		#search_movie_series.box
+			if is_mobile
+				if !(user_status.code==3 && user_status.data.premium)
+					div(style="width: 100%; margin-bottom: 20px;" class="ad ads reklama")
+						center
+							div(class="spolecznoscinet" id="spolecznosci-3541")
+			else
+				if !(user_status.code==3 && user_status.data.premium)
+					div(style="width: 100%; margin-bottom: 20px;" class="ad ads reklama")
+						center
+							div(class="spolecznoscinet" id="spolecznosci-3535")
+			
+			h2.pageTitle(style=data.movies.length!=0 || data.series.length!=0?"float:left":'') Znalezione 
+				span.green seriale i filmy
+
+			.clear
+
+			//- if data.movies.length!=0 || data.series.length!=0
+			//- 	form(action="/szukaj" method="GET" style="float:right;")
+			//- 		input.input(type="text" name="q" placeholder="Szukaj ponownie" tabindex="2" style="float: left; width: 200px; height:24px;" value=data.q)
+			//- 		input.btn(type="submit" value="Szukaj" tabindex="3" style="float: left; margin-left: 7px;")
+			//- .clear
+
+			if data.movies.length==0 && data.series.length==0
+				span Brak wyników.
+				form(action="/szukaj" method="GET")
+					input.input(type="text" name="q" placeholder="Szukaj ponownie" tabindex="2" autofocus style="margin-top: 32px;")
+					input.btn(type="submit" value="Szukaj" tabindex="3" style="margin-top: 10px;")
+			else
+				if data.series.length>0
+					ul#resultList2(style="margin-bottom: 50px;")
+						each serie in data.series
+							li
+								div
+									a(href="/serial/"+serie.url+"/"+serie.num)
+										.poster
+											img(src=IMG_HOSTNAME+serie.poster width="80" height="80")
+									.block
+										a(href="/serial/"+serie.url+"/"+serie.num)
+											.title !{serie.title}
+										if serie.title!=serie.title_org
+											a(href="/serial/"+serie.url+"/"+serie.num)
+												.title_org !{serie.title_org}
+											a(href="/serial/"+serie.url+"/"+serie.num)
+												.info Serial, #{serie.year}
+										else
+											a(href="/serial/"+serie.url+"/"+serie.num)
+												.info(style="padding-top: 27px;") Serial, #{serie.year}
+									.clear
+						.clear
+
+				if data.movies.length>0
+					ul#resultList2
+						each movie in data.movies
+							li
+								div
+									a(href="/film/"+movie.url+"/"+movie.num)
+										.poster
+											img(src=IMG_HOSTNAME+movie.poster width="80" height="80")
+									.block
+										a(href="/film/"+movie.url+"/"+movie.num)
+											.title !{movie.title}
+										if movie.title!=movie.title_org
+											a(href="/film/"+movie.url+"/"+movie.num)
+												.title_org !{movie.title_org}
+											a(href="/film/"+movie.url+"/"+movie.num)
+												.info Film, #{movie.year}
+										else
+											a(href="/film/"+movie.url+"/"+movie.num)
+												.info(style="padding-top: 27px;") Film, #{movie.year}
+									.clear
+						.clear

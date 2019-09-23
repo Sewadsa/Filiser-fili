@@ -1,0 +1,480 @@
+extend main
+block content
+
+	if is_mobile
+		#movies_page.box
+			.container
+				if !(user_status.code==3 && user_status.data.premium)
+					div(style="width: 100%; margin-bottom: 20px;" class="ad ads reklama")
+						center
+							div(class="spolecznoscinet" id="spolecznosci-3541")
+
+				section#allMovies
+					h2.sectionTitle Wszystkie filmy
+					
+					.sortBox
+						a(href=(encodeURI(status.url))+'&sort_by=date'+(status.sort_by=='date' && status.type==-1?'&type=asc':'&type=desc'))
+							.l_btn(class=(status.sort_by=='date'?'l_active':'') title="Sortuj według daty dodania/aktualizacji")
+								i.fa(class="fa-calendar")
+								i.fa(style=(status.sort_by=='date' && status.type==-1?'visibility: hidden;':'') class="fa-sort-up")
+								i.fa(style=(status.sort_by=='date' && status.type==1?'visibility: hidden':'') class="fa-sort-desc")
+						a(href=(encodeURI(status.url))+'&sort_by=views'+(status.sort_by=='views' && status.type==-1?'&type=asc':'&type=desc'))
+							.l_btn(class=(status.sort_by=='views'?'l_active':'') title="Sortuj według pełnych wyświetleń")
+								i.fa(class="fa-eye")
+								i.fa(style=(status.sort_by=='views' && status.type==-1?'visibility: hidden;':'') class="fa-sort-up")
+								i.fa(style=(status.sort_by=='views' && status.type==1?'visibility: hidden':'') class="fa-sort-desc")
+						a(href=(encodeURI(status.url))+'&sort_by=rate'+(status.sort_by=='rate' && status.type==-1?'&type=asc':'&type=desc'))
+							.l_btn(class=(status.sort_by=='rate'?'l_active':'') title="Sortuj według ocen")
+								i.fa(class="fa-star")
+								i.fa(style=(status.sort_by=='rate' && status.type==-1?'visibility: hidden;':'') class="fa-sort-up")
+								i.fa(style=(status.sort_by=='rate' && status.type==1?'visibility: hidden;':'') class="fa-sort-desc")
+					.clear
+
+					.sectionBox(style="padding-bottom: 6px;")
+						if status.maxPage>0
+							if movies.length>=8
+								.pagineteBox(style="margin-bottom: 15px; margin-top: 6px;")
+									if status.page>1
+										a.pBtn(href=encodeURI(status.urlPages+'&page='+(status.page-1)) style="padding: 0 10px;") Poprzednia
+										a.pBtn(href=encodeURI(status.urlPages+'&page=1')) 1
+
+										each num in [status.page-3, status.page-2, status.page-1]
+											if num>1
+												a.pBtn(href=encodeURI(status.urlPages+'&page='+num)) #{num}
+
+									if status.maxPage>1
+										.pBtn(class="pAcitve") #{status.page}
+
+									if(status.page<status.maxPage)
+										each num in [status.page+1, status.page+2, status.page+3]
+											if num<status.maxPage
+												a.pBtn(href=encodeURI(status.urlPages+'&page='+num)) #{num}
+
+
+
+									if(status.page!=status.maxPage)
+										a.pBtn(href=encodeURI(status.urlPages+'&page='+status.maxPage)) #{status.maxPage}
+
+
+									if status.page<status.maxPage
+										a.pBtn(href=encodeURI(status.urlPages+'&page='+(status.page+1)) style="padding: 0 10px;") Następna
+									.clear
+							.parfl
+								each movie,index in movies
+									section.item
+										div
+											- var same = movie.title==movie.title_org;
+											a(href="/film/"+movie.url+'/'+movie.num)
+												.poster
+													img(src=IMG_HOSTNAME+movie.poster width="100" height="100" alt=(same?movie.title:movie.title+' / '+movie.title_org) title=(same?movie.title:movie.title+' / '+movie.title_org))
+											.block
+												a(href="/film/"+movie.url+'/'+movie.num)
+													h3.title !{movie.title}
+												if !same
+													a(href="/film/"+movie.url+'/'+movie.num)
+														h4.title_org !{movie.title_org}
+												span.time #{MOMENT(movie.update_date).fromNow()}
+													i.fa(class="fa-eye" style="padding-left: 10px;")  #{movie.viewed}
+												- var genres = [];
+												- for (var i = 0, len = movie.genres.length; i < len; i++) {
+												-	var uppered = movie.genres[i].charAt(0).toUpperCase() + movie.genres[i].slice(1);
+												- 	if(i==(len-1)) genres.push([uppered, movie.genres[i]]);
+												- 	else genres.push([uppered+',', movie.genres[i]]);
+												- }
+												.block2
+													each gen in genres
+														a(href='/filmy?kat='+gen[1])
+															.gen #{gen[0]}
+													.clear
+												a(href="/filmy?start_year="+movie.year+"&end_year="+movie.year)
+													span.year #{movie.year}
+												span.rate
+													i(class="fa fa-star" aria-hidden="true")
+													span.num #{movie.rate==0?'BRAK':movie.rate.toFixed(1)+' / 5'}
+												span.type #{movie.typeVideo}
+											.clear
+											if movie.viewedByYou
+												.viewedByMe(title="Ten film został przez Ciebie obejrzany")
+													i.fa(class="fa-check")
+										p.desc !{(epipsis_text.apply(movie.desc, [180, true])).replace(/\u00a0/g, " ")}
+											
+
+							.clear
+						else
+							.no Brak wyników.
+
+						if status.maxPage>0
+							.pagineteBox
+								if status.page>1
+									a.pBtn(href=encodeURI(status.urlPages+'&page='+(status.page-1)) style="padding: 0 10px;") Poprzednia
+									a.pBtn(href=encodeURI(status.urlPages+'&page=1')) 1
+
+									each num in [status.page-3, status.page-2, status.page-1]
+										if num>1
+											a.pBtn(href=encodeURI(status.urlPages+'&page='+num)) #{num}
+
+								if status.maxPage>1
+									.pBtn(class="pAcitve") #{status.page}
+
+								if(status.page<status.maxPage)
+									each num in [status.page+1, status.page+2, status.page+3]
+										if num<status.maxPage
+											a.pBtn(href=encodeURI(status.urlPages+'&page='+num)) #{num}
+
+
+
+								if(status.page!=status.maxPage)
+									a.pBtn(href=encodeURI(status.urlPages+'&page='+status.maxPage)) #{status.maxPage}
+
+
+								if status.page<status.maxPage
+									a.pBtn(href=encodeURI(status.urlPages+'&page='+(status.page+1)) style="padding: 0 10px;") Następna
+								.clear
+
+				if !(user_status.code==3 && user_status.data.premium)
+					div(style="width: 100%; margin-top: 20px;" class="ad ads reklama")
+						center
+							div(class="spolecznoscinet" id="spolecznosci-3543")
+	else
+		if !(user_status.code==3 && user_status.data.premium)
+			div(style="width: 100%; margin-top: 20px;" class="ad ads reklama")
+				center
+					div(class="spolecznoscinet" id="spolecznosci-3739")
+					
+		#movies_page.box
+			.container(style="background-color: #181818;")
+				#left_side(style="margin-right: 14px; width: 336px;")
+					section#version(style="margin-bottom: 20px;")
+						h2.sectionTitle Wersja
+						.clear
+
+						.sectionBox
+							.vvBox
+								.vBox(data-type="0" class=(status.vers.indexOf(0)!=-1?'vBox_active':''))
+									i.fa(class="fa-flag-o")
+									.text1 Polski
+								.vBox(data-type="1" class=(status.vers.indexOf(1)!=-1?'vBox_active':''))
+									i.fa(class="fa-volume-down")
+									.text2 Dubbing
+								.vBox(data-type="2" class=(status.vers.indexOf(2)!=-1?'vBox_active':''))
+									i.fa(class="fa-microphone")
+									.text3 Lektor PL
+								.vBox(data-type="4" class=(status.vers.indexOf(4)!=-1?'vBox_active':''))
+									i.fa(class="fa-align-left")
+									.text4 Napisy PL
+								.vBox(data-type="5" class=(status.vers.indexOf(5)!=-1?'vBox_active':''))
+									i.fa(class="fa-align-left")
+									.text5 Napi. ENG
+								.vBox(data-type="6" class=(status.vers.indexOf(6)!=-1?'vBox_active':''))
+									i.fa(class="fa-globe")
+									.text6 ENG
+								.clear
+								.but(class='showResults') Pokaż wyniki
+							.clear
+
+					if !(user_status.code==3 && user_status.data.premium)
+						div(style="margin: 0px auto;" class="ad ads reklama")
+							center
+								div(class="spolecznoscinet" id="spolecznosci-3537")
+
+
+					section#years(style="margin-top: 20px;")
+						h2.sectionTitle Gatunki
+						.clear
+
+						.sectionBox
+							.gBox
+								ul
+									each kat in status.kats
+										li(data-gen=kat+"" class=(status.katsEnabled.indexOf(kat)!=-1?'active':'')) #{kat}
+									.clear
+							.but(class='showResults') Pokaż wyniki
+							.clear
+
+					section#years(style="margin-top: 20px;")
+						h2.sectionTitle Lata (przedział)
+						.clear
+
+						.sectionBox
+							.tBox
+								input.input(type="text" min="1920" max="2100" name="min" placeholder="Od np. 1920" style="margin-right: 5px;" value=(status.start_year?status.start_year:''))
+								input.input(type="text" min="1920" max="2100" name="max" placeholder="Do np. "+(new Date().getFullYear()) value=(status.end_year?status.end_year:''))
+								.but(style="float: left; margin: 0; margin-left: 10px;" class='showResults') Pokaż wyniki
+								.clear
+
+
+
+				#right_side
+					section#allMovies
+						h2.sectionTitle Wszystkie filmy
+						
+						.sortBox
+							a(href=(encodeURI(status.url))+'&sort_by=date'+(status.sort_by=='date' && status.type==-1?'&type=asc':'&type=desc'))
+								.l_btn(class=(status.sort_by=='date'?'l_active':'') title="Sortuj według daty dodania/aktualizacji")
+									i.fa(class="fa-calendar")
+									i.fa(style=(status.sort_by=='date' && status.type==-1?'visibility: hidden;':'') class="fa-sort-up")
+									i.fa(style=(status.sort_by=='date' && status.type==1?'visibility: hidden':'') class="fa-sort-desc")
+							a(href=(encodeURI(status.url))+'&sort_by=views'+(status.sort_by=='views' && status.type==-1?'&type=asc':'&type=desc'))
+								.l_btn(class=(status.sort_by=='views'?'l_active':'') title="Sortuj według pełnych wyświetleń")
+									i.fa(class="fa-eye")
+									i.fa(style=(status.sort_by=='views' && status.type==-1?'visibility: hidden;':'') class="fa-sort-up")
+									i.fa(style=(status.sort_by=='views' && status.type==1?'visibility: hidden':'') class="fa-sort-desc")
+							a(href=(encodeURI(status.url))+'&sort_by=rate'+(status.sort_by=='rate' && status.type==-1?'&type=asc':'&type=desc'))
+								.l_btn(class=(status.sort_by=='rate'?'l_active':'') title="Sortuj według ocen")
+									i.fa(class="fa-star")
+									i.fa(style=(status.sort_by=='rate' && status.type==-1?'visibility: hidden;':'') class="fa-sort-up")
+									i.fa(style=(status.sort_by=='rate' && status.type==1?'visibility: hidden;':'') class="fa-sort-desc")
+						.clear
+
+						.sectionBox
+							if status.maxPage>0
+								if movies.length>=8
+									.pagineteBox(style="margin-bottom: 30px; margin-top: 0px;")
+										if status.page>1
+											a.pBtn(href=encodeURI(status.urlPages+'&page='+(status.page-1)) style="padding: 0 10px;") Poprzednia
+											a.pBtn(href=encodeURI(status.urlPages+'&page=1')) 1
+
+											each num in [status.page-3, status.page-2, status.page-1]
+												if num>1
+													a.pBtn(href=encodeURI(status.urlPages+'&page='+num)) #{num}
+
+										if status.maxPage>1
+											.pBtn(class="pAcitve") #{status.page}
+
+										if(status.page<status.maxPage)
+											each num in [status.page+1, status.page+2, status.page+3]
+												if num<status.maxPage
+													a.pBtn(href=encodeURI(status.urlPages+'&page='+num)) #{num}
+
+
+
+										if(status.page!=status.maxPage)
+											a.pBtn(href=encodeURI(status.urlPages+'&page='+status.maxPage)) #{status.maxPage}
+
+
+										if status.page<status.maxPage
+											a.pBtn(href=encodeURI(status.urlPages+'&page='+(status.page+1)) style="padding: 0 10px;") Następna
+										.clear
+								each movie,index in movies
+									section.item
+										- var same = movie.title==movie.title_org;
+										a(href="/film/"+movie.url+'/'+movie.num)
+											.poster
+												img(src=IMG_HOSTNAME+movie.poster width="120" height="120" alt=(same?movie.title:movie.title+' / '+movie.title_org) title=(same?movie.title:movie.title+' / '+movie.title_org))
+										.block
+											a(href="/film/"+movie.url+'/'+movie.num)
+												h3.title !{movie.title}
+											if !same
+												a(href="/film/"+movie.url+'/'+movie.num)
+													h4.title_org !{movie.title_org}
+											span.time #{MOMENT(movie.update_date).fromNow()}
+												i.fa(class="fa-eye" style="padding-left: 10px;")  #{movie.viewed}
+											- var genres = [];
+											- for (var i = 0, len = movie.genres.length; i < len; i++) {
+											-	var uppered = movie.genres[i].charAt(0).toUpperCase() + movie.genres[i].slice(1);
+											- 	if(i==(len-1)) genres.push([uppered, movie.genres[i]]);
+											- 	else genres.push([uppered+',', movie.genres[i]]);
+											- }
+											.block2
+												each gen in genres
+													a(href='/filmy?kat='+gen[1])
+														.gen #{gen[0]}
+												.clear
+											a(href="/filmy?start_year="+movie.year+"&end_year="+movie.year)
+												span.year #{movie.year}
+											span.rate
+												i(class="fa fa-star" aria-hidden="true")
+												span.num #{movie.rate==0?'BRAK':movie.rate.toFixed(1)+' / 5'}
+											span.type #{movie.typeVideo}
+										.clear
+										p.desc !{(epipsis_text.apply(movie.desc, [180, true])).replace(/\u00a0/g, " ")}
+										if movie.viewedByYou
+											.viewedByMe(title="Ten film został przez Ciebie obejrzany")
+												i.fa(class="fa-check")
+									if index==7
+										if !(user_status.code==3 && user_status.data.premium)
+											div(style="padding: 0px 0 20px 0; width: 800px; overflow: hidden;" class="ad ads reklama")
+												center
+													div(class="spolecznoscinet" id="spolecznosci-3535")
+
+								.clear
+							else
+								.no Brak wyników.
+
+							if status.maxPage>0
+								.pagineteBox
+									if status.page>1
+										a.pBtn(href=encodeURI(status.urlPages+'&page='+(status.page-1)) style="padding: 0 10px;") Poprzednia
+										a.pBtn(href=encodeURI(status.urlPages+'&page=1')) 1
+
+										each num in [status.page-3, status.page-2, status.page-1]
+											if num>1
+												a.pBtn(href=encodeURI(status.urlPages+'&page='+num)) #{num}
+
+									if status.maxPage>1
+										.pBtn(class="pAcitve") #{status.page}
+
+									if(status.page<status.maxPage)
+										each num in [status.page+1, status.page+2, status.page+3]
+											if num<status.maxPage
+												a.pBtn(href=encodeURI(status.urlPages+'&page='+num)) #{num}
+
+
+
+									if(status.page!=status.maxPage)
+										a.pBtn(href=encodeURI(status.urlPages+'&page='+status.maxPage)) #{status.maxPage}
+
+
+									if status.page<status.maxPage
+										a.pBtn(href=encodeURI(status.urlPages+'&page='+(status.page+1)) style="padding: 0 10px;") Następna
+									.clear
+
+
+				.clear
+
+
+
+		//- section.container
+		//- 	h2.title Wszystkie 
+		//- 		span.green filmy
+
+		//- 	.sortBox
+		//- 		a(href=(encodeURI(status.url))+'&sort_by=date'+(status.sort_by=='date' && status.type==-1?'&type=asc':'&type=desc'))
+		//- 			.l_btn(class=(status.sort_by=='date'?'l_active':'') title="Sortuj według daty dodania")
+		//- 				i.fa(class="fa-calendar")
+		//- 				i.fa(style=(status.sort_by=='date' && status.type==-1?'visibility: hidden;':'') class="fa-sort-up")
+		//- 				i.fa(style=(status.sort_by=='date' && status.type==1?'visibility: hidden':'') class="fa-sort-desc")
+		//- 		a(href=(encodeURI(status.url))+'&sort_by=views'+(status.sort_by=='views' && status.type==-1?'&type=asc':'&type=desc'))
+		//- 			.l_btn(class=(status.sort_by=='views'?'l_active':'') title="Sortuj według wyświetleń")
+		//- 				i.fa(class="fa-eye")
+		//- 				i.fa(style=(status.sort_by=='views' && status.type==-1?'visibility: hidden;':'') class="fa-sort-up")
+		//- 				i.fa(style=(status.sort_by=='views' && status.type==1?'visibility: hidden':'') class="fa-sort-desc")
+		//- 		a(href=(encodeURI(status.url))+'&sort_by=rate'+(status.sort_by=='rate' && status.type==-1?'&type=asc':'&type=desc'))
+		//- 			.l_btn(class=(status.sort_by=='rate'?'l_active':'') title="Sortuj według oceny")
+		//- 				i.fa(class="fa-star")
+		//- 				i.fa(style=(status.sort_by=='rate' && status.type==-1?'visibility: hidden;':'') class="fa-sort-up")
+		//- 				i.fa(style=(status.sort_by=='rate' && status.type==1?'visibility: hidden;':'') class="fa-sort-desc")
+		//- 	.clear
+
+		//- 	#leftSide
+		//- 		span.ver Wersja
+		//- 		.vvBox
+		//- 			.vBox(data-type="polski" class=(status.vers.indexOf('POLSKI')!=-1?'vBox_active':''))
+		//- 				i.fa(class="fa-flag-o")
+		//- 				.text1 Polski
+		//- 			.vBox(data-type="dubbing" class=(status.vers.indexOf('DUBBING')!=-1?'vBox_active':''))
+		//- 				i.fa(class="fa-volume-down")
+		//- 				.text2 Dubbing
+		//- 			.vBox(data-type="lektor_pl" class=(status.vers.indexOf('LEKTOR_PL')!=-1?'vBox_active':''))
+		//- 				i.fa(class="fa-microphone")
+		//- 				.text3 Lektor PL
+		//- 			.vBox(data-type="napisy_pl" class=(status.vers.indexOf('NAPISY_PL')!=-1?'vBox_active':''))
+		//- 				i.fa(class="fa-align-left")
+		//- 				.text4 Napisy PL
+		//- 			.vBox(data-type="napisy_eng" class=(status.vers.indexOf('NAPISY_ENG')!=-1?'vBox_active':''))
+		//- 				i.fa(class="fa-align-left")
+		//- 				.text5 Nap. ENG
+		//- 			.vBox(data-type="eng" class=(status.vers.indexOf('ENG')!=-1?'vBox_active':''))
+		//- 				i.fa(class="fa-globe")
+		//- 				.text6 ENG
+		//- 			.clear
+		//- 		.btn Pokaż wyniki
+		//- 		.clear
+
+		//- 		span.time Wybierz przedział czasowy w latach
+		//- 		.tBox
+		//- 			input.input(type="text" min="1800" max="2100" name="min" placeholder="Od np. 1995" style="margin-right: 5px;" value=(status.start_year?status.start_year:''))
+		//- 			input.input(type="text" min="1800" max="2100" name="max" placeholder="Do np. 2016" value=(status.end_year?status.end_year:''))
+		//- 			.clear
+		//- 		.btn Pokaż wyniki
+		//- 		.clear
+
+		//- 		span.genres Gatunki
+		//- 		.gBox
+		//- 			ul
+		//- 				each kat in status.kats
+		//- 					li(data-gen=kat class=(status.katsEnabled.indexOf(kat)!=-1?'active':'')) #{kat}
+		//- 				.clear
+		//- 		.btn Pokaż wyniki
+		//- 		.clear
+
+		//- 		#ad250250(class="ads ad reklama" style="width: 250px; margin: 0 auto; margin-top: 30px;")
+		//- 			div(class="ns_placement" id="QAPS_AKPL_6d00dd0493421559375e7bfbe3f6ae51")
+		//- 			script(type="text/javascript" async="async" src="https://adsearch.adkontekst.pl/_/ads2/?QAPS_AKPL=6d00dd0493421559375e7bfbe3f6ae51")
+
+
+		//- 	#rightSide
+		//- 		if status.maxPage>0
+		//- 			ul#moviesList
+		//- 				each movie in movies
+		//- 					li
+		//- 						section(style="position: relative;")
+		//- 							a(href='/film/'+movie.url+"/"+movie.num)
+		//- 								.poster
+		//- 									img(src=""+movie.poster width="100" height="100" alt title)
+		//- 							a(href='/film/'+movie.url+"/"+movie.num)
+		//- 								h3.title_ !{movie.title}
+		//- 							if movie.title!=movie.title_org
+		//- 								a(href='/film/'+movie.url+"/"+movie.num)
+		//- 									h4.title_org !{movie.title_org}
+		//- 							.block
+		//- 								a(href='/filmy?start_year='+movie.year+'&end_year='+movie.year)
+		//- 									.year #{movie.year}
+		//- 								if(movie.typeVideo)
+		//- 									.types 
+		//- 										i.fa(class="fa-microphone")
+		//- 										span #{movie.typeVideo}
+		//- 								.views 
+		//- 									i.fa(class="fa-eye")
+		//- 									span #{movie.views}
+		//- 							- var genres = [];
+		//- 							- for (var i = 0, len = movie.genres.length; i < len; i++) {
+		//- 							-	var uppered = movie.genres[i].charAt(0).toUpperCase() + movie.genres[i].slice(1);
+		//- 							- 	if(i==(len-1)) genres.push([uppered, movie.genres[i]]);
+		//- 							- 	else genres.push([uppered+',', movie.genres[i]]);
+		//- 							- }
+		//- 							.block2
+		//- 								each gen in genres
+		//- 									a(href='/filmy?kat='+gen[1])
+		//- 										.gen #{gen[0]}
+		//- 								.clear
+		//- 							.clear
+		//- 							p.desc !{epipsis_text.apply(movie.desc, [205, true])}
+		//- 							if movie.viewedByYou
+		//- 								.viewedByMe(title="Ten film został przez Ciebie obejrzany")
+		//- 									i.fa(class="fa-check")
+		//- 							.clear
+		//- 				.clear
+		//- 		else
+		//- 			.no Brak wyników.
+
+		//- 		if status.maxPage>0
+		//- 			.pagineteBox
+		//- 				if status.page>1
+		//- 					a.pBtn(href=encodeURI(status.urlPages+'&page='+(status.page-1)) style="padding: 0 10px;") Poprzednia
+		//- 					a.pBtn(href=encodeURI(status.urlPages+'&page=1')) 1
+
+		//- 					each num in [status.page-3, status.page-2, status.page-1]
+		//- 						if num>1
+		//- 							a.pBtn(href=encodeURI(status.urlPages+'&page='+num)) #{num}
+
+		//- 				if status.maxPage>1
+		//- 					.pBtn(class="pAcitve") #{status.page}
+
+		//- 				if(status.page<status.maxPage)
+		//- 					each num in [status.page+1, status.page+2, status.page+3]
+		//- 						if num<status.maxPage
+		//- 							a.pBtn(href=encodeURI(status.urlPages+'&page='+num)) #{num}
+
+
+
+		//- 				if(status.page!=status.maxPage)
+		//- 					a.pBtn(href=encodeURI(status.urlPages+'&page='+status.maxPage)) #{status.maxPage}
+
+
+		//- 				if status.page<status.maxPage
+		//- 					a.pBtn(href=encodeURI(status.urlPages+'&page='+(status.page+1)) style="padding: 0 10px;") Następna
+		//- 				.clear
+
+		//- 	.clear
+

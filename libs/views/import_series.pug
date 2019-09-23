@@ -1,0 +1,52 @@
+extend main
+block content
+	#import_page_series.box
+		.container
+			section
+				h2.sectionTitle Importuj linki
+				.clear
+
+				.sectionBox
+					.leftBtn(id="prevEpisode") Poprzedni
+					.title
+					.num
+					.rightBtn(id="nextEpisode" style="float: right") Następny
+					input.input(type="text" id="episodeLinkInput" placeholder="Wklej link alltube")
+					.clear
+
+					.err
+
+					.divLeft
+						select.select(name="type" style="display: none;" id="type_select")
+							each val in VIDEO_TYPES_LIST.slice()
+								option(value=""+val[0]) #{val[1]}
+
+						.optBtnsPane(data-target="#type_select")
+							ul
+								each val, index in VIDEO_TYPES_LIST.slice()
+									li.optBtn(data-val=""+val[0] class=(index==0?'selected':'') style="margin-right: 3px;") #{val[1]}
+								.clear
+
+						select.select(name="quality" style="display: none;" id="quality_select")
+							each val in VIDEO_QUALITY_LIST.slice().reverse()
+								option(value=""+val[0]) #{val[1]}
+
+						.optBtnsPane(style="margin-top: 12px;" data-target="#quality_select")
+							ul
+								each val, index in VIDEO_QUALITY_LIST.slice().reverse()
+									li.optBtn(data-val=""+val[0] class=(index==0?'selected':'') style="margin-right: 3px;") #{val[1]}
+								.clear
+
+						.Btn(id="iframeReload") Reload
+						.Btn(id="prevLink") Prev link
+						.Btn(id="nextLink") Next link
+						.clear
+						.divBG
+							iframe#iframeImport(width="820" height="462" allowfullscreen style="display: block;")
+							iframe#iframeImport2(width="820" height="140" allowfullscreen style="padding-top: 12px; display: block;")
+						.clear
+					.divLeft(style="margin-top: 82px; margin-left: 20px;")
+						ul#hostings
+
+
+					.clear

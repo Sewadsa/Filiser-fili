@@ -1,0 +1,44 @@
+#modalBG
+	#add_link_page(style="margin-top: 128px;")
+		.tit Dodaj link
+		.err
+		.confirm
+		form#addLinksForm
+			fieldset
+				input.input(name="link" placeholder="Wklej link" tabindex="2" autofocus style="margin-top: 15px;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false")
+				input(type="hidden" name="code" value=""+code)
+
+				select.select(name="type" style="display: none;" id="type_select")
+					each val in VIDEO_TYPES_LIST.slice()
+						option(value=""+val[0]) #{val[1]}
+
+				.optBtnsPane(style="margin-top: 20px;" data-target="#type_select")
+					ul
+						each val, index in VIDEO_TYPES_LIST.slice()
+							li.optBtn(data-val=""+val[0] class=(index==0?'selected':'')) #{val[1]}
+						.clear
+
+				select.select(name="quality" style="display: none;" id="quality_select")
+					each val in VIDEO_QUALITY_LIST.slice().reverse()
+						option(value=""+val[0]) #{val[1]}
+
+				.optBtnsPane(style="margin-top: 20px;" data-target="#quality_select")
+					ul
+						each val, index in VIDEO_QUALITY_LIST.slice().reverse()
+							li.optBtn(data-val=""+val[0] class=(index==0?'selected':'')) #{val[1]}
+						.clear
+
+				if user_status.code==3 && user_status.data.type!='USER'
+					.checker(style="margin-top: 20px; margin-left: 3px;")
+						input(type="checkbox" id="checker" class="checkbox_s" name="premium")
+						label.checkbox(for="checker")
+							i.fa(class="fa-check")
+					.inf(style="margin-top: 22px;") Link premium?
+					.clear
+
+				.bo
+					span(class="cssload-loader")
+						span(class="cssload-loader-inner")
+					input.btn(type="submit" value="Dodaj" tabindex="5" style="margin-top: 20px;" id="submit")
+				.info
+					a.greenLink(href="/hostingi" target="_blank" style="cursor:pointer;") Sprawdź obsługiwane hostingi

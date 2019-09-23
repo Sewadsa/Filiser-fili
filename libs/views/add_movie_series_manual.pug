@@ -1,0 +1,73 @@
+extend main
+block content
+	.container
+		#add_movie_series.box
+			script(src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.4.1/cropper.min.js")
+			link(rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.4.1/cropper.min.css")
+			h2.pageTitle Dodajesz 
+				span.green #{type==0?'Film':'Serial'}
+
+			#left_side
+				.info(style="margin-bottom: 15px;") Uzupełnij wszystkie pola.
+				.err
+				form#addMovieSeriesForm(style="margin-top: 15px;")
+					fieldset
+						.line
+							label.lab Oryginalny tytuł:
+							input.input(type="text" name="title_org" placeholder="Pole wymagane" tabindex="2")
+
+						.line
+							label.lab Polski tytuł:
+							input.input(type="text" name="title" placeholder="Pole wymagane" tabindex="3")
+							label.infos Jeśli polski tytuł nie istnieje należy skopiować oryginalny.
+
+						.line
+							label.lab Data premiery (świat):
+							input.input(type="text" name="year" placeholder="Pole wymagane YYYY-MM-DD" tabindex="4")
+
+						.line
+							label.lab Kategorie:
+							select.multi_select(name="genres" multiple tabindex="6")
+								each item in GENRES_LIST
+									option(value=item) #{item}
+							label.infos Maksymalnie 3 kategorie. Zaznacz trzymając CTRL.
+
+						.line
+							label.lab Opis:
+							textarea.area(name="desc" placeholder="Pole wymagane" tabindex="7")
+
+						input(type="hidden" name="id" value='')
+						input(type="hidden" name="type" value=type)
+						input(type="hidden" name="poster" id="poster_input")
+
+						.bo
+							span(class="cssload-loader")
+								span(class="cssload-loader-inner")
+							input.btn(type="submit" value="Dodaj")
+
+
+			#right_side
+				#empty
+					.info Okładka jest wymagana.
+					label.btn(for="file_input" style="margin-top: 15px; float:left;") Dodaj okładkę
+					label.infos(style="margin-top: 15px; float:left; margin-left: 8px;") Minimalne wymiary 220x220px. Maksymalny rozmiar pliku 5MB. Obsługiwane rozszerzenia: png, jpg, gif.
+					.clear
+					input.file_input(type="file" name="file_input" id="file_input" hidden)
+				#full(hidden)
+					.info Wykadruj okładkę.
+					label.btn(for="file_input" style="margin-top: 15px; float:left;") Zmień okładkę
+					label.infos(style="margin-top: 15px; float:left; margin-left: 8px;") Minimalne wymiary 220x220px. Maksymalny rozmiar pliku 5MB. Obsługiwane rozszerzenia: png, jpg, gif.
+					.clear
+					input.file_input(type="file" name="file_input" id="file_input" hidden)
+				#cropper_box(hidden)
+					div(style="width: 550px; height: 550px; float: left; overflow: hidden;")
+						img(id="image-to-crop" style="width: 550px; height: 550px;")
+
+					div(id="prev" style="float: left;  width: 220px; height: 220px; overflow: hidden;")
+			.clear
+
+	#cropperRequired
+
+
+
+		

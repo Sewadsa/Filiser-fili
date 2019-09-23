@@ -1,0 +1,95 @@
+extend main
+block content
+	#infringements_page.box
+		.container
+			h2.title Naruszenie praw autorskich
+
+			form#infringements
+				fieldset
+					.line
+						span.formTitle Instytucja/firma (opcjonalnie)
+						input.input(type="text" name="company" tabindex="2" placeholder="Instytucja/firma" autofocus)
+						.clear
+
+					.line
+						span.formTitle Imię i nazwisko osoby zgłaszającej
+						input.input(type="text" name="name" tabindex="3" placeholder="Imię i nazwisko")
+						.clear
+
+					.line
+						span.formTitle(style="line-height: 15px;") Tytuł/stanowisko (uprawnienia posiadane do złożenia naruszenia)
+						input.input(type="text" name="access" tabindex="4" placeholder="Tytuł/stanowisko")
+						.clear
+
+					.line
+						span.formTitle Ulica, nr domu, nr lokalu
+						input.input(type="text" name="address" tabindex="5" placeholder="Ulica, nr domu, nr lokalu")
+						.clear
+
+					.line
+						span.formTitle Kod pocztowy
+						input.input(type="text" name="zip" tabindex="6" placeholder="Kod pocztowy")
+						.clear
+
+					.line
+						span.formTitle Miejscowość
+						input.input(type="text" name="city" tabindex="7" placeholder="Miejscowość")
+						.clear
+
+					.line
+						span.formTitle Kraj
+						input.input(type="text" name="country" tabindex="8" placeholder="Kraj")
+						.clear
+
+					.line
+						span.formTitle Adres e-mail
+						input.input(type="text" name="email" tabindex="9" placeholder="Adres e-mail")
+						.clear
+
+					.line
+						span.formTitle(style="line-height: 15px;") Link/i do Komentarza/Postu lub Materiału naruszającego prawo i opis treści naruszających prawo
+						textarea.area(name="urls" spellcheck="false" onkeyup="MAIN.resizeArea(this)" placeholder="Linki (każdy w nowej lini)" style="white-space: nowrap;")
+						.clear
+
+					h3.subTitle(style="margin-top: 20px;") Wyjaśnienie
+
+					p Prosimy o wyjaśnienie, w jaki sposób ten Komentarz/Post lub Materiał (Profil) narusza prawo.<br>Prosimy o podanie informacji kontaktowych, które będą mogły zostać przekazane Użytkownikowi – naruszycielowi, aby mogła skontaktować się ona bezpośrednio w celu rozstrzygnięcia problemu (jeśli dane nie zostaną podane osobno, zostaną użyte dane wpisane powyżej).<br>Prosimy o podanie danych osoby, której prawa są łamane (jeśli są one inne niż wpisane w formularzu; jeśli dane te nie zostaną wpisane, założymy, że to Pana/Pani prawa zostały naruszone lub naruszenie nie dotyczy konkretnej osoby)
+
+					textarea.area(name="explanation" spellcheck="false" style="width: 656px; max-width: 656px; margin-left: 0px;" placeholder="Wyjaśnienie")
+					.clear
+
+					h3.subTitle(style="margin-top: 30px;") Notka Prawna
+
+					p Zgodnie z art. 14 Ustawy o świadczeniu usług drogą elektroniczną (Dz.U.2002.144.1204 z późn. zmianami), możemy zablokować Komentarze/Posty lub Materiały w reakcji na urzędowe zawiadomienie lub wiarygodne zgłoszenie. Prosimy wypełnić powyższe dane, by zgłoszenie spełniało warunek wiarygodności.<br>Proszę pamiętać, że podane informacje mogą zostać przekazane Użytkownikowi, który dostarczył materiały podejrzane o łamanie zasad, w celu umożliwienia mu złożenia wyjaśnień.<br>Proszę również upewnić się, czy konkretne treści rzeczywiście naruszają prawa autorskie. W razie wątpliwości odnośnie swoich praw lub braku pewności, czy wystąpiło naruszenie praw autorskich, sugerujemy najpierw zwróć się o poradę prawną. Zwracamy uwagę, iż na mocy art. 212 par.1 Kodeksu Karnego (Dz.U.1997.88.553 z późn. zmianami) złożenie nieprawdziwego zawiadomienia może być zagrożone karą nawet roku pozbawienia wolności. Szkody spowodowane nieprawdziwym zgłoszeniem mogą też prowadzić do zasądzenia wysokich odszkodowań zasądzonych w postępowaniu cywilnym.
+
+					.line
+						div(class="g-recaptcha" data-sitekey=RECAPTCHA_SITE_KEY data-theme="dark" data-tabindex="5" style="float: right")
+						.clear
+
+					input.but(type="submit" value="Wyślij" style="float: right")
+					.clear
+
+
+
+						
+
+
+
+						
+
+
+			//- p Informujemy iż, szanujemy prawa autorskie właścicieli do ich utworów i nie powinieneś Użytkowniku umieszczać w serwisie Filiser.pl żadnych materiałów, które do Ciebie nie należą lub do których nie masz praw - w tym także choćby majątkowych praw autorskich.
+
+			//- p Aby pomóc chronić prawa autorskie zgadzamy się i stosujemy do uwag oraz procedur przeciwdziałania ich naruszeniom - uwag i procedur ustanowionych m.in. przez Digital Millennium Copyright Act (DMCA).
+
+			//- p Jeżeli zauważyłeś, że ktoś bez Twojej wiedzy i zgody użył lub naniósł (zapisał) w serwisie Filiser.pl materiały do których masz prawa autorskie, które możesz niezbicie wykazać, poinformuj nas o tym, a my niezwłocznie podejmiemy kroki w celu usunięcia tych treści.
+
+			//- p Aby upewnić się czy obsługa serwisu Filiser.pl będzie mogła szybko i efektywnie zareagować na Twoje uwagi, proszę napisać do nas na <a href="mailto:naruszenia@filiser.pl" style="color: #20da24">naruszenia@filiser.pl</a>.<br><br>W wiadomości prosimy o podanie następujacych informacji:
+
+			//- ul
+			//- 	li Dokładne dane materiałów, które Twoim zdaniem naruszają prawa autorskie Twoje lub podmiotu, którego reprezentujesz.
+			//- 	li Dane, które pozwolą nam zlokalizować materiały, co do których masz pewność, że naruszają prawa autorskie (nazwa, linki do materiałów).
+			//- 	li Twoje dane teleadresowe, za pomocą których będziemy mogli się z Tobą skontaktować (nazwisko i imię, adres, numer telefonu oraz adres e-mail).
+			//- 	li  Oświadczenie, iż jesteś przekonany, że używanie materiałów w sposób, co do którego masz wątpliwości, nie zostało autoryzowane przez osobę, która ma do niego pełne prawa autorskie lub przez jej przedstawiciela oraz, że jest niezgodne z istniejącym porządkiem prawa.
+			//- 	li Zapewnienie, że wszystkie informacje zawarte w Twoim oświadczeniu są aktualne i zgodne z prawdą, oraz że jesteś właścicielem lub osobą upoważnioną przez niego do chronienia wyłącznych praw, które według Ciebie lub Twego mocodawcy zostały naruszone. Zapamiętaj, że podanie nieprawdziwych danych jest karalne!
+			//- 	li Twój podpis (normalny lub elektroniczny), jeśli jesteś upoważniony do chronienia wyłącznych praw autorskich, które zostały według Ciebie naruszone lub podpis zwykły lub elektroniczny właściciela tychże praw.

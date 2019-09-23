@@ -1,0 +1,183 @@
+extend main
+block content
+	- if(user_status.code==3){
+	- 	var isOwnVideo = String(video.user._id) == String(user_status.data._id);
+	- 	var isModAdmin = user_status.data.type == "ADMIN" || user_status.data.type == "MODERATOR"
+	- 	}
+
+	if isOwnVideo && video.status=='WAIT'
+		.container
+			.notify_line(class="notify_info")
+				.iconSide
+					i.fa(class="fa-info")
+				h2.contentSide Ten filmik został dodany przez Ciebie. W tej chwili czeka na weryfikację.
+
+	#video_page.box(data-code=""+video._id)
+		if isModAdmin
+			.container(style="margin-bottom: 20px;" id="mod_ad_btns_top")
+				section
+					button.but(id="delMovieBtn") Usuń filmik
+					.clear
+
+		.container
+			section#left_side
+				h2.title(title=video.title style="font-size: 18px; line-height: 22px;") !{video.title}
+				if isModAdmin
+					input#titleEdit(type="text" onblur="MAIN.changeInputTitle(this)")
+				.clear
+
+				#player_box(style="margin-top: 8px; height: 461px;")
+					#player
+						iframe#iframe(src="https://www.youtube.com/embed/"+video.video_id+'?iv_load_policy=3&modestbranding=0&rel=0&showinfo=0' width="100%" height="100%" allowfullscreen scrolling="no")
+
+				#under_player(style="height: 26px;")
+					#views(title="Odsłony strony")
+						i.fa(class="fa-eye") 
+							span.l #{video.views}
+					.clear
+
+				#commentsBox(style="margin-top: 25px;")
+					.commentsCount Komenatarze: #{commentsCount}
+
+					#addCommentBox
+						form#addComment
+							fieldset
+								img.avatar(src=(user_status.code==3?(user_status.data.avatar?user_status.data.avatar:'/assets/img/default_avatar.jpg'):'/assets/img/default_avatar.jpg') width="48" height="48" title="Twój avatar" alt="Avatar")
+								textarea.area(name="message" placeholder="Dodaj komentarz..." id="commentArea")
+								.clear
+								if user_status.code==3
+									if user_status.data.comment_captcha
+										.z(style="float: right; margin-top: 8px;")
+											div#recaptchaComment
+										.clear
+									input.but(type="submit" value="Wyślij" style="float: right; margin-top: 8px;")
+									.bos
+										span(class="cssload-loader")
+											span(class="cssload-loader-inner")
+									.err
+									
+									
+								else
+									.o_btn(style="float: right; margin-top: 8px;" class="loginBtn") Wyślij
+								.clear
+					if commentsCount>0
+						ul#comments
+							each comment, index in video.comments
+								li.comment(data-ref=""+comment._id)
+									a(href="/user/"+comment.user.username)
+										img.avatar(src=(comment.user.avatar?comment.user.avatar:'/assets/img/default_avatar.jpg') width="48" height="48" title="Użytkownik "+comment.user.username alt="Avatar")
+									.bo
+										a(href="/user/"+comment.user.username title="Użytkownik "+comment.user.username)
+											span.name(class=(comment.user.premium && PREMIUM?'premium':'')) #{comment.user.username}
+										if comment.spoilers
+											.spoil Ten komentarz może zawierać spoilery. 
+												span.greenLink(class="showComment") Pokaż.
+											p(style="display:none") #{comment.message}
+										else
+											p #{comment.message}
+										.rate
+											- glos = null;
+											- if(user_status.code==3){
+											- 	for(var i = 0, len = comment.vote_logs.length; i < len; i++){
+											- 		if(String(comment.vote_logs[i].user_id)==String(user_status.data._id)){
+											- 			glos = comment.vote_logs[i].vote; break;
+											- 		}
+											- 	}
+											- }
+											i.fa(class="fa-thumbs-up" class=(user_status.code!=3?'loginBtn':'likeUpCommentBtn') style=(glos==1?'color:#28aa31;margin-left: 0px;':'margin-left: 0px;') title="Jestem za")  
+												span.l #{comment.like_up}
+											i.fa(class="fa-thumbs-down" class=(user_status.code!=3?'loginBtn':'likeDownCommentBtn') style=(glos==0?'color:#e2391d;':'') title="Jestem przeciw") 
+												span.l #{comment.like_down}
+										.time #{MOMENT(comment.date).fromNow()}
+									.clear
+
+
+			#right_side
+				//-img#poster(src=video.poster width="330" height="186" alt="Okładka" title="Okładka do filmu" style="margin-top: 30px;")
+
+				if(user_status.code==3 && video.votedByYou)
+					#rate_this(style="padding-top: 30px;") Twoja ocena: #{video.votedByYou}
+				else
+					#rate_this(style="padding-top: 30px;") Oceń ten materiał:
+				- var rate = video.rate;
+				#star_rate2
+					- var fullStars = Math.floor(rate);
+					- var starsAdded = fullStars;
+					- var i_star = 1;
+
+					- for(var i = 0; i < fullStars; i++) {
+						i.fa(class="fa-star" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star" title="Oceń na "+i_star)
+						- i_star++;
+					- }
+
+					- if(starsAdded<5){
+						- var polowka = rate-fullStars;
+						- if(polowka>=0.5){
+							- starsAdded++;
+							i.fa(class="fa-star-half-o" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star-half-o" title="Oceń na "+i_star)
+							- i_star++;
+						- }else{
+							- starsAdded++;
+							i.fa(class="fa-star-o" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star-o" title="Oceń na "+i_star)
+							- i_star++;
+						- }
+					- }
+
+					- if(starsAdded<5){
+						- for(var i = 0; i < 5-starsAdded; i++) {
+							i.fa(class="fa-star-o" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star-o" title="Oceń na "+i_star)
+							- i_star++;
+						- }
+					- }
+				#rate #{(Math.round(video.rate * 100)/100).toFixed(1)+' / 5.0'}
+				#votes Głosów: #{video.votes_count}
+				.clear
+
+				- var genres = '';
+				- for (var i = 0, len = video.genres.length; i < len; i++) {
+				-	var uppered = video.genres[i].charAt(0).toUpperCase() + video.genres[i].slice(1);
+				- 	if(i==0) genres+= uppered;
+				- 	else genres+= ', '+uppered;
+				- }
+
+
+				span#genres2 Kategorie: #{genres}
+				span#date Dodał: <a href="/user/#{video.user.username}">#{video.user.username}</a> #{MOMENT().to(video.date)}
+
+				section#des
+					h2#sub_title Opis filmiku:
+					if isModAdmin
+						.editDesc
+							i.fa(class="fa-edit" title="Edytuj opis")
+					.clear
+					if isModAdmin
+						textarea.area(id="areaDescEdit" onkeyup="MAIN.resizeArea(this)" onblur="MAIN.changeAreaDesc(this)")
+					p#desc !{video.desc}
+
+				if !(user_status.code==3 && user_status.data.premium)
+					div(style="width: 330px; margin: 20px 0;" class="ad ads reklama")
+						if Math.random() > 0.08
+							script(src="https://rtbnowads.com/publisher/emit.php?page_id=398&id=2")
+						else
+							a(href="https://goo.gl/atZgWV" rel="nofollow" target="_blank")
+								img(src="https://ad.bitbay.net/pl/bb-300x250.png" width="300" height="250")
+
+				if videos.length>0
+					section#recommended-videos(style="margin-top: 20px;")
+						h2.sectionTitle Polecane
+						.clear
+
+						.sectionBox
+							each video in videos
+								section.item
+									a(href="/filmik/"+video.url+"/"+video.num)
+										.poster
+											img(src=video.poster width="128" height="72")
+									.block
+										a(href="/filmik/"+video.url+"/"+video.num)
+											h3.title(title=video.title) #{video.title}
+										.views #{liczba_to_tekst(video.views)} wyświetleń
+
+									.clear
+
+			.clear

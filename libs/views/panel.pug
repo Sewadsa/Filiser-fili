@@ -1,0 +1,332 @@
+extend main
+block content
+	#panel_verify_page.box
+		.container
+			h2.title Panel 
+					span.green weryfikacyjny
+
+			#activity_box
+				if movies.length == 0 && series.length == 0 && episodes.length == 0 && linksCount == 0 &&  commentsCount == 0 && videos.length == 0
+					.d Wszystko sprawdzone.
+				else
+					#btns
+						- var firstName = '';
+						if movies.length>0
+							- firstName = 'movies';
+						if series.length>0 && firstName==''
+							- firstName = 'series';
+						if episodes.length>0 && firstName==''
+							- firstName = 'episodes';
+						if linksCount>0 && firstName==''
+							- firstName = 'links';
+						if commentsCount>0 && firstName==''
+							- firstName = 'comments';
+						if videos.length>0 && firstName==''
+							- firstName = 'videos';
+
+						
+
+
+						if movies.length>0
+							.l_btn(class=(firstName=='movies'?'l_active':'') data-name="movies") Filmy (#{movies.length})
+						if series.length>0
+							.l_btn(class=(firstName=='series'?'l_active':'') data-name="series") Seriale (#{series.length})
+						if episodes.length>0
+							.l_btn(class=(firstName=='episodes'?'l_active':'') data-name="episodes") Odcinki (#{episodes.length})
+						if linksCount>0
+							.l_btn(class=(firstName=='links'?'l_active':'') data-name="links") Linki (#{linksCount})
+						if commentsCount>0
+							.l_btn(class=(firstName=='comments'?'l_active':'') data-name="comments") Komentarze (#{commentsCount})
+						if videos.length>0
+							.l_btn(class=(firstName=='videos'?'l_active':'') data-name="videos") Filmiki (#{videos.length})
+						if linksCount>0
+							.l_btn(data-name="tools") Narzędzia
+						.clear
+					#contents
+						if movies.length>0
+							ul#movies_list(data-name="movies" class="par" style=(firstName=='movies'?'display:block':'display:none'))
+								if movies.length==0
+									li.no_data Brak wyników
+								else
+									each movie in movies
+										li.line(data-ref=""+movie._id)
+											a(href=BASE_URL+'/film/'+movie.url+'/'+movie.num target="_blank")
+												img.poster(src=IMG_HOSTNAME+movie.poster width="48" height="48")
+											.titles_box
+												.title !{movie.title}
+												.title_org !{movie.title_org}
+											.y_g_box
+												- var genres = '';
+												- for (var i = 0, len = movie.genres.length; i < len; i++) {
+												-	var uppered = movie.genres[i].charAt(0).toUpperCase() + movie.genres[i].slice(1);
+												- 	if(i==0) genres+= uppered;
+												- 	else genres+= ', '+uppered;
+												- }
+												.genres #{genres}
+												.year #{movie.year}
+													a.user(href="/user/"+movie.user.username target="_blank" class="greenLink" title="Dodał:") !{movie.user.username}
+													span.rate #{Math.round(movie.rate * 100)/100}
+											.btn_box
+												i.fa(class="fa-times deleteMovieBtn" title="Usuń")
+												if movie.filmweb_id!=-1
+													a(href="http://www.filmweb.pl/film/"+movie.url+'-'+movie.filmweb_id target="_blank")
+														i.fa(class="fa-external-link" title="Otwórz film w filmweb.pl")
+												//-i.fa(class="fa-edit" title="Edytuj")
+												i.fa(class="fa-check-square-o acceptMovieBtn" title="Akceptuj")
+											.clear
+
+											.desc #{movie.desc}
+
+						if series.length>0
+							ul#series_list(data-name="series" class="par" style=(firstName=='series'?'display:block':'display:none'))
+								if series.length==0
+									li.no_data Brak wyników
+								else
+									each ser in series
+										li.line(data-ref=""+ser._id)
+											a(href=BASE_URL+'/serial/'+ser.url+'/'+ser.num target="_blank")
+												img.poster(src=IMG_HOSTNAME+ser.poster width="48" height="48")
+											.titles_box
+												.title !{ser.title}
+												.title_org !{ser.title_org}
+											.y_g_box
+												- var genres = '';
+												- for (var i = 0, len = ser.genres.length; i < len; i++) {
+												-	var uppered = ser.genres[i].charAt(0).toUpperCase() + ser.genres[i].slice(1);
+												- 	if(i==0) genres+= uppered;
+												- 	else genres+= ', '+uppered;
+												- }
+												.genres #{genres}
+												.year #{ser.year}
+													a.user(href="/user/"+ser.user.username target="_blank" class="greenLink" title="Dodał:") !{ser.user.username}
+													span.rate #{Math.round(ser.rate * 100)/100}
+													span.rate Odcinki: #{ser.episodes?ser.episodes.length:0}
+											.btn_box
+												i.fa(class="fa-times deleteSeriesBtn" title="Usuń")
+												a(href="http://www.filmweb.pl/serial/"+ser.url+'-'+ser.year+'-'+ser.filmweb_id target="_blank")
+													i.fa(class="fa-external-link" title="Otwórz serial w filmweb.pl")
+												i.fa(class="fa-edit" title="Edytuj")
+												i.fa(class="fa-check-square-o acceptSeriesBtn" title="Akceptuj")
+											.clear
+
+											.desc #{ser.desc}
+						if episodes.length>0
+							ul#episodes_list(data-name="episodes" class="par" style=(firstName=='episodes'?'display:block':'display:none'))
+								if episodes.length==0
+									li.no_data Brak wyników
+								else
+									each epi in episodes
+										li.line(data-ref=""+epi._id)
+											a(href='/serial/'+epi.series_id.url+'/s'+pad(epi.season_num)+'e'+pad(epi.episode_num)+(epi.episode_num_alter?'-e'+pad(epi.episode_num_alter):'')+'/'+epi.url+'/'+epi.num target="_blank")
+												img.poster(src=IMG_HOSTNAME+epi.series_id.poster width="48" height="48")
+											.titles_box
+												.title !{epi.series_id.title}
+												.title_org !{epi.series_id.title_org}
+											.y_g_box
+												.genres s#{pad(epi.season_num)}e#{pad(epi.episode_num)}#{epi.episode_num_alter?'-e'+pad(epi.episode_num_alter):''}
+												.year(title="Tytuł odcinka") !{epi.title}
+													a.user(href="/user/"+epi.user.username target="_blank" class="greenLink" title="Dodał:") !{epi.user.username}
+											.btn_box
+												i.fa(class="fa-times deleteEpisodeBtn" title="Usuń")
+												a(href="http://www.filmweb.pl/serial/"+epi.series_id.url+'-'+epi.series_id.year+'-'+epi.series_id.filmweb_id+'/episodes' target="_blank")
+													i.fa(class="fa-external-link" title="Otwórz serial w filmweb.pl")
+												i.fa(class="fa-edit" title="Edytuj")
+												i.fa(class="fa-check-square-o acceptEpisodeBtn" title="Akceptuj")
+											.clear
+						if linksCount>0
+							- var series_index = 0;
+							ul#links_list(data-name="links" class="par" style=(firstName=='links'?'display:block':'display:none'))
+								each epi, index in episode_links
+									- series_index = index+1;
+									li.line
+										a(href='/serial/'+epi.series_id.url+'/s'+pad(epi.season_num)+'e'+pad(epi.episode_num)+(epi.episode_num_alter?'-e'+pad(epi.episode_num_alter):'')+'/'+epi.url+'/'+epi.num target="_blank")
+											img.poster(src=IMG_HOSTNAME+epi.series_id.poster width="24" height="24")
+										.titles_box
+											.episode s#{pad(epi.season_num)}e#{pad(epi.episode_num)}#{epi.episode_num_alter?'-e'+pad(epi.episode_num_alter):''} !{epi.title}
+											.title !{epi.series_id.title}
+											.title_org !{epi.series_id.title_org}
+										.btn_box
+											a(href="http://www.filmweb.pl/serial/"+epi.series_id.url+'-'+epi.series_id.year+'-'+epi.series_id.filmweb_id+'/episodes#sezon'+epi.season_num target="_blank")
+												i.fa(class="fa-external-link" title="Zobacz odcinki w filmweb.pl")
+										.clear
+										ul
+											each link in epi.links
+												li.lineInner(data-ref=""+link._id data-code=""+epi.series_id._id data-code2=""+epi._id)
+													a.user(href="/user/"+link.user.username target="_blank" class="greenLink" title="Dodał:") !{link.user.username}
+
+													- for(var i = 0, len = VIDEO_HOSTING_LIST.length; i < len; i++){
+													- 	if(VIDEO_HOSTING_LIST[i].name==link.hosting){
+													- 		embed = VIDEO_HOSTING_LIST[i].embed_code;
+													- 		embed = embed.replace('#WIDTH', 1280);
+													- 		embed = embed.replace('#HEIGHT', 720);
+													- 		embed = embed.replace('#ID', link.video_id);
+													- 		break;
+													- 	}
+													- }
+													- if(link.hosting=='verystream') embed = embed.replace('/e/', '/stream/');
+													- else if(link.hosting=='openload') embed = embed.replace('embed', 'f');
+													- else if(link.hosting=='vidoza') embed = embed.replace('embed-', '');
+													- else if(link.hosting=='gounlimited') embed = embed.replace('embed-', '');
+													- else if(link.hosting=='premium') embed = embed.replace('zgdat01', 'zgdat02');
+
+													a.hosting(href=embed target="_blank" class="greenLink") #{link.hosting}
+													.videoId #{link.file_size ? BYTES_FORMAT(link.file_size, {unitSeparator: ' ', decimalPlaces: 2}):'Size: nie ustalono'}
+													select.select(name="type" class="typeSelect")
+														each val in VIDEO_TYPES_LIST
+															option(value=""+val[0] selected=(link.type==val[0])) #{val[1]}
+													select.select(name="quality" style="margin-left: 20px; margin-right: 20px;" class="qualitySelect")
+														each val in VIDEO_QUALITY_LIST
+															option(value=""+val[0] selected=(link.quality==val[0])) #{val[1]}
+													i.fa(class="fa-times deleteLinkBtn" title="Usuń")
+													i.fa(class="fa-check-square-o acceptLinkeBtn" title="Akceptuj")
+													.clear
+
+													if link.report!=''
+														.zgloszenie Zgłoszenie:
+														.report #{REPORT_TYPES_LIST[link.report]}
+														.report_desc #{link.report_desc}
+														.clear
+								each movie, index in movie_links
+									li.line(style=(index==0 && series_index>0?'margin-top: 100px;':''))
+										a(href="/film/"+movie.url+"/"+movie.num target="_blank")
+											img.poster(src=IMG_HOSTNAME+movie.poster width="24" height="24")
+										.titles_box
+											.title !{movie.title} (!{movie.year})
+											.title_org !{movie.title_org}
+										.btn_box
+											a(href="http://www.filmweb.pl/film/"+movie.url+'-'+movie.filmweb_id target="_blank")
+												i.fa(class="fa-external-link" title="Zobacz film w filmweb.pl")
+										.clear
+										ul
+											each link in movie.links
+												li.lineInner(data-ref=""+link._id data-code=""+movie._id)
+													a.user(href="/user/"+link.user.username target="_blank" class="greenLink" title="Dodał:") !{link.user.username}
+
+													- for(var i = 0, len = VIDEO_HOSTING_LIST.length; i < len; i++){
+													- 	if(VIDEO_HOSTING_LIST[i].name==link.hosting){
+													- 		embed = VIDEO_HOSTING_LIST[i].embed_code;
+													- 		embed = embed.replace('#WIDTH', 1280);
+													- 		embed = embed.replace('#HEIGHT', 720);
+													- 		embed = embed.replace('#ID', link.video_id);
+													- 		break;
+													- 	}
+													- }
+													- if(link.hosting=='verystream') embed = embed.replace('/e/', '/stream/');
+													- else if(link.hosting=='openload') embed = embed.replace('embed', 'f');
+													- else if(link.hosting=='vidoza') embed = embed.replace('embed-', '');
+													- else if(link.hosting=='gounlimited') embed = embed.replace('embed-', '');
+													- else if(link.hosting=='premium') embed = embed.replace('zgdat01', 'zgdat02');
+
+													a.hosting(href=embed target="_blank" class="greenLink") #{link.hosting}
+													.videoId #{link.file_size ? BYTES_FORMAT(link.file_size, {unitSeparator: ' ', decimalPlaces: 2}):'Size: nie ustalono'}
+													select.select(name="type" class="typeSelect")
+														each val in VIDEO_TYPES_LIST
+															option(value=""+val[0] selected=(link.type==val[0])) #{val[1]}
+													select.select(name="quality" style="margin-left: 20px; margin-right: 20px;" class="qualitySelect")
+														each val in VIDEO_QUALITY_LIST
+															option(value=""+val[0] selected=(link.quality==val[0])) #{val[1]}
+													i.fa(class="fa-times deleteLinkBtn" title="Usuń")
+													i.fa(class="fa-check-square-o acceptLinkeBtn" title="Akceptuj")
+													.clear
+
+													if link.report!=''
+														.zgloszenie Zgłoszenie:
+														.report #{REPORT_TYPES_LIST[link.report]}
+														.report_desc #{link.report_desc}
+														.clear
+
+						if commentsCount>0
+							ul#comments_list(data-name="comments" class="par" style=(firstName=='comments'?'display:block':'display:none'))
+								each epi in episode_comments
+									li.line
+										a(href='/serial/'+epi.series_id.url+'/s'+pad(epi.season_num)+'e'+pad(epi.episode_num)+(epi.episode_num_alter?'-e'+pad(epi.episode_num_alter):'')+'/'+epi.url+'/'+epi.num target="_blank")
+											img.poster(src=IMG_HOSTNAME+epi.series_id.poster width="24" height="24")
+										.titles_box
+											.episode s#{pad(epi.season_num)}e#{pad(epi.episode_num)}#{epi.episode_num_alter?'-e'+pad(epi.episode_num_alter):''} !{epi.title}
+											.title !{epi.series_id.title}
+											.title_org !{epi.series_id.title_org}
+										.clear
+										ul
+											each comment in epi.comments
+												li.lineInner(data-ref=""+comment._id)
+													a.user(href="/user/"+comment.user.username target="_blank" class="greenLink" title="Dodał:") !{comment.user.username}
+													.message #{comment.message}
+													i.fa(class="fa-times deleteCommentkBtn" title="Usuń")
+													i.fa(class="fa-flag flagCommentkBtn" title="Komentarz zawiera spoilery")
+													i.fa(class="fa-check-square-o acceptCommentBtn" title="Akceptuj" style="padding-right: 0px;")
+													.clear
+								each movie in movie_comments
+									li.line
+										a(href="/film/"+movie.url+"/"+movie.num target="_blank")
+											img.poster(src=IMG_HOSTNAME+movie.poster width="24" height="24")
+										.titles_box
+											.title !{movie.title}
+											.title_org !{movie.title_org}
+										.clear
+										ul
+											each comment in movie.comments
+												li.lineInner(data-ref=""+comment._id)
+													a.user(href="/user/"+comment.user.username target="_blank" class="greenLink" title="Dodał:") !{comment.user.username}
+													.message #{comment.message}
+													i.fa(class="fa-times deleteCommentkBtn" title="Usuń")
+													i.fa(class="fa-flag flagCommentkBtn" title="Komentarz zawiera spoilery")
+													i.fa(class="fa-check-square-o acceptCommentBtn" title="Akceptuj" style="padding-right: 0px;")
+													.clear
+								each video in video_comments
+									li.line
+										a(href="/filmik/"+video.url+"/"+video.num target="_blank")
+											img.poster(src=IMG_HOSTNAME+video.poster width="50" height="28")
+										.titles_box
+											.title !{video.title}
+										.clear
+										ul
+											each comment in video.comments
+												li.lineInner(data-ref=""+comment._id)
+													a.user(href="/user/"+comment.user.username target="_blank" class="greenLink" title="Dodał:") !{comment.user.username}
+													.message #{comment.message}
+													i.fa(class="fa-times deleteCommentkBtn" title="Usuń")
+													i.fa(class="fa-flag flagCommentkBtn" title="Komentarz zawiera spoilery")
+													i.fa(class="fa-check-square-o acceptCommentBtn" title="Akceptuj" style="padding-right: 0px;")
+													.clear
+
+						if videos.length>0
+							ul#videos_list(data-name="videos" class="par" style=(firstName=='videos'?'display:block':'display:none'))
+								each video in videos
+									li.line(data-ref=""+video._id)
+										a(href="https://www.youtube.com/watch?v="+video.video_id target="_blank")
+											img.poster(src=IMG_HOSTNAME+video.poster width="100" height="56")
+										.y_g_box
+											.title(style="padding: 15px 0;") !{video.title}
+											- var genres = '';
+											- for (var i = 0, len = video.genres.length; i < len; i++) {
+											-	var uppered = video.genres[i].charAt(0).toUpperCase() + video.genres[i].slice(1);
+											- 	if(i==0) genres+= uppered;
+											- 	else genres+= ', '+uppered;
+											- }
+											.genres2 #{genres}
+											//- .year #{movie.year}
+											//- 	a.user(href="/user/"+movie.user.username target="_blank" class="greenLink" title="Dodał:") !{movie.user.username}
+											//- 	span.rate #{Math.round(movie.rate * 100)/100}
+										.btn_box
+											a(href='/filmik/'+video.url+'/'+video.num target="_blank")
+												i.fa(class="fa-external-link" title="Otwórz film w filmweb.pl")
+											i.fa(class="fa-times deleteVideoBtn" title="Usuń")
+											i.fa(class="fa-check-square-o acceptVideoBtn" title="Akceptuj")
+										.clear
+
+										.desc #{video.desc}
+
+						if linksCount>0
+							ul#tools(data-name="tools" class="par" style="display:none")
+								li.line#delLinksByUser
+									.padding
+										form#panelToolsDelLinksByUser
+											fieldset
+												label Usuń linki użytkownika z poczekalni:
+												input.input(type="text" name="name" placeholder="Nazwa użytkownika")
+												input.btn(type="submit" value="Wykonaj")
+												.bo
+													span(class="cssload-loader")
+														span(class="cssload-loader-inner")
+												.err 
+												.clear

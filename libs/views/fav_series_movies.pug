@@ -1,0 +1,67 @@
+extend main
+block content
+	.container
+		#fav_series_movies.box
+			if is_mobile
+				if !(user_status.code==3 && user_status.data.premium)
+					div(style="width: 100%; margin-bottom: 20px;" class="ad ads reklama")
+						center
+							div(class="spolecznoscinet" id="spolecznosci-3541")
+			else
+				if !(user_status.code==3 && user_status.data.premium)
+					div(style="width: 100%; margin-bottom: 20px;" class="ad ads reklama")
+						center
+							div(class="spolecznoscinet" id="spolecznosci-3535")
+
+			section#favMoviesSeries
+				h2.sectionTitle Ulubione
+				.sectionBoxSelect
+					ul
+						if fav_series.length>0
+							li.selBox(active data-name="series") Seriale
+						if fav_movies.length>0
+							li.selBox(data-name="movies") Filmy
+				.clear
+
+				if fav_series.length>0
+					.sectionBox(id="series")
+						ul#favList
+							each series in fav_series
+								li
+									div
+										a(href="/serial/"+series.url+"/"+series.num)
+											.poster
+												img(src=IMG_HOSTNAME+series.poster width="80" height="80")
+										.block
+											a(href="/serial/"+series.url+"/"+series.num)
+												.title !{series.title}
+											if series.title!=series.title_org
+												a(href="/serial/"+series.url+"/"+series.num)
+													.title_org !{series.title_org}
+											span.time #{MOMENT(series.update_date).fromNow()}#{series.new_status && series.new_status.str.length>0 && series.new_status.episode?':':''}
+											if(series.new_status && series.new_status.str.length>0 && series.new_status.episode)
+												span.event #{series.new_status?series.new_status.str:''} 
+													a.watchBtn(href="/serial/"+series.url+"/s"+pad(series.new_status.episode.season_num)+"e"+pad(series.new_status.episode.episode_num)+(series.new_status.episode.episode_num_alter?'-e'+pad(series.new_status.episode.episode_num_alter):'')+"/"+series.new_status.episode.url+"/"+series.new_status.episode.num) #{series.new_status?'s'+pad(series.new_status.episode.season_num)+'e'+pad(series.new_status.episode.episode_num)+(series.new_status.episode.episode_num_alter?'-e'+pad(series.new_status.episode.episode_num_alter):''):''}
+										.clear
+							.clear
+
+				if fav_movies.length>0
+					.sectionBox(id="movies" style=(fav_series.length>0?"display: none;":''))
+						ul#favList
+							each movie in fav_movies
+								li
+									div
+										a(href="/film/"+movie.url+"/"+movie.num)
+											.poster
+												img(src=IMG_HOSTNAME+movie.poster width="80" height="80")
+										.block
+											a(href="/film/"+movie.url+"/"+movie.num)
+												.title !{movie.title}
+											if movie.title!=movie.title_org
+												a(href="/film/"+movie.url+"/"+movie.num)
+													.title_org !{movie.title_org}
+											span.time #{MOMENT(movie.update_date).fromNow()}#{movie.new_status && movie.new_status.length>0?':':''}
+											if(movie.new_status && movie.new_status.length>0)
+												span.event #{movie.new_status?movie.new_status:''}
+										.clear
+							.clear

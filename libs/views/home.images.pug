@@ -1,0 +1,399 @@
+extend main
+block content
+	script(type="application/ld+json").
+		{"@context": "http://schema.org","@type": "WebSite","url": "#{BASE_URL}","potentialAction": {"@type": "SearchAction","target": "#{BASE_URL+'/szukaj?q={searchTerms}'}","query-input": "required name=searchTerms"}}
+
+	if is_mobile
+		.container
+		if pay_result=='true'
+			.goodMes Płatność przyjęta poprawnie. W ciągu kilku minut twoje konto premium powinno zostać aktywowane.
+		else if pay_result=='false'
+			.badMes Płatność odrzucona. Jeśli pieniądze zostały pobrane z konta odczekaj 60 minut. Po tym czasie możesz napisać do nas (kontakt@fili.cc).
+		#home_page.box
+			.container
+				if !(user_status.code==3 && user_status.data.premium)
+					div(style="width: 100%; margin-bottom: 20px;" class="ad ads reklama")
+						center
+							div(class="spolecznoscinet" id="spolecznosci-3541")
+
+				section#popularMoviesSeries(style="margin-bottom: 22px;")
+					h2.sectionTitle Popularne
+					.sectionBoxSelect
+						ul
+							li.selBox(active data-name="series") Seriale
+							li.selBox(data-name="movies") Filmy
+					.clear
+
+					.sectionBox(id="series")
+						ul#selectTime
+							li.timeBox(active data-name="day1") 24h
+							li.timeBox(data-name="day7") 7 Dni
+							li.timeBox(data-name="day30") 30 Dni
+							.clear
+
+						if hps
+							each day, index_hps in hps
+								.day(id=day[0] style=(index_hps>0?'display:none':''))
+									each series, index in day[1]
+										section.item
+											div
+												- var same = series.title==series.title_org;
+												a(href="/serial/"+series.url+'/'+series.num)
+													.poster
+														img(src=series.poster width="100" height="100" alt=(same?series.title:series.title+' / '+series.title_org) title=(same?series.title:series.title+' / '+series.title_org))
+												.block
+													a(href="/serial/"+series.url+'/'+series.num)
+														h3.title !{series.title}
+													if !same
+														a(href="/serial/"+series.url+'/'+series.num)
+															h4.title_org !{series.title_org}
+													span.time #{MOMENT(series.update_date).fromNow()}#{series.new_status && series.new_status.str.length>0 && series.new_status.episode?':':''}
+													if(series.new_status && series.new_status.str.length>0 && series.new_status.episode)
+														span.event #{series.new_status?series.new_status.str:''} 
+															a.watchBtn(href="/serial/"+series.url+"/s"+pad(series.new_status.episode.season_num)+"e"+pad(series.new_status.episode.episode_num)+(series.new_status.episode.episode_num_alter?'-e'+pad(series.new_status.episode.episode_num_alter):'')+"/"+series.new_status.episode.url+"/"+series.new_status.episode.num) #{series.new_status?'s'+pad(series.new_status.episode.season_num)+'e'+pad(series.new_status.episode.episode_num)+(series.new_status.episode.episode_num_alter?'-e'+pad(series.new_status.episode.episode_num_alter):''):''}
+													a(href="/seriale?start_year="+series.year+"&end_year="+series.year)
+														span.year #{series.year}
+													span.rate
+														i(class="fa fa-star" aria-hidden="true")
+														span.num #{series.rate==0?'BRAK':Math.round(series.rate * 10)/10+' / 5'}
+												.clear
+						.clear
+
+					.sectionBox(id="movies" style="display: none;")
+						ul#selectTime
+							li.timeBox(active data-name="day1") 24h
+							li.timeBox(data-name="day7") 7 Dni
+							li.timeBox(data-name="day30") 30 Dni
+							.clear
+
+						if hpm
+							each day, index_hps in hpm
+								.day(id=day[0] style=(index_hps>0?'display:none':''))
+									each movie, index in day[1]
+										section.item
+											div
+												- var same = movie.title==movie.title_org;
+												a(href="/film/"+movie.url+'/'+movie.num)
+													.poster
+														img(src=movie.poster width="100" height="100" alt=(same?movie.title:movie.title+' / '+movie.title_org) title=(same?movie.title:movie.title+' / '+movie.title_org))
+												.block
+													a(href="/film/"+movie.url+'/'+movie.num)
+														h3.title !{movie.title}
+													if !same
+														a(href="/film/"+movie.url+'/'+movie.num)
+															h4.title_org !{movie.title_org}
+													span.time #{MOMENT(movie.update_date).fromNow()}#{movie.new_status && movie.new_status.length>0?':':''}
+													if(movie.new_status && movie.new_status.length>0)
+														span.event #{movie.new_status?movie.new_status:''} 
+													a(href="/filmy?start_year="+movie.year+"&end_year="+movie.year)
+														span.year #{movie.year}
+													span.rate
+														i(class="fa fa-star" aria-hidden="true")
+														span.num #{movie.rate==0?'BRAK':Math.round(movie.rate * 10)/10+' / 5'}
+												.clear
+						.clear
+
+					.clear
+				
+				if !(user_status.code==3 && user_status.data.premium)
+						div(style="width: 100%;" class="ad ads reklama")
+							center
+								div(class="spolecznoscinet" id="spolecznosci-3543")
+
+				section#newSeriesMovies(style="margin-top: 22px; margin-bottom: 22px;")
+					h2.sectionTitle Ostatnio dodane
+					.sectionBoxSelect
+						ul
+							li.selBox(data-name="series" active) Seriale
+							li.selBox(data-name="movies") Filmy
+					.clear
+
+					.sectionBox(id="series")
+						if new_series
+							.day
+								each series in new_series
+									section.item
+										div
+											- var same = series.title==series.title_org;
+											a(href="/serial/"+series.url+'/'+series.num)
+												.poster
+													img(src=series.poster width="100" height="100" alt=(same?series.title:series.title+' / '+series.title_org) title=(same?series.title:series.title+' / '+series.title_org))
+											.block
+												a(href="/serial/"+series.url+'/'+series.num)
+													h3.title !{series.title}
+												if !same
+													a(href="/serial/"+series.url+'/'+series.num)
+														h4.title_org !{series.title_org}
+												if local_restriction
+													- var genres = '';
+													- for (var i = 0, len = series.genres.length; i < len; i++) {
+													-	var uppered = series.genres[i].charAt(0).toUpperCase() + series.genres[i].slice(1);
+													- 	if(i==0) genres+= uppered;
+													- 	else genres+= ', '+uppered;
+													- }
+													span.time #{genres}
+												else
+													span.time #{MOMENT(series.update_date).fromNow()}#{series.new_status && series.new_status.str.length>0 && series.new_status.episode?':':''}
+													if(series.new_status && series.new_status.str.length>0 && series.new_status.episode)
+														span.event #{series.new_status?series.new_status.str:''} 
+															a.watchBtn(href="/serial/"+series.url+"/s"+pad(series.new_status.episode.season_num)+"e"+pad(series.new_status.episode.episode_num)+(series.new_status.episode.episode_num_alter?'-e'+pad(series.new_status.episode.episode_num_alter):'')+"/"+series.new_status.episode.url+"/"+series.new_status.episode.num) #{series.new_status?'s'+pad(series.new_status.episode.season_num)+'e'+pad(series.new_status.episode.episode_num)+(series.new_status.episode.episode_num_alter?'-e'+pad(series.new_status.episode.episode_num_alter):''):''}
+												a(href="/seriale?start_year="+series.year+"&end_year="+series.year)
+													span.year #{series.year}
+												span.rate
+													i(class="fa fa-star" aria-hidden="true")
+													span.num #{series.rate==0?'BRAK':series.rate.toFixed(1)+' / 5'}
+											.clear
+						.clear
+
+					.sectionBox(id="movies" style="display: none;")
+						if new_movies
+							.day
+								each movie in new_movies
+									section.item
+										div
+											- var same = movie.title==movie.title_org;
+											a(href="/film/"+movie.url+'/'+movie.num)
+												.poster
+													img(src=movie.poster width="100" height="100" alt=(same?movie.title:movie.title+' / '+movie.title_org) title=(same?movie.title:movie.title+' / '+movie.title_org))
+											.block
+												a(href="/film/"+movie.url+'/'+movie.num)
+													h3.title !{movie.title}
+												if !same
+													a(href="/film/"+movie.url+'/'+movie.num)
+														h4.title_org !{movie.title_org}
+												if local_restriction
+													- var genres = '';
+													- for (var i = 0, len = movie.genres.length; i < len; i++) {
+													-	var uppered = movie.genres[i].charAt(0).toUpperCase() + movie.genres[i].slice(1);
+													- 	if(i==0) genres+= uppered;
+													- 	else genres+= ', '+uppered;
+													- }
+													span.time #{genres}
+												else
+													span.time #{MOMENT(movie.update_date).fromNow()}#{movie.new_status && movie.new_status.length>0?':':''}
+													if(movie.new_status && movie.new_status.length>0)
+														span.event #{movie.new_status?movie.new_status:''} 
+												a(href="/filmy?start_year="+movie.year+"&end_year="+movie.year)
+													span.year #{movie.year}
+												span.rate
+													i(class="fa fa-star" aria-hidden="true")
+													span.num #{movie.rate==0?'BRAK':movie.rate.toFixed(1)+' / 5'}
+											.clear
+						.clear
+
+				if !(user_status.code==3 && user_status.data.premium)
+						div(style="width: 100%;" class="ad ads reklama")
+							center
+								div(class="spolecznoscinet" id="spolecznosci-3545")
+	else
+		if !(user_status.code==3 && user_status.data.premium)
+			div(style="width: 100%; margin-top: 20px;" class="ad ads reklama")
+				center
+					div(class="spolecznoscinet" id="spolecznosci-3739")
+
+		#home_page.box
+			if pay_result=='true'
+				.container(style="background-color: #181818;")
+					.goodMes Płatność przyjęta poprawnie. W ciągu kilku minut twoje konto premium powinno zostać aktywowane.
+			else if pay_result=='false'
+				.container(style="background-color: #181818;")
+					.badMes Płatność odrzucona. Jeśli pieniądze zostały pobrane z konta odczekaj 60 minut. Po tym czasie możesz napisać do nas (kontakt@fili.cc).
+
+			.container(style="background-color: #181818;")
+				#left_side(style="margin-right: 14px;")
+					section#popularMoviesSeries(style="margin-bottom: 22px;")
+						h2.sectionTitle Popularne
+						.sectionBoxSelect
+							ul
+								li.selBox(active data-name="series") Seriale
+								li.selBox(data-name="movies") Filmy
+						.clear
+
+						.sectionBox(id="series")
+							ul#selectTime
+								li.timeBox(active data-name="day1") 24h
+								li.timeBox(data-name="day7") 7 Dni
+								li.timeBox(data-name="day30") 30 Dni
+								.clear
+
+							if hps
+								each day, index_hps in hps
+									.day(id=day[0] style=(index_hps>0?'display:none':''))
+										each series, index in day[1]
+											section.item
+												- var same = series.title==series.title_org;
+												a(href="/serial/"+series.url+'/'+series.num)
+													.poster
+														img(src=series.poster width="120" height="120" alt=(same?series.title:series.title+' / '+series.title_org) title=(same?series.title:series.title+' / '+series.title_org))
+												.block
+													a(href="/serial/"+series.url+'/'+series.num)
+														h3.title !{series.title}
+													if !same
+														a(href="/serial/"+series.url+'/'+series.num)
+															h4.title_org !{series.title_org}
+													span.time #{MOMENT(series.update_date).fromNow()}#{series.new_status && series.new_status.str.length>0 && series.new_status.episode?':':''}
+													if(series.new_status && series.new_status.str.length>0 && series.new_status.episode)
+														span.event #{series.new_status?series.new_status.str:''} 
+															a.watchBtn(href="/serial/"+series.url+"/s"+pad(series.new_status.episode.season_num)+"e"+pad(series.new_status.episode.episode_num)+(series.new_status.episode.episode_num_alter?'-e'+pad(series.new_status.episode.episode_num_alter):'')+"/"+series.new_status.episode.url+"/"+series.new_status.episode.num) #{series.new_status?'s'+pad(series.new_status.episode.season_num)+'e'+pad(series.new_status.episode.episode_num)+(series.new_status.episode.episode_num_alter?'-e'+pad(series.new_status.episode.episode_num_alter):''):''}
+													a(href="/seriale?start_year="+series.year+"&end_year="+series.year)
+														span.year #{series.year}
+													span.rate
+														i(class="fa fa-star" aria-hidden="true")
+														span.num #{series.rate==0?'BRAK':Math.round(series.rate * 10)/10+' / 5'}
+												.clear
+							.clear
+
+						.sectionBox(id="movies" style="display: none;")
+							ul#selectTime
+								li.timeBox(active data-name="day1") 24h
+								li.timeBox(data-name="day7") 7 Dni
+								li.timeBox(data-name="day30") 30 Dni
+								.clear
+
+							if hpm
+								each day, index_hps in hpm
+									.day(id=day[0] style=(index_hps>0?'display:none':''))
+										each movie, index in day[1]
+											section.item
+												- var same = movie.title==movie.title_org;
+												a(href="/film/"+movie.url+'/'+movie.num)
+													.poster
+														img(src=movie.poster width="120" height="120" alt=(same?movie.title:movie.title+' / '+movie.title_org) title=(same?movie.title:movie.title+' / '+movie.title_org))
+												.block
+													a(href="/film/"+movie.url+'/'+movie.num)
+														h3.title !{movie.title}
+													if !same
+														a(href="/film/"+movie.url+'/'+movie.num)
+															h4.title_org !{movie.title_org}
+													span.time #{MOMENT(movie.update_date).fromNow()}#{movie.new_status && movie.new_status.length>0?':':''}
+													if(movie.new_status && movie.new_status.length>0)
+														span.event #{movie.new_status?movie.new_status:''} 
+													a(href="/filmy?start_year="+movie.year+"&end_year="+movie.year)
+														span.year #{movie.year}
+													span.rate
+														i(class="fa fa-star" aria-hidden="true")
+														span.num #{movie.rate==0?'BRAK':Math.round(movie.rate * 10)/10+' / 5'}
+												.clear
+							.clear
+
+						.clear
+
+					if !(user_status.code==3 && user_status.data.premium)
+						div(style="width: 820px; overflow: hidden;" class="ad ads reklama")
+							center
+								div(class="spolecznoscinet" id="spolecznosci-3533")
+					
+					section#newSeriesMovies(style="margin-top: 22px;")
+						h2.sectionTitle Ostatnio dodane
+						.sectionBoxSelect
+							ul
+								li.selBox(data-name="series" active) Seriale
+								li.selBox(data-name="movies") Filmy
+						.clear
+
+						.sectionBox(id="series")
+							if new_series
+								each series in new_series
+									section.item
+										- var same = series.title==series.title_org;
+										a(href="/serial/"+series.url+'/'+series.num)
+											.poster
+												img(src=series.poster width="120" height="120" alt=(same?series.title:series.title+' / '+series.title_org) title=(same?series.title:series.title+' / '+series.title_org))
+										.block
+											a(href="/serial/"+series.url+'/'+series.num)
+												h3.title !{series.title}
+											if !same
+												a(href="/serial/"+series.url+'/'+series.num)
+													h4.title_org !{series.title_org}
+											if local_restriction
+												- var genres = '';
+												- for (var i = 0, len = series.genres.length; i < len; i++) {
+												-	var uppered = series.genres[i].charAt(0).toUpperCase() + series.genres[i].slice(1);
+												- 	if(i==0) genres+= uppered;
+												- 	else genres+= ', '+uppered;
+												- }
+												span.time #{genres}
+											else
+												span.time #{MOMENT(series.update_date).fromNow()}#{series.new_status && series.new_status.str.length>0 && series.new_status.episode?':':''}
+												if(series.new_status && series.new_status.str.length>0 && series.new_status.episode)
+													span.event #{series.new_status?series.new_status.str:''} 
+														a.watchBtn(href="/serial/"+series.url+"/s"+pad(series.new_status.episode.season_num)+"e"+pad(series.new_status.episode.episode_num)+(series.new_status.episode.episode_num_alter?'-e'+pad(series.new_status.episode.episode_num_alter):'')+"/"+series.new_status.episode.url+"/"+series.new_status.episode.num) #{series.new_status?'s'+pad(series.new_status.episode.season_num)+'e'+pad(series.new_status.episode.episode_num)+(series.new_status.episode.episode_num_alter?'-e'+pad(series.new_status.episode.episode_num_alter):''):''}
+											a(href="/seriale?start_year="+series.year+"&end_year="+series.year)
+												span.year #{series.year}
+											span.rate
+												i(class="fa fa-star" aria-hidden="true")
+												span.num #{series.rate==0?'BRAK':series.rate.toFixed(1)+' / 5'}
+										.clear
+							.clear
+
+						.sectionBox(id="movies" style="display: none;")
+							if new_movies
+								each movie in new_movies
+									section.item
+										- var same = movie.title==movie.title_org;
+										a(href="/film/"+movie.url+'/'+movie.num)
+											.poster
+												img(src=movie.poster width="120" height="120" alt=(same?movie.title:movie.title+' / '+movie.title_org) title=(same?movie.title:movie.title+' / '+movie.title_org))
+										.block
+											a(href="/film/"+movie.url+'/'+movie.num)
+												h3.title !{movie.title}
+											if !same
+												a(href="/film/"+movie.url+'/'+movie.num)
+													h4.title_org !{movie.title_org}
+											if local_restriction
+												- var genres = '';
+												- for (var i = 0, len = movie.genres.length; i < len; i++) {
+												-	var uppered = movie.genres[i].charAt(0).toUpperCase() + movie.genres[i].slice(1);
+												- 	if(i==0) genres+= uppered;
+												- 	else genres+= ', '+uppered;
+												- }
+												span.time #{genres}
+											else
+												span.time #{MOMENT(movie.update_date).fromNow()}#{movie.new_status && movie.new_status.length>0?':':''}
+												if(movie.new_status && movie.new_status.length>0)
+													span.event #{movie.new_status?movie.new_status:''} 
+											a(href="/filmy?start_year="+movie.year+"&end_year="+movie.year)
+												span.year #{movie.year}
+											span.rate
+												i(class="fa fa-star" aria-hidden="true")
+												span.num #{movie.rate==0?'BRAK':movie.rate.toFixed(1)+' / 5'}
+										.clear
+							.clear
+
+				#right_side(style="width: 336px;")
+					if !(user_status.code==3 && user_status.data.premium)
+						div(style="margin: 0px auto 20px auto;" class="ad ads reklama")
+							center
+								div(class="spolecznoscinet" id="spolecznosci-3537")
+
+					section#randomSeries(style="margin-bottom: 20px;")
+						h2.sectionTitle Losowe seriale
+						.clear
+						.sectionBox
+							each series in random_series
+								- var same = series.title==series.title_org;
+								section.item2x2
+									a(href="/serial/"+series.url+'/'+series.num)
+										.poster
+											img(src=series.poster width="150" height="150" alt=(same?series.title:series.title+' / '+series.title_org) title=(same?series.title:series.title+' / '+series.title_org))
+							.clear
+
+					section#randomMovies
+						h2.sectionTitle Losowe filmy
+						.clear
+						.sectionBox
+							each movie in random_movies
+								- var same = movie.title==movie.title_org;
+								section.item3x3
+									a(href="/film/"+movie.url+'/'+movie.num)
+										.poster
+											img(src=movie.poster width="100" height="100" alt=(same?movie.title:movie.title+' / '+movie.title_org) title=(same?movie.title:movie.title+' / '+movie.title_org))
+							.clear
+
+					if !(user_status.code==3 && user_status.data.premium)
+						div(style="margin-top: 30px;" class="ad ads reklama")
+							center
+								div(class="spolecznoscinet" id="spolecznosci-3539")
+
+				.clear
+

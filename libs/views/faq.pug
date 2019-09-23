@@ -1,0 +1,88 @@
+extend main
+block content
+	#faq_page.box
+		.container
+			section
+				h2.sectionTitle Często zadawane pytania
+				.clear
+
+				.sectionBox
+					ul
+						li.questionBox
+							.clickableBox
+								span.qText #01 Czy trzeba płacić za korzystanie ze strony?
+								.clear
+							.answerBox
+								span.aText Przeglądanie/korzystanie ze strony jak i rejestracja jest całkowicie darmowa.
+						li.questionBox
+							.clickableBox
+								span.qText #02 Wideo zacina się lub ładuje w nieskończoność.
+								.clear
+							.answerBox
+								span.aText W godzinach popołudniowych i wieczornych ze względu na duży ruch mogą występować w/w problemy. Warto odświeżyć player, ponieważ można trafić na mniej obciążony serwer. 
+						li.questionBox
+							.clickableBox
+								span.qText #03 Czemu jest tak dużo reklam?
+								.clear
+							.answerBox
+								span.aText Reklamy w hostingach należą do zewnętrznych serwisów i zarabiają na nich użytkownicy wrzucający na nie swoje materiały wideo. Nie mamy wpływu na ilość oraz częstotliwość ich występowania. Warto zainstalować rozszerzenie blokujące reklamy, aby zmniejszyć ich ilość.<br><br>Ze swojej strony mamy reklamy bannerowe oraz kilka reklam typu popup na użytkownika co kilka godzin.
+						li.questionBox
+							.clickableBox
+								span.qText #04 Czemu Film/Serial, który oglądam zniknął z serwisu?
+								.clear
+							.answerBox
+								span.aText.
+									Jedną z głównych przyczyn zniknięć są zgłoszenia o naruszeniu praw autorskich.<br>
+									Po otrzymaniu takiego w ciągu około 24h blokujemy dostęp do wymienionych stron.
+						li.questionBox
+							.clickableBox
+								span.qText #05 Jakie hostingi plików są obsługiwane?
+								.clear
+							.answerBox
+								span.aText Lista wszystkich dostępnych serwisów znajduje się pod adresem: 
+									a.greenLink(href="/hostingi") Fili.cc/hostingi
+						//- li.questionBox
+						//- 	.clickableBox
+						//- 		span.qText #06 W jaki sposób jest określana jakość materiału wideo?
+						//- 		.clear
+						//- 	.answerBox
+						//- 		span.aText.
+						//- 			W Fili.cc wyróżnia się 4 rodzaje jakości 360p, 480p, 720p, 1080p, które zostały ustalone według możliwości najpopularniejszego hostingu czyli Openload.<br><br>
+						//- 			Tabelka I ukazuje zależność jakości do czasu trwania pliku wideo:<br>
+						//- 		img(src="/assets/img/tabelka1.jpg" class="tabelka1")
+						//- 		span.aText.
+						//- 			<br>
+						//- 			Wielkość pliku odczytuje się po skonwertowaniu materiału wideo.<br>
+						//- 			Wartości nie dotyczą wersji nagrań typu CAM, TS i innych niskich jakości, które należy oznaczać jako niska 360p.<br>
+						//- 			Jakość linków w serwisie jest tylko informacyjna i może różnić się od rzeczywistości.
+						//- li.questionBox
+						//- 	.clickableBox
+						//- 		span.qText #07 Co zrobić, aby moje linki do materiałów nie były odrzucane?
+						//- 		.clear
+						//- 	.answerBox
+						//- 		span.aText.
+						//- 			1. Linki należy oznaczać poprawnie (według rozpiski w tabeli I) typ oraz jakość linku.<br>
+						//- 			2. W przypadku materiałów z napisami:<br>
+						//- 			&emsp;- nie powinny zawierać reklam konkurencyjnych stron (dopuszczalna reklama grupy tłumaczącej materiał),<br>
+						//- 			&emsp;- wymagane kodowanie utf-8 (materiały wideo bez polskich znaków są kasowane),<br>
+						//- 			&emsp;- tłumaczenie z programów tłumaczących tekst maszynowo jest odrzucane,<br>
+						//- 			&emsp;- synchronizacja tekstu z wideo powinna być dopasowana,<br>
+						//- 			3. Warto wyłączyć na koncie w Openload blokowanie dostępu direct co przyśpieszy sprawdzenie linku.<br><br>
+
+						//- 			Większość linków zostaje wstępnie sprawdzona przez nasz system zaraz po dodaniu.
+						li.questionBox
+							.clickableBox
+								span.qText #06 Jakie są limity linków na odcinek, film i użytkownika?
+								.clear
+							.answerBox
+								span.aText.
+									1. Każdy użytkownik może dodać tylko 1 link do filmu/odcinka w danej kategorii i jakości (np. Napisy ENG 720p i 480p).<br>
+									2. Na odcinki nałożono limit 4 linków na kategorie, jakość, hosting (np. Mogą istnieć 4 linki w odcinku w kategorii Lektor PL, jakości 720p, hosting Openload i tak w każdej możliwej konfiguracji).<br>
+									3. Jeśli link zostanie dodany do innej jakości niż powinien i moderator zmieni ja na poprawną, a limit w danej jakości nadal będzie przekroczony link zostanie automatycznie usunięty.<br>
+						
+
+									
+
+
+
+					

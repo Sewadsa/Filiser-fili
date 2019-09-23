@@ -1,0 +1,26 @@
+ul
+	each serie in series
+		a(href="/serial/"+serie.url+"/"+serie.num)
+			li
+				.poster
+					img(src=IMG_HOSTNAME+serie.poster width="60" height="60")
+				.title !{serie.title}
+				if serie.title!=serie.title_org
+					.title_org !{serie.title_org}
+					.info Serial, #{serie.year}
+				else
+					.info(style="padding-top: 27px;") Serial, #{serie.year}
+				.clear
+	each movie in movies
+		a(href="/film/"+movie.url+"/"+movie.num)
+			li
+				.poster
+					img(src=IMG_HOSTNAME+movie.poster width="60" height="60")
+				.title !{movie.title}
+				if movie.title!=movie.title_org
+					.title_org !{movie.title_org}
+					.info Film, #{movie.year}
+				else
+					.info(style="padding-top: 27px;") Film, #{movie.year}
+				.clear
+a.more(href="/szukaj?q="+q class="greenLink") Pokaż więcej

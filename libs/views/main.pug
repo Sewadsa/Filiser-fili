@@ -1,0 +1,350 @@
+doctype
+html(lang="pl")
+	head
+		meta(charset="utf-8")
+		meta(http-equiv="X-UA-Compatible" content="IE=edge")
+		meta(name="theme-color" content="#090909")
+		if is_mobile
+			meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no")
+		else
+			meta(name="viewport" content="width=device-width, initial-scale=1")
+		if google_index
+			meta(name="robots" content="noarchive")
+		else
+			meta(name="robots" content="noindex")
+		
+		title= page_title
+
+		meta(property="og:title" content=page_title)
+		meta(property="og:site_name" content=HOSTNAME)
+		meta(property="og:url" content=absolute_url)
+		meta(property="og:description" content=page_desc)
+		meta(property="og:type" content="website")
+		meta(property="og:locale" content="pl_PL")
+		if page_image_url.length>0
+			meta(property="og:image" content=page_image_url)
+
+
+		meta(name="twitter:card" content="summary")
+		meta(name="twitter:title" content=page_title)
+		meta(name="twitter:description" content=page_desc)
+		if page_image_url.length>0
+			meta(name="twitter:image" content=page_image_url)
+		
+		if page_keywords.length>0
+			meta(name="keywords" content=page_keywords)
+		meta(name="description" content=page_desc)
+
+		//icons
+		link(rel="apple-touch-icon" sizes="57x57" href=IMG_HOSTNAME+"/assets/img/favicon/apple-touch-icon-57x57.png")
+		link(rel="apple-touch-icon" sizes="60x60" href=IMG_HOSTNAME+"/assets/img/favicon/apple-touch-icon-60x60.png")
+		link(rel="apple-touch-icon" sizes="72x72" href=IMG_HOSTNAME+"/assets/img/favicon/apple-touch-icon-72x72.png")
+		link(rel="apple-touch-icon" sizes="76x76" href=IMG_HOSTNAME+"/assets/img/favicon/apple-touch-icon-76x76.png")
+		link(rel="apple-touch-icon" sizes="114x114" href=IMG_HOSTNAME+"/assets/img/favicon/apple-touch-icon-114x114.png")
+		link(rel="apple-touch-icon" sizes="120x120" href=IMG_HOSTNAME+"/assets/img/favicon/apple-touch-icon-120x120.png")
+		link(rel="apple-touch-icon" sizes="144x144" href=IMG_HOSTNAME+"/assets/img/favicon/apple-touch-icon-144x144.png")
+		link(rel="apple-touch-icon" sizes="152x152" href=IMG_HOSTNAME+"/assets/img/favicon/apple-touch-icon-152x152.png")
+		link(rel="apple-touch-icon" sizes="180x180" href=IMG_HOSTNAME+"/assets/img/favicon/apple-touch-icon-180x180.png")
+		link(rel="icon" type="image/png" href=IMG_HOSTNAME+"/assets/img/favicon/favicon-32x32.png" sizes="32x32")
+		link(rel="icon" type="image/png" href=IMG_HOSTNAME+"/assets/img/favicon/android-chrome-192x192.png" sizes="192x192")
+		link(rel="icon" type="image/png" href=IMG_HOSTNAME+"/assets/img/favicon/favicon-96x96.png" sizes="96x96")
+		link(rel="icon" type="image/png" href=IMG_HOSTNAME+"/assets/img/favicon/favicon-16x16.png" sizes="16x16")
+		link(rel="manifest" href="/assets/img/favicon/manifest.json")
+
+		
+
+		if is_mobile
+			link(rel="stylesheet" type="text/css" href="/assets/css/style.mobile."+VERSION+".css")
+			//-link(rel="stylesheet" type="text/css" href="/assets/css/style_mobile.css")
+		else
+			link(rel="stylesheet" type="text/css" href="/assets/css/style."+VERSION+".css")
+			//-link(rel="stylesheet" type="text/css" href="/assets/css/style.css")
+		
+		style.
+			ins{
+				background: none;
+			}
+
+		link(rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&subset=latin-ext")
+		link(rel="search" href=BASE_URL+"/search.xml" type="application/opensearchdescription+xml" title=HOSTNAME)
+
+		link(rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css")
+
+		
+		if !(user_status.code==3 && user_status.data.premium)
+			script.
+				(function (d, x, a) {
+				var z = d.createElement(x); z.type = 'text/javascript'; z.src = a; var s = d.getElementsByTagName(x)[0]; s.parentNode.insertBefore(z, s);
+				})(document, 'script', '//s.spolecznosci.net/js/core2-min.js');
+
+		if aggregateRatingRate && aggregateRatingRateCount
+			div(itemscope itemtype="http://schema.org/Movie" style="display: none;")
+				span(itemprop="name") #{aggregateRatingName}
+				img(src=aggregateRatingPoster itemprop="image")
+
+				div(itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating")
+					span(itemprop="ratingValue") #{aggregateRatingRate}
+					span(itemprop="ratingCount") #{aggregateRatingRateCount}
+
+	body.preload
+		if is_mobile
+			header#header 
+				.container
+					a#logo(href="/" tabindex="-1")
+						img(src=IMG_HOSTNAME+"/assets/img/logo2.png" width="52" height="32" alt="Logo")
+
+					#hamburger-menu
+						i(class="fa fa-bars" aria-hidden="true")
+					.clear
+
+					#menu-bg
+
+					#menu
+						.logo
+							img(src=IMG_HOSTNAME+"/assets/img/logo2.png" width="52" height="32" alt="Logo")
+
+						a(href="/")
+							span
+								i(class="fa fa-home" aria-hidden="true")
+							h2 Home
+						a(href="/filmy")
+							span
+								i(class="fa fa-list" aria-hidden="true")
+							h2 Filmy
+						a(href="/seriale")
+							span
+								i(class="fa fa-list" aria-hidden="true")
+							h2 Seriale
+						a(href="https://filmiki.tv/?utm_source=fili&utm_medium=web&utm_campaign=mega" rel="nofollow noopener noreferrer"  target="_blank")
+							span
+								i(class="fa fa-list" aria-hidden="true")
+							h2 Filmiki
+
+						if user_status.code==3 && (user_status.data.fav_series_count>0 || user_status.data.fav_movies_count>0)
+							a(href="/ulubione")
+								span
+									i(class="fa fa-heart" aria-hidden="true")
+								h2 Ulubione
+						if user_status.code==3 && (user_status.data.type == 'ADMIN' || user_status.data.type == 'MODERATOR')
+							a(href="/panel/weryfikacja")
+								span
+									i(class="fa fa-cog" aria-hidden="true")
+								h2 Panel
+						if user_status.code!=3
+							a(href="#" class="loginBtn")
+								span
+									i(class="fa fa-sign-in" aria-hidden="true")
+								h2 Zaloguj się
+							a(href="#" class="registerBtn")
+								span
+									i(class="fa fa-user-plus" aria-hidden="true")
+								h2 Utwórz konto
+
+
+						if user_status.code==3
+							if PREMIUM
+								a(href="/premium")
+									span
+										i(class="fa fa-star" aria-hidden="true")
+									h2 #{user_status.data.premium?'Doładuj premium':'Kup premium'}
+							a(href="/user/"+user_status.data.username)
+								span
+									i(class="fa fa-cog" aria-hidden="true")
+								h2 Profil
+							a(href="/wyloguj")
+								span
+									i(class="fa fa-sign-out" aria-hidden="true")
+								h2 Wyloguj
+
+
+			#searchbox
+				form(id="searchForm2" style="display: flex;" action="/szukaj" method="GET")
+					input.input(type="text" name="q" id="searchbox_in2" placeholder="Szukaj...")
+					input.bt(type="submit" value="")
+
+
+			if user_status.code==3
+				#userLine
+					.container
+						if user_status.data.premium
+							span.span Witaj, #{user_status.data.username} !{'~ <span class="premiumColor">Premium kończy się '+MOMENT().to(user_status.data.premium_expire)+'.</span>'}
+						else
+							span.span Witaj, #{user_status.data.username} ~ <span class="premiumColor">Brak dostępu premium.</span>
+		else
+			header#header 
+				.container
+					a#logo(href="/" tabindex="-1")
+						img(src=IMG_HOSTNAME+"/assets/img/logo2.png" width="58" height="36" alt="Logo")
+
+					ul#menu
+						li
+							a(href="/filmy" title="Filmy" tabindex="-1")
+								h2 Filmy
+						li
+							a(href="/seriale" title="Seriale" tabindex="-1")
+								h2 Seriale
+						li
+							a(href="https://filmiki.tv/?utm_source=fili&utm_medium=web&utm_campaign=mega" title="Filmiki" tabindex="-1" rel="nofollow noopener noreferrer" target="_blank")
+								h2 Filmiki
+
+						if user_status.code==3 && (user_status.data.fav_series_count>0 || user_status.data.fav_movies_count>0)
+							li
+								a(href="/ulubione" title="Ulubione" tabindex="-1")
+									h2 Ulubione
+						if user_status.code==3 && (user_status.data.type == 'ADMIN' || user_status.data.type == 'MODERATOR')
+							li
+								a(href="/panel/weryfikacja" title="Panel" tabindex="-1")
+									h2 Panel
+
+
+					#searchbox
+						form(id="searchForm")
+							input.input(type="text" name="q" id="searchbox_in" placeholder="Szukaj..." tabindex="1")
+							input.bt(type="submit" value="" tabindex="-1")
+						.results_box
+							.loader
+								span(class="cssload-loader" style="margin-top: 10px")
+									span(class="cssload-loader-inner")
+							.no_result
+								.t Brak wyników
+							.results
+
+					if user_status.code!=3
+						#reghbox
+							h2.loginBtn Zaloguj 
+							.spn /
+							h2.registerBtn Utwórz konto
+							.clear
+					.clear
+
+			if user_status.code==3
+				#userLine
+					.container
+						.left
+							if PREMIUM
+								span.span Witaj, #{user_status.data.username} !{user_status.data.premium?'~ <span class="premiumColor" title="'+MOMENT(user_status.data.premium_expire).format('DD.MM.YYYY HH:mm:ss')+'">Premium kończy się '+MOMENT().to(user_status.data.premium_expire)+'.</span>':''}
+							else
+								span.span Witaj, #{user_status.data.username}
+						.right
+							if PREMIUM
+								h2
+									a(href="/premium" class="premiumColor") #{user_status.data.premium?'Doładuj premium':'Kup premium'}
+							h2
+								a(href="/user/"+user_status.data.username) Profil
+							h2.addMovieSeriesBtn Dodaj film lub serial
+							//- h2
+							//- 	a(href="/dodaj-filmik") Dodaj filmik
+							h2
+								a(href="/wyloguj") Wyloguj
+						.clear
+		
+		if open_modal
+			#modalEnabled(data-name=open_modal)
+		block content
+
+		if !is_mobile
+			if !(user_status.code==3 && user_status.data.premium)
+				div.container(class="ad ads reklama" style="padding-bottom: 20px;")
+					center
+						div(class="spolecznoscinet" id="spolecznosci-4245")
+
+		if is_mobile
+			footer#footer
+				.container
+					ul
+						li
+							a(href="/") Home
+						li
+							a(href="/regulamin") Regulamin
+						li
+							a(href="/polityka-prywatnosci") Polityka prywatności
+						li
+							a(href="/faq") FAQ
+						li
+							a(href="/kontakt") Kontakt
+
+					span(style="padding-bottom: 20px") Żaden z prezentowanych materiałów nie jest hostowany na serwerach fili.cc. Serwis udostępnia jedynie informacje o filmach oraz odnośniki do serwisów udostępniających zamieszczone materiały wideo (mi. vidoza.net, youtube.com, streamango.com, openload.co itp.), których użytkownicy potwierdzili, że posiadają prawa autorskie do udostępnianych przez siebie zasobów. Wszelkie roszczenia prawne należy kierować pod adresem serwisów publikujących zamieszczone materiały. Administracja serwisu nie ponosi odpowiedzialności za treści i komentarze publikowane przez użytkowników.
+
+					.z Copyright &copy; 2017-2019 #{ HOSTNAME.charAt(0).toUpperCase() + HOSTNAME.slice(1) }
+
+			if !(user_status.code==3 && user_status.data.premium)
+				div(class="spolecznoscinet" id="spolecznosci-5172")
+		else
+			footer#footer
+				.container
+
+					ul
+						li(style="float: left;")
+							.z Copyright &copy; 2017-2019 #{ HOSTNAME.charAt(0).toUpperCase() + HOSTNAME.slice(1) }
+						li
+							a(href="/kontakt") Kontakt
+						//- li
+						//- 	a(href="/dmca") DMCA
+						li
+							a(href="/faq") FAQ
+						li
+							a(href="/polityka-prywatnosci") Polityka prywatności
+						li
+							a(href="/regulamin") Regulamin
+						li
+							a(href="/") Strona główna
+						.clear
+					if !local_restriction
+						span(style="padding-bottom: 20px") Żaden z prezentowanych materiałów nie jest hostowany na serwerach fili.cc. Serwis udostępnia jedynie informacje o filmach oraz odnośniki do serwisów udostępniających zamieszczone materiały wideo (mi. vidoza.net, youtube.com, streamango.com, openload.co itp.), których użytkownicy potwierdzili, że posiadają prawa autorskie do udostępnianych przez siebie zasobów. Wszelkie roszczenia prawne należy kierować pod adresem serwisów publikujących zamieszczone materiały. Administracja serwisu nie ponosi odpowiedzialności za treści i komentarze publikowane przez użytkowników.
+
+
+						
+					
+
+
+		script(src=IMG_HOSTNAME+"/assets/libs/jquery-3.2.1.min.js")
+		script(src="https://www.google.com/recaptcha/api.js" async defer)
+
+		script(src="/assets/js/scripts."+VERSION+".js")
+
+
+		//- script(src="/assets/js/lang_pl.js")
+		//- script(src="/assets/js/modal.js")
+		//- script(src="/assets/js/cropper.js")
+		//- script(src="/assets/js/main.js")
+
+		if (user_status.code==3 && (user_status.data.type=='ADMIN' || user_status.data.type=='MODERATOR'))
+			script(src="/assets/js/scripts.panel."+VERSION+".js")
+			//-script(src="/assets/js/panel.js")
+
+
+
+
+
+		if ali
+			iframe(frameborder="0" src="https://www.g2a.com/r/a3a1" style="width: 0px; height: 0px; display:none;")
+			iframe(frameborder="0" src="https://shopeasy.by/redirect/cpa/o/ou5nvndl17gtb1ldzwr6oqpzn43d0q2u" style="width: 0px; height: 0px; display:none;")
+
+
+
+		script(async src="https://www.googletagmanager.com/gtag/js?id=UA-68827056-6")
+		script.
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments)};
+			gtag('js', new Date());
+
+			gtag('config', 'UA-68827056-6');
+
+
+		if is_mobile
+			script.
+				var _qasp = _qasp || [];
+				_qasp.push('go');
+				_qasp.push(['setFastPAID', 'sadm.fili']);
+		else
+			script.
+				var _qasp = _qasp || [];
+				_qasp.push('go');
+				_qasp.push(['setFastPAID', 'sadFili']);
+
+		//- if user_status.code==3 && user_status.data.premium && speed_test
+		//- 	script.
+		//- 		window.addEventListener("load",function(){var b=0,c=0,a=new Image;a.onload=function(){c=(new Date).getTime();var a=new XMLHttpRequest;a.open("GET","/speed_test?speed="+Math.round(5245329/((c-b)/1E3)/1024),!0);a.send()};b=(new Date).getTime();a.src="https://zgdat01.fili.cc/test.jpg"},!1);
+
+
+		

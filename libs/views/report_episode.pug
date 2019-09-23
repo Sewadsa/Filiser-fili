@@ -1,0 +1,19 @@
+#modalBG
+	#report_episode_page(style="margin-top: 128px;")
+		.form_step
+			.tit Zgłoś odcinek
+			.err 
+			form#reportEpisodeForm
+				fieldset
+					select.select(name="type" tabindex="3" style="margin-top: 20px;")
+						each val, arg in REPORT_TYPES_LIST_EPISODE
+							option(value=""+arg) #{val}
+					textarea.area(name="desc" placeholder="Opcjonalny komentarz do zgłoszenia" tabindex="3" autofocus style="margin-top: 20px; width: 346px;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false")
+					input(type="hidden" name="code" value=""+code)
+					input(type="hidden" name="ref" value=""+ref)
+					.bo
+						span(class="cssload-loader")
+							span(class="cssload-loader-inner")
+						input.btn(type="submit" value="Wyślij" tabindex="4" style="margin-top: 20px;")
+
+			

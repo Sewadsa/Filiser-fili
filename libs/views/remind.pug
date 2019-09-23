@@ -1,0 +1,20 @@
+#modalBG
+	#remind_page
+		.form_step
+			.tit Przypomnij hasło
+			.err 
+			form#remindUserForm
+				fieldset
+					input.input(type="text" name="username" placeholder="Adres e-mail" tabindex="2" style="margin-top: 15px;")
+					.bo
+						span(class="cssload-loader")
+							span(class="cssload-loader-inner")
+						input.btn(type="submit" value="Przypomnij" tabindex="4" style="margin-top: 20px;")
+					.info2
+						.greenLink(style="cursor:pointer;" onclick="MODAL.new('register');") Utwórz konto
+					.info3
+						.greenLink(style="cursor:pointer;" onclick="MODAL.new('login');") Zaloguj się
+		.succes_step
+			.tit Co teraz?
+			.tit2 Na adres e-mail przypisany do konta została wysłana<br>wiadomość z linkiem do zmiany hasła.
+			

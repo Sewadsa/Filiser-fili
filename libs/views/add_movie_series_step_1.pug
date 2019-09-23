@@ -1,0 +1,58 @@
+extend main
+block content
+	.container
+		#add_movie_series.box
+			h2.pageTitle(style=result.length!=0?"float:left":'') Znalezione 
+				span.green filmy i seriale
+
+			if result.length!=0
+				form(action="/dodaj-film-serial" method="POST" style="float:right;")
+					input.input(type="text" name="name" placeholder="Szukaj ponownie" tabindex="2" style="float: left; width: 200px; height:24px;")
+					input.btn(type="submit" value="Szukaj" tabindex="3" style="float: left; margin-left: 7px;")
+			.clear
+
+			if result.length==0
+				span Brak wyników.
+				form(action="/dodaj-film-serial" method="POST")
+					input.input(type="text" name="name" placeholder="Szukaj ponownie" tabindex="2" autofocus style="margin-top: 32px;")
+					input.btn(type="submit" value="Szukaj" tabindex="3" style="margin-top: 10px;")
+				br
+				span Nie znalazłeś/aś filmu lub serialu? Dodaj go ręcznie.<br><br>Uwaga:<br><br>-Proszę sprawdzić bardziej szczegółowe frazy podając również rok produkcji.<br>-Proszę upewnić się czy dany film lub serial nie jest już w naszej bazie.
+				br
+				br
+				a.greenLink(href="/dodaj-film-recznie" style="padding: 3px 0; display: inline-block;") Dodaj film
+				br
+				a.greenLink(href="/dodaj-serial-recznie" style="padding: 3px 0; display: inline-block;") Dodaj serial
+			else
+				ul#resultList
+					each item in result
+						if !item.ban
+							li
+								if item.added
+									a(href=item.url target="_blank")
+										img(src=item.poster width="112" height="160" alt="Okładka" title="Okładka")
+								else
+									a(href="/dodaj-film-serial/"+item.id)
+										img(src=item.poster width="112" height="160" alt="Okładka" title="Okładka")
+								span.title #{item.title}
+								if item.title!=item.title_org
+									span.title_org #{item.title_org}
+								span.info #{item.type=="f" ? 'Film':'Serial'} | #{item.year}
+								if item.added
+									i.fa(class="fa-check") 
+									.t Dodane
+									a.t2(href=item.url target="_blank") zobacz
+								else
+									a.btn(href="/dodaj-film-serial/"+item.id) Dodaj ten #{item.type=="f" ? 'Film':'Serial'}
+					.clear
+				br
+				span Nie znalazłeś/aś filmu lub serialu? Dodaj go ręcznie.<br><br>Uwaga:<br><br>-Proszę sprawdzić bardziej szczegółowe frazy podając również rok produkcji.<br>-Proszę upewnić się czy dany film lub serial nie jest już w naszej bazie.
+				br
+				br
+				a.greenLink(href="/dodaj-film-recznie" style="padding: 3px 0; display: inline-block;") Dodaj film
+				br
+				a.greenLink(href="/dodaj-serial-recznie" style="padding: 3px 0; display: inline-block;") Dodaj serial
+
+
+
+		

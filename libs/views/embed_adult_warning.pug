@@ -1,0 +1,160 @@
+doctype
+html(lang="pl")
+	head
+		meta(charset="utf-8")
+		meta(http-equiv="X-UA-Compatible" content="IE=edge")
+
+		link(rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&subset=latin-ext")
+		link(rel="stylesheet" type="text/css" href=IMG_HOSTNAME+"/assets/css/normalize.css")
+
+
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js")
+
+		style.
+			body{
+				font-family: 'Open Sans', sans-serif;
+				font-weight: 400;
+				font-size: 20px;
+				color: #bdbdbd;
+				background-color: #252525;
+			}
+
+			.header{
+				font-size: 4vw;
+
+				padding-top: 17vh;
+				padding-bottom: 6.33vh;
+			}
+
+			.line1, .line2, .line3{
+				padding-top: 4px;
+				font-size: 2.3vw;
+			}
+
+			.line1{
+				line-height:3.3vw;
+			}
+
+			.line2{
+				margin-top: 2vw;
+				font-size: 1.9vw;
+			}
+
+			.line3{
+				padding-bottom: 4.75vh;
+			}
+
+			.line4{
+				padding-bottom: 8px;
+				font-size: 2vw;
+			}
+
+			div{
+				flex: 1 1;
+				flex-basis: 100%;
+			}
+
+			.btn{
+				background-color: #b36b2b;
+				color: #ececec;
+				padding: 1.4vh;
+				font-size: 2.1vw;
+				cursor: pointer;
+				display: block;
+				text-decoration:none;
+				margin: 3vw 0.3vw 0 0.3vw;
+				-webkit-touch-callout: none;
+				-webkit-user-select: none;
+				-khtml-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+			}
+
+			.btn2{
+				background-color: #2e6aaa;
+				color: #ececec;
+				padding: 1.4vh;
+				font-size: 1.8vw;
+				cursor: pointer;
+				margin-right: 1.3vh;
+			}
+
+			.btn[clicked], .btn2[clicked]{
+				opacity: 0.7;
+			}
+
+			@media only screen and (max-width: 800px) {
+				.btn{
+					font-size: 3.1vw!important;
+				}
+			}
+		
+	body(style="opacity: 0;")
+		center(style="display:flex; align-items: center; justify-content: center; flex-wrap: wrap;")
+			div.header#s Uwaga!
+			div.line1 Za chwile zostanie otwarta zewnętrzna witryna zawierająca materiał wideo.<br/>Może ona wyświetlać reklamy przeznaczone dla osób dorosłych, próbujące wyłudzić dane osobowe lub chcące zainstalować podejrzane oprogramowanie na twoim urządzeniu.
+			a.btn#accept Mam ukończone 18 lat i chcę kontynuować.
+			span.btn#back Wróć
+			div.line2 Możesz zainstalować rozszerzenie adblock do swojej przeglądarki, aby zablokować te reklamy.
+
+
+		script.
+			back = document.getElementById('back');
+			var backHandler = function(){
+				top.location.reload();
+			}
+			back.addEventListener('click', backHandler);
+			back.addEventListener('touchstart', backHandler);
+
+			setCookie = function(name, value, days) {
+				var expires = "";
+				if(days){
+					var date = new Date();
+					date.setTime(date.getTime() + (days*24*60*60*1000));
+					expires = "; expires=" + date.toUTCString();
+				}
+				document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+			}
+
+			accept = document.getElementById('accept');
+			var acceptHandler = function(){
+				setCookie('adult_warning', true, 365);
+				location.reload();
+			}
+			accept.addEventListener('click', acceptHandler);
+			accept.addEventListener('touchstart', acceptHandler);
+
+
+
+			adb = false;
+			var ifr = document.createElement('iframe');
+			ifr.height = '1px';
+			ifr.width = '1px';
+			ifr.id = 'ads-iframe';
+			ifr.src = 'https://s.spolecznosci.net/js/core2-min.js';
+
+			document.body.appendChild(ifr);
+
+			var dv = document.createElement('div');
+			dv.style.height = '1px';
+			dv.style.width = '1px';
+			dv.id = 'ads-iframe2';
+			dv.className = 'ad reklama';
+
+			document.body.appendChild(dv);
+
+			setTimeout(function(){
+				var ifr = document.getElementById('ads-iframe');
+				if(ifr.style.display=='none' || ifr.style.display=='hidden' || ifr.style.visibility=='hidden' || ifr.offsetHeight==0) adb = true;
+
+				var dv = document.getElementById('ads-iframe2');
+				if(dv.style.display=='none' || dv.style.display=='hidden' || dv.style.visibility=='hidden' || dv.offsetHeight==0) adb = true;
+
+				if(adb){
+					setCookie('adult_warning', true, 365);
+					location.reload();
+				}else{
+					document.getElementsByTagName('body')[0].style.opacity = 1;
+				}
+			}, 500);

@@ -1,0 +1,8 @@
+#modalBG
+	#login_page(style="margin-top: 128px;")
+		.form_step
+			.tit Dodaj film lub serial
+			form(action="/dodaj-film-serial" method="POST")
+				input.input(type="text" name="name" placeholder="Podaj tytuł lub link do filmweb.pl" tabindex="2" autofocus style="margin-top: 15px;")
+				input.btn(type="submit" value="Szukaj" tabindex="3" style="margin-top: 20px;")
+			

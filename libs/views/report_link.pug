@@ -1,0 +1,24 @@
+#modalBG
+	#report_link_page
+		.form_step
+			.tit Zgłoś link
+			.err 
+			form#reportLinkForm
+				fieldset
+					select.select(name="type" tabindex="3" style="margin-top: 20px;")
+						each val, arg in REPORT_TYPES_LIST
+							option(value=""+arg) #{val}
+					textarea.area(name="desc" placeholder="Opcjonalny komentarz do zgłoszenia" tabindex="3" autofocus style="margin-top: 20px;  width: 346px;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false")
+					input(type="hidden" name="code" value=""+code)
+					input(type="hidden" name="code2" value=""+code2)
+					input(type="hidden" name="ref" value=""+ref)
+					input(type="hidden" name="type2" value=""+type)
+					.bo
+						span(class="cssload-loader")
+							span(class="cssload-loader-inner")
+						input.btn(type="submit" value="Wyślij" tabindex="4" style="margin-top: 20px;")
+			#result(style="display:none;")
+				center
+					span(style="font-size: 14px; color: #20da24; display: block;") Zgłoszenie przyjęte.
+
+			

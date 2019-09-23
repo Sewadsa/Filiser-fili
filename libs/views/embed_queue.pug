@@ -1,0 +1,165 @@
+doctype
+html(lang="pl")
+	head
+		meta(charset="utf-8")
+		meta(http-equiv="X-UA-Compatible" content="IE=edge")
+
+		link(rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&subset=latin-ext")
+		link(rel="stylesheet" type="text/css" href=IMG_HOSTNAME+"/assets/css/normalize.css")
+
+
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js")
+		script(src=IMG_HOSTNAME+"/assets/libs/jquery-3.2.1.min.js")
+
+		style.
+			body{
+				font-family: 'Open Sans', sans-serif;
+				font-weight: 400;
+				font-size: 20px;
+				color: #bdbdbd;
+				background-color: #252525;
+				-webkit-touch-callout: none;
+				-webkit-user-select: none;
+				-khtml-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+			}
+
+			.header{
+				font-size: 4vw;
+
+				padding-top: 19vh;
+				padding-bottom: 6.33vh;
+			}
+
+			.line1, .line2, .line3{
+				padding-top: 4px;
+				font-size: 3vw;
+			}
+
+			.line1{
+
+			}
+
+			.line2{
+
+			}
+
+			.line3{
+				padding-bottom: 4.75vh;
+			}
+
+			.line4{
+				padding-bottom: 8px;
+				font-size: 2vw;
+			}
+
+			div{
+				flex: 1 1;
+				flex-basis: 100%;
+			}
+
+			.btn{
+				background-color: #b36b2b;
+				color: #ececec;
+				padding: 1.64vh;
+				font-size: 2.1vw;
+				cursor: pointer;
+				margin-top: 3vw;
+			}
+
+			.btn2{
+				background-color: #2e6aaa;
+				color: #ececec;
+				padding: 1.4vh;
+				font-size: 1.8vw;
+				cursor: pointer;
+				margin-right: 1.3vh;
+			}
+
+			.btn[clicked], .btn2[clicked]{
+				opacity: 0.7;
+			}
+		
+	body
+		center(style="display:flex; align-items: center; justify-content: center; flex-wrap: wrap;")
+			div.header Zabrakło wolnych miejsc!<br>Umieszczono Cię na liście oczekujących.
+			div.line1 Twoje miejsce w kolejce: <span id="queue-number">#{queue_number}</span>
+			if can_watch
+				div.line1 Czas oczekiwania: ~ <span id="time-left"></span>
+			div.line2(style="padding-top: 4.75vh;") Oglądaj od zaraz w usłudze premium.
+			//- div.line4 Szybka płatność Blik, Przelew, Paypal
+			//- span.btn2(id='gen-payment-15') 15 dni / 8.99zł
+			//- span.btn2(id='gen-payment-30') 30 dni / 14.99zł
+			//- div 
+			span.btn(id='show-more') Dowiedz się więcej
+
+
+		if can_watch
+			script.
+				var pad = function(num) {
+					var s = num+'';
+					while(s.length < 2) s = '0'+s;
+					return s;
+				}
+
+				date = moment('!{can_watch}');
+				time_left = document.getElementById('time-left');
+
+				var render = function(){
+					var diff = date.diff(new moment());
+					var duration = moment.duration(diff);
+
+					var h = moment.duration(duration).hours();
+					var m = moment.duration(duration).minutes();
+					var s = moment.duration(duration).seconds();
+
+					if(h<=0 && m<=0 && s<=0) location.reload();
+
+					time_left.innerHTML = pad(h)+':'+pad(m)+':'+pad(s);
+				}
+
+				render();
+				setInterval(render, 1000);
+		
+		script.
+			queue_number = document.getElementById('queue-number');
+			var session_id = "#{session_id}";
+			setInterval(function(){
+				$.post('/embed/ping3', {session_id: session_id}, function(res){
+					if(res.queue_number) queue_number.innerHTML = res.queue_number;
+					if(res.can_watch) date = moment(res.can_watch);
+					if(res.queue_number==0) location.reload();
+					
+				}).fail(function(){});
+			}, 10000);
+
+		script.
+			show_more = document.getElementById('show-more');
+			var openShowMore = function(){
+				show_more.setAttribute('clicked', 'clicked');
+				top.location.href = '/premium';
+			}
+			show_more.addEventListener('click', openShowMore);
+			show_more.addEventListener('touchstart', openShowMore);
+
+			//- gen_payment_15 = document.getElementById('gen-payment-15');
+			//- var openGen15 = function(){
+			//- 	gen_payment_15.setAttribute('clicked', 'clicked');
+			//- 	top.location.href = '/premium/gen-payment?days=15';
+			//- }
+			//- gen_payment_15.addEventListener('click', openGen15);
+			//- gen_payment_15.addEventListener('touchstart', openGen15);
+
+			//- gen_payment_30 = document.getElementById('gen-payment-30');
+			//- var openGen30 = function(){
+			//- 	gen_payment_30.setAttribute('clicked', 'clicked');
+			//- 	top.location.href = '/premium/gen-payment?days=30';
+			//- }
+			//- gen_payment_30.addEventListener('click', openGen30);
+			//- gen_payment_30.addEventListener('touchstart', openGen30);
+
+
+
+			

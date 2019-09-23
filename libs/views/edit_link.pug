@@ -1,0 +1,25 @@
+#modalBG
+	#edit_link_page(style="margin-top: 128px;")
+		.form_step
+			.tit Edytuj link
+			.err 
+			form#editLinkForm
+				fieldset
+					span.hosting(style="display: block; color:#999999; margin-top: 15px;") Hosting: #{info.hosting}
+					input.input(type="text" name="video_id" placeholder="Wideo ID w hostingu" tabindex="2" style="margin-top: 12px;" value=""+info.video_id)
+					input(type="hidden" name="code" value=""+code)
+					input(type="hidden" name="code2" value=""+code2)
+					input(type="hidden" name="ref" value=""+ref)
+					input(type="hidden" name="type2" value=""+type)
+					select.select(name="type" tabindex="3" style="margin-top: 20px;")
+						each val in VIDEO_TYPES_LIST
+							option(value=""+val[0] selected=(info.type==val[0])) #{val[1]}
+					select.select(name="quality" tabindex="4" style="margin-top: 20px;")
+						each val in VIDEO_QUALITY_LIST
+							option(value=""+val[0] selected=(info.quality==val[0])) #{val[1]}
+					.bo
+						span(class="cssload-loader")
+							span(class="cssload-loader-inner")
+						input.btn(type="submit" value="Zapisz" tabindex="5" style="margin-top: 20px;")
+
+			

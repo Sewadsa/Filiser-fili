@@ -1,0 +1,760 @@
+extend main
+block content
+	- if(user_status.code==3){
+	- 	var isOwnSeries = String(series.user._id) == String(user_status.data._id);
+	- 	var isModAdmin = user_status.data.type == "ADMIN" || user_status.data.type == "MODERATOR"
+	- 	}
+
+	if is_mobile
+		#episode_page.box(data-code=""+series._id data-code2=""+episode._id)
+			if isModAdmin
+				.container(style="margin-bottom: 20px;" id="mod_ad_btns_top")
+					section
+						button.but(id="editEpisodeNameBtn") Edytuj nazwę odcinka
+						.clear
+
+			.container
+				if !(user_status.code==3 && user_status.data.premium)
+					div(style="width: 100%; margin-bottom: 20px;" class="ad ads reklama")
+						center
+							div(class="spolecznoscinet" id="spolecznosci-3541")
+
+				a(href='/serial/'+series.url+'/'+series.num title="Strona serialu")
+					img#poster(src=IMG_HOSTNAME+series.poster width="53" height="53" alt="Okładka")
+				h2.title(title=series.title) !{series.title}
+				if series.title!=series.title_org
+					h3.title_org(title=series.title_org) !{series.title_org}
+					.clear
+				else
+					h4.episode_title2 [s#{pad(season_num)}e#{pad(episode.episode_num)}#{episode.episode_num_alter?'-e'+pad(episode.episode_num_alter):''}] !{episode.title}
+					.clear(style="margin-bottom: 12px;")
+				if series.title!=series.title_org
+					h4.episode_title [s#{pad(season_num)}e#{pad(episode.episode_num)}#{episode.episode_num_alter?'-e'+pad(episode.episode_num_alter):''}] !{episode.title}
+
+				if series.status=='COPY'
+					h2.title_block Odcinek został zablokowany z powodu:<br>naruszenia praw autorskich
+
+
+				else if episode.linksCount==0
+					h2.no_data Brak linków.
+					//.but(class=(user_status.code!=3?'loginBtn':'addLinkEpisodeBtn') style="margin-top: 18px; margin-left: 8px;") Dodaj linki
+					.clear
+
+				else
+					#player_box(style="display: none;")
+						#player(style="-webkit-overflow-scrolling: touch; overflow: auto;")
+							iframe#iframe(src="" width="100%" height="100%" allowfullscreen scrolling="yes")
+					#under_player(style="display: none;")
+						#views(title="Odsłony strony | Pełne wyświetlenia odcinka: "+episode.viewed)
+							i.fa(class="fa-eye") 
+								span.l #{episode.views}
+
+						#menu
+							.m_btn(class=(episode.viewedByYou?'m_btnActive':'') class=(user_status.code!=3?'loginBtn':'setViewedBtn'))
+								i.fa(class="fa-check" aria-hidden="true")
+								.div Odcinek obejrzany?
+							.favBtn(style="margin-left: 4px;" class=(user_status.code!=3?'loginBtn':'setFavBtn') selected=(isSeriesFav?'':null))
+								i(class="fa fa-heart-o" aria-hidden="true" title="Dodaj do ulubionych")
+								i(class="fa fa-heart" aria-hidden="true" title="Usuń z ulubionych")
+								.info Dodaj do ulubionych
+						.clear
+
+					if episode.linksCount>0
+						#video_links
+							#btns
+								- var links = episode.links;
+								- var isUsedFirst = false;
+								- for(var i = 0, len = VIDEO_TYPES_LIST.length; i < len; i++){
+								- 	if(links[VIDEO_TYPES_LIST[i][0]]){
+								- 		var linksArray = links[VIDEO_TYPES_LIST[i][0]];
+								-		var count = 0;
+								- 		for(var j = 0, len2 = linksArray.length; j < len2; j++){
+								-			var link = linksArray[j];
+											- if(user_status.code==3){
+											- var isOwnLink = String(link.user._id) == String(user_status.data._id);
+											- var isPremiumUser = user_status.data.premium }
+											- if(link.status=='PUBLIC' || isOwnLink || isModAdmin) count++;
+								-		}
+								-		if(count>0){
+											.l_btn(class=(isUsedFirst?'':'l_active') data-type=VIDEO_TYPES_LIST[i][0]) #{VIDEO_TYPES_LIST[i][1]}
+								- 			isUsedFirst = true;
+								- 		}
+								- 	}
+								- }
+								- if(links['W_ROOM']){
+								- 	var linksArray = links['W_ROOM'];
+								-	if(linksArray.length>0){
+										.l_btn(class=(isUsedFirst?'':'l_active') data-type="W_ROOM") Poczekalnia
+								- 		isUsedFirst = true;
+								- 	}
+								- }
+								.clear
+
+
+							#links
+								ul
+								- isUsedFirst = false;
+								- for(var i = 0, len = VIDEO_TYPES_LIST.length; i < len; i++){
+								- 	if(links[VIDEO_TYPES_LIST[i][0]]){
+								- 		var linksArray = links[VIDEO_TYPES_LIST[i][0]];
+										ul(style=(isUsedFirst?'display:none':'') data-type=VIDEO_TYPES_LIST[i][0])
+											each link,link_index in linksArray
+												- if(user_status.code==3){
+												- 	var isOwnLink = String(link.user._id) == String(user_status.data._id);
+												- 	var isPremiumUser = user_status.data.premium;
+												-	var isLogged = true; }
+
+												if(link.status=='PUBLIC')
+													li.line(data-ref=(link.premium && (!isPremiumUser && !isModAdmin)?'':link._id))
+														.leftSide
+															if isPremiumUser
+																span.marker
+																	if link.ads == 'BAD'
+																		i.fa(class="fa-circle" aria-hidden="true" style="color: #cc0000;")
+																	else if link.ads == 'NORM'
+																		i.fa(class="fa-circle" aria-hidden="true" style="color: #f1c86f;")
+																	else
+																		i.fa(class="fa-circle" aria-hidden="true" style="color: #1b7025;")
+															span.host #{link.premium && (isPremiumUser || isModAdmin)?link.server:''}#{link.hosting}
+															span.quality #{VIDEO_QUALITY_ASSOCIATE[link.quality].split('/')[1]}
+														.rightSide
+															if isModAdmin
+																i.fa(class="fa-remove delLinkBtnSeries" title="Usuń ten link")
+
+															if link.report=='' && user_status.code==3 && !link.premium
+																	i.fa(class="fa-warning reportLinkBtnSeries" title="Zgłoś ten link")
+
+															div(style="width: 75px; float: left; margin-left: 10px;")
+																if !isPremiumUser && !isModAdmin && link.premium
+																	a#watchBtn2(href="/premium" target="_blank" rel="nofollow") Oglądaj
+																else
+																	span#watchBtn Oglądaj	
+														.clear
+								- 		isUsedFirst = true;
+								- 	}
+								- }
+								- 	if(links['W_ROOM']){
+								- 		var linksArray = links['W_ROOM'];
+										ul(style=(isUsedFirst?'display:none':'') data-type="W_ROOM")
+											each link in linksArray
+												- if(user_status.code==3){
+												- 	var isOwnLink = String(link.user._id) == String(user_status.data._id); }
+
+												li.line(data-ref=""+link._id)
+													.leftSide
+														if isPremiumUser
+															span.marker
+																if link.ads == 'BAD'
+																	i.fa(class="fa-circle" aria-hidden="true" style="color: #cc0000;")
+																else if link.ads == 'NORM'
+																	i.fa(class="fa-circle" aria-hidden="true" style="color: #f1c86f;")
+																else
+																	i.fa(class="fa-circle" aria-hidden="true" style="color: #1b7025;")
+														span.host #{link.hosting}
+														span.quality #{VIDEO_TYPES_LIST_ASSOCIATE[link.type]}
+													.rightSide
+														if isModAdmin
+															i.fa(class="fa-check acceptLinkBtnSeriesMovies" title="Zatwierdź")
+															i.fa(class="fa-remove delLinkBtnSeries" title="Usuń ten link")
+
+														div(style="width: 75px; float: left; margin-left: 10px;")
+															span#watchBtn Oglądaj
+													.clear
+								- }
+								if isPremiumUser
+									ol.legend
+										li
+											i.fa(class="fa-circle" aria-hidden="true" style="color: #1b7025;")
+											span Brak reklam
+											.clear
+										li
+											i.fa(class="fa-circle" aria-hidden="true" style="color: #f1c86f;")
+											span Może zawierać reklamy
+											.clear
+										li
+											i.fa(class="fa-circle" aria-hidden="true" style="color: #cc0000;")
+											span Zawiera denerwujące reklamy (wyskakujące okienka)
+											.clear
+
+
+				- var genres = '';
+				- for (var i = 0, len = series.genres.length; i < len; i++) {
+				-	var uppered = series.genres[i].charAt(0).toUpperCase() + series.genres[i].slice(1);
+				- 	if(i==0) genres+= uppered;
+				- 	else genres+= ', '+uppered;
+				- }							
+
+
+				if(user_status.code==3 && series.votedByYou)
+					#rate_this Twoja ocena: #{series.votedByYou}
+				else
+					#rate_this Oceń ten serial:
+				- var rate = series.rate;
+				#star_rate2
+					- var fullStars = Math.floor(rate);
+					- var starsAdded = fullStars;
+					- var i_star = 1;
+
+					- for(var i = 0; i < fullStars; i++) {
+						i.fa(class="fa-star" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star" title="Oceń na "+i_star)
+						- i_star++;
+					- }
+
+					- if(starsAdded<5){
+						- var polowka = rate-fullStars;
+						- if(polowka>=0.5){
+							- starsAdded++;
+							i.fa(class="fa-star-half-o" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star-half-o" title="Oceń na "+i_star)
+							- i_star++;
+						- }else{
+							- starsAdded++;
+							i.fa(class="fa-star-o" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star-o" title="Oceń na "+i_star)
+							- i_star++;
+						- }
+					- }
+
+					- if(starsAdded<5){
+						- for(var i = 0; i < 5-starsAdded; i++) {
+							i.fa(class="fa-star-o" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star-o" title="Oceń na "+i_star)
+							- i_star++;
+						- }
+					- }
+				#rate #{(Math.round(series.rate * 100)/100).toFixed(1)+' / 5.0'}
+				#votes Głosów: #{series.votes_count?series.votes_count:0}
+				.clear
+
+				span#genres-date Premiera: #{series.year}, #{genres}
+
+				section#des
+					h2#sub_title Opis serialu:
+					p#desc #{series.desc.replace(/\u00a0/g, " ")}
+
+				#season
+					#h Oglądasz sezon #{season_num}
+					
+					.line(id="lineUp") Pokaż poprzednie odcinki
+					.overlay
+						ul#episodesList
+							each episode2 in episodes
+								a(href='/serial/'+series.url+'/s'+pad(season_num)+'e'+pad(episode2.episode_num)+(episode2.episode_num_alter?'-e'+pad(episode2.episode_num_alter):'')+'/'+episode2.url+'/'+episode2.num)
+									li.line(data-ref=""+episode2._id class=(episode2.episode_num==episode.episode_num?'l_active':(episode2.viewedByYou?'l_watched':''))) e#{pad(episode2.episode_num)}#{episode2.episode_num_alter?'-e'+pad(episode2.episode_num_alter):''} <span class="" style="font-size: 10px;">&bull;</span> !{episode2.title}
+					.line(id="lineDown") Pokaż następne odcinki
+					if(is_lower && is_higher)
+						a(href='/serial/'+lower_episode.url+'/s'+pad(lower_episode.season_num)+'e'+pad(lower_episode.episode_num)+(lower_episode.episode_num_alter?'-e'+pad(lower_episode.episode_num_alter):'')+'/'+lower_episode.url+'/'+lower_episode.num)
+							.line(style="width: 50%; float: left; text-align: center; border-right: 1px dashed #2e2e2e;" title="Przechodzi do poprzedniego sezonu") Poprzedni sezon (!{lower_episode.season_num})
+						a(href='/serial/'+higher_episode.url+'/s'+pad(higher_episode.season_num)+'e'+pad(higher_episode.episode_num)+(higher_episode.episode_num_alter?'-e'+pad(higher_episode.episode_num_alter):'')+'/'+higher_episode.url+'/'+higher_episode.num)
+							.line(style="width: 50%; float: right; text-align: center;" title="Przechodzi do następnego sezonu") Następny sezon (!{higher_episode.season_num})
+						.clear
+					else if(is_lower)
+						a(href='/serial/'+lower_episode.url+'/s'+pad(lower_episode.season_num)+'e'+pad(lower_episode.episode_num)+(lower_episode.episode_num_alter?'-e'+pad(lower_episode.episode_num_alter):'')+'/'+lower_episode.url+'/'+lower_episode.num)
+							.line(style="text-align: center;" title="Przechodzi do poprzedniego sezonu") Poprzedni sezon (!{lower_episode.season_num})
+					else if(is_higher)
+						a(href='/serial/'+higher_episode.url+'/s'+pad(higher_episode.season_num)+'e'+pad(higher_episode.episode_num)+(higher_episode.episode_num_alter?'-e'+pad(higher_episode.episode_num_alter):'')+'/'+higher_episode.url+'/'+higher_episode.num)
+							.line(style="text-align: center;" title="Przechodzi do następnego sezonu") Następny sezon (!{higher_episode.season_num})
+
+					//-if series.status!='COPY' && !series.promotion
+					//-	.but(class=(user_status.code!=3?'loginBtn':'addLinkEpisodeBtn') style="margin-top: 12px; float: left") Dodaj linki
+					//-	.but(style="margin-top: 12px; float: right; margin-right: 5px;" class=(user_status.code!=3?'loginBtn':'addEpisodeBtn')) Dodaj odcinek
+					//-	.clear
+
+				if !(user_status.code==3 && user_status.data.premium)
+					div(style="width: 100%; margin: 20px 0;" class="ad ads reklama")
+						center
+							div(class="spolecznoscinet" id="spolecznosci-3543")
+
+				#commentsBox
+					.commentsCount Komentarze: #{commentsCount}
+
+					#addCommentBox
+						form#addComment
+							fieldset
+								.flx
+									img.avatar(src=(user_status.code==3?(user_status.data.avatar?IMG_HOSTNAME+user_status.data.avatar:IMG_HOSTNAME+'/assets/img/default_avatar.jpg'):IMG_HOSTNAME+'/assets/img/default_avatar.jpg') width="48" height="48" title="Twój avatar" alt="Avatar")
+									if user_status.code==3	
+										textarea.area(name="message" placeholder="Dodaj komentarz..." id="commentArea")
+									else
+										textarea.area(name="message" placeholder="Zaloguj sie, aby dodać komentarz." id="commentArea" disabled)
+								if user_status.code==3
+									if user_status.data.comment_captcha
+										.z(style="float: right; margin-top: 8px;")
+											div#recaptchaComment
+										.clear
+									input.but(type="submit" value="Wyślij" style="float: right; margin-top: 8px;")
+									.bos
+										span(class="cssload-loader")
+											span(class="cssload-loader-inner")
+									.err
+									
+									
+								else
+									.o_btn(style="float: right; margin-top: 8px;" class="loginBtn") Zaloguj
+								.clear
+					if commentsCount>0
+						ul#comments
+							each comment, index in episode.comments
+								li.comment(data-ref=""+comment._id)
+									a(href="/user/"+comment.user.username)
+										img.avatar(src=(comment.user.avatar?IMG_HOSTNAME+comment.user.avatar:IMG_HOSTNAME+'/assets/img/default_avatar.jpg') width="48" height="48" title="Użytkownik "+comment.user.username alt="Avatar")
+									.bo
+										a(href="/user/"+comment.user.username title="Użytkownik "+comment.user.username)
+											span.name(class=(comment.user.premium && PREMIUM?'premium':'')) #{comment.user.username}
+										if comment.spoilers
+											.spoil Ten komentarz może zawierać spoilery. 
+												span.greenLink(class="showComment") Pokaż.
+											p(style="display:none") !{comment.message}
+										else
+											p !{comment.message}
+										.rate
+											- glos = null;
+											- if(user_status.code==3){
+											- 	for(var i = 0, len = comment.vote_logs.length; i < len; i++){
+											- 		if(String(comment.vote_logs[i].user_id)==String(user_status.data._id)){
+											- 			glos = comment.vote_logs[i].vote; break;
+											- 		}
+											- 	}
+											- }
+											i.fa(class="fa-thumbs-up" class=(user_status.code!=3?'loginBtn':'likeUpCommentBtn') style=(glos==1?'color:#28aa31;margin-left: 0px;':'margin-left: 0px;') title="Jestem za")  
+												span.l #{comment.like_up}
+											i.fa(class="fa-thumbs-down" class=(user_status.code!=3?'loginBtn':'likeDownCommentBtn') style=(glos==0?'color:#e2391d;':'') title="Jestem przeciw") 
+												span.l #{comment.like_down}
+										.time #{MOMENT(comment.date).fromNow()}
+									.clear
+
+	else
+		#episode_page.box(data-code=""+series._id data-code2=""+episode._id)
+			if isModAdmin
+				.container(style="margin-bottom: 20px;" id="mod_ad_btns_top")
+					section
+						button.but(id="editEpisodeNameBtn") Edytuj nazwę odcinka
+						.clear
+
+			.container
+				section#left_side
+					a(href='/serial/'+series.url+'/'+series.num title="Strona serialu")
+						img#poster(src=IMG_HOSTNAME+series.poster width="53" height="53" alt="Okładka")
+					h2.title(title=series.title) !{series.title}
+					if isModAdmin
+						input#titleEdit(type="text" onblur="MAIN.changeInputTitle(this)")
+					if series.title!=series.title_org || isModAdmin
+						h3.title_org(title=series.title_org) !{series.title_org}
+						if isModAdmin
+							input#titleOrgEdit(type="text" onblur="MAIN.changeInputTitleOrg(this)")
+					.clear
+					h4.episode_title [s#{pad(season_num)}e#{pad(episode.episode_num)}#{episode.episode_num_alter?'-e'+pad(episode.episode_num_alter):''}] !{episode.title}
+
+
+					if series.status=='COPY'
+						#player_box(style="height: 461px;")
+							h2.title_block Odcinek został zablokowany z powodu:
+							h3.title2_block naruszenia praw autorskich
+
+						if seriess.length>0
+							section#recommended-series(style="margin-top: 26px;")
+								h2.sectionTitle(style="padding-bottom: 12px;") Polecane
+								.clear
+
+								.sectionBox(style="padding: 0px;")
+									each series in seriess
+										section.item
+											a(href="/serial/"+series.url+"/"+series.num)
+												.poster
+													img(src=IMG_HOSTNAME+series.poster width="86" height="86")
+											.block
+												a(href="/serial/"+series.url+"/"+series.num)
+													h3.title(title=series.title) !{series.title}
+												if series.title!=series.title_org
+													a(href="/serial/"+series.url+"/"+series.num)
+														h4.title_org(title=series.title_org) !{series.title_org}
+												a(href="/seriale?start_year="+series.year+"&end_year="+series.year)
+													span.year #{series.year}
+												if series.rate>0
+													span.rate
+														i(class="fa fa-star" aria-hidden="true")
+														span.num #{series.rate.toFixed(1)+' / 5'}
+												.clear
+											.clear
+									.clear
+					else if episode.linksCount==0
+						h2.no_data Brak linków.
+						.but(class=(user_status.code!=3?'loginBtn':'addLinkEpisodeBtn') style="margin-top: 18px; margin-left: 8px;") Dodaj linki
+						.clear
+
+						if seriess.length>0
+							section#recommended-series(style="margin-top: 26px;")
+								h2.sectionTitle(style="padding-bottom: 12px;") Polecane
+								.clear
+
+								.sectionBox(style="padding: 0px;")
+									each series in seriess
+										section.item
+											a(href="/serial/"+series.url+"/"+series.num)
+												.poster
+													img(src=IMG_HOSTNAME+series.poster width="86" height="86")
+											.block
+												a(href="/serial/"+series.url+"/"+series.num)
+													h3.title(title=series.title) !{series.title}
+												if series.title!=series.title_org
+													a(href="/serial/"+series.url+"/"+series.num)
+														h4.title_org(title=series.title_org) !{series.title_org}
+												a(href="/seriale?start_year="+series.year+"&end_year="+series.year)
+													span.year #{series.year}
+												if series.rate>0
+													span.rate
+														i(class="fa fa-star" aria-hidden="true")
+														span.num #{series.rate.toFixed(1)+' / 5'}
+												.clear
+											.clear
+									.clear
+							if !(user_status.code==3 && user_status.data.premium)
+								div(style="margin: 30px auto; width: 820px; overflow: hidden;" class="ad ads reklama")
+									center
+										div(class="spolecznoscinet" id="spolecznosci-3533")
+					else
+						#player_box
+							#player
+								iframe#iframe(src="" width="100%" height="100%" allowfullscreen scrolling="no")
+							.blo
+								.na Wybierz źródło poniżej.
+								i(class="fa fa-hand-o-down" aria-hidden="true")
+
+						#under_player
+							#views(title="Odsłony strony | Pełne wyświetlenia odcinka: "+episode.viewed)
+								i.fa(class="fa-eye") 
+									span.l #{episode.views}
+
+							#menu
+								.m_btn(class=(episode.viewedByYou?'m_btnActive':'') class=(user_status.code!=3?'loginBtn':'setViewedBtn'))
+									i.fa(class="fa-check" aria-hidden="true")
+									.div Odcinek obejrzany?
+								.favBtn(style="margin-left: 4px;" class=(user_status.code!=3?'loginBtn':'setFavBtn') selected=(isSeriesFav?'':null))
+									i(class="fa fa-heart-o" aria-hidden="true" title="Dodaj do ulubionych")
+									i(class="fa fa-heart" aria-hidden="true" title="Usuń z ulubionych")
+									.info Dodaj do ulubionych
+							.clear
+
+						if !(user_status.code==3 && user_status.data.premium)
+							div(style="margin: 30px auto; width: 820px; overflow: hidden;" class="ad ads reklama")
+								center
+									div(class="spolecznoscinet" id="spolecznosci-3533")
+								
+						if episode.linksCount>0
+							#video_links
+								#btns
+									- var links = episode.links;
+									- var isUsedFirst = false;
+									- for(var i = 0, len = VIDEO_TYPES_LIST.length; i < len; i++){
+									- 	if(links[VIDEO_TYPES_LIST[i][0]]){
+									- 		var linksArray = links[VIDEO_TYPES_LIST[i][0]];
+									-		var count = 0;
+									- 		for(var j = 0, len2 = linksArray.length; j < len2; j++){
+									-			var link = linksArray[j];
+												- if(user_status.code==3){
+												- var isOwnLink = String(link.user._id) == String(user_status.data._id);
+												- var isPremiumUser = user_status.data.premium }
+												- if(link.status=='PUBLIC' || isOwnLink || isModAdmin) count++;
+									-		}
+									-		if(count>0){
+												.l_btn(class=(isUsedFirst?'':'l_active') data-type=VIDEO_TYPES_LIST[i][0]) #{VIDEO_TYPES_LIST[i][1]}
+									- 			isUsedFirst = true;
+									- 		}
+									- 	}
+									- }
+									- if(links['W_ROOM']){
+									- 	var linksArray = links['W_ROOM'];
+									-	if(linksArray.length>0){
+											.l_btn(class=(isUsedFirst?'':'l_active') data-type="W_ROOM") Poczekalnia
+									- 		isUsedFirst = true;
+									- 	}
+									- }
+									.clear
+
+
+								#links
+									ul
+									- isUsedFirst = false;
+									- for(var i = 0, len = VIDEO_TYPES_LIST.length; i < len; i++){
+									- 	if(links[VIDEO_TYPES_LIST[i][0]]){
+									- 		var linksArray = links[VIDEO_TYPES_LIST[i][0]];
+											ul(style=(isUsedFirst?'display:none':'') data-type=VIDEO_TYPES_LIST[i][0])
+												each link,link_index in linksArray
+													- if(user_status.code==3){
+													- 	var isOwnLink = String(link.user._id) == String(user_status.data._id);
+													- 	var isPremiumUser = user_status.data.premium;
+													-	var isLogged = true; }
+
+													if(link.status=='PUBLIC')
+														li.line(data-ref=(link.premium && (!isPremiumUser && !isModAdmin)?'':link._id))
+															.leftSide
+																if(!link.premium)
+																	a(href="/user/"+link.user.username)
+																		i.fa(class="fa-user" style=(isOwnLink?'color:#2f7bbf':'') title=(isOwnLink?'Ten link został dodany przez Ciebie':'Dodał: '+link.user.username))
+																else
+																	i.fa(class="fa-star" style="padding-right: 10px; color: #adadad;")
+																if isPremiumUser
+																	span.marker
+																		if link.ads == 'BAD'
+																			i.fa(class="fa-circle" aria-hidden="true" style="color: #cc0000;")
+																		else if link.ads == 'NORM'
+																			i.fa(class="fa-circle" aria-hidden="true" style="color: #f1c86f;")
+																		else
+																			i.fa(class="fa-circle" aria-hidden="true" style="color: #1b7025;")
+																span.host #{link.premium && (isPremiumUser || isModAdmin)?link.server:''}#{link.hosting}
+																span.quality #{VIDEO_QUALITY_ASSOCIATE[link.quality]} #{link.file_size && isModAdmin ? '/ '+BYTES_FORMAT(link.file_size, {unitSeparator: ' ', decimalPlaces: 2}):''}
+															.rightSide
+																if isModAdmin
+																	a(href="http://54.36.109.213:8089/add?data="+link.downl_data target="_blank" ref="nofollow")
+																		i.fa(class="fa-download" title="Pobierz plik")
+																if isModAdmin
+																	i.fa(class="fa-edit editLinkBtnSeries" title="Edytuj ten link")
+																	i.fa(class="fa-remove delLinkBtnSeries" title="Usuń ten link")
+
+																if link.report=='' && user_status.code==3 && !link.premium
+																	i.fa(class="fa-warning reportLinkBtnSeries" title="Zgłoś ten link")
+
+																if isModAdmin
+																	i.fa(class="fa-external-link-square openLinkInNewTab" title="Otwórz bezpośrednio")
+
+																//-if link.hosting=='openload' && !isPremiumUser
+																//-	a(href="/download/file?type=1&m_id="+series._id+"&file_id="+link._id target="_blank" ref="nofollow")
+																//-		i.fa(class="fa-download" title="Pobierz plik")
+
+																div(style="width: 75px; float: left; margin-left: 10px;")
+																	if !isPremiumUser && !isModAdmin && link.premium
+																		a#watchBtn2(href="/premium" target="_blank" rel="nofollow") Oglądaj
+																	else
+																		span#watchBtn Oglądaj		
+															.clear
+									- 		isUsedFirst = true;
+									- 	}
+									- }
+									- 	if(links['W_ROOM']){
+									- 		var linksArray = links['W_ROOM'];
+											ul(style=(isUsedFirst?'display:none':'') data-type="W_ROOM")
+												each link in linksArray
+													- if(user_status.code==3){
+													- 	var isOwnLink = String(link.user._id) == String(user_status.data._id); }
+
+													li.line(data-ref=""+link._id)
+														.leftSide
+															a(href="/user/"+link.user.username)
+																i.fa(class="fa-user" style=(isOwnLink?'color:#2f7bbf':'') title=(isOwnLink?'Ten link został dodany przez Ciebie':'Dodał: '+link.user.username))
+															if isPremiumUser
+																span.marker
+																	if link.ads == 'BAD'
+																		i.fa(class="fa-circle" aria-hidden="true" style="color: #cc0000;")
+																	else if link.ads == 'NORM'
+																		i.fa(class="fa-circle" aria-hidden="true" style="color: #f1c86f;")
+																	else
+																		i.fa(class="fa-circle" aria-hidden="true" style="color: #1b7025;")
+															span.host #{link.hosting}
+															span.quality #{VIDEO_TYPES_LIST_ASSOCIATE[link.type]}
+														.rightSide
+															if isModAdmin
+																a(href="http://54.36.109.213:8089/add?data="+link.downl_data target="_blank" ref="nofollow")
+																	i.fa(class="fa-download" title="Pobierz plik")
+															if isModAdmin
+																i.fa(class="fa-check acceptLinkBtnSeriesMovies" title="Zatwierdź")
+																i.fa(class="fa-edit editLinkBtnSeries" title="Edytuj ten link")
+																i.fa(class="fa-remove delLinkBtnSeries" title="Usuń ten link")
+																i.fa(class="fa-external-link-square openLinkInNewTab" title="Otwórz bezpośrednio")
+
+															div(style="width: 75px; float: left; margin-left: 10px;")
+																span#watchBtn Oglądaj
+														.clear
+									- }
+									if isPremiumUser
+										ol.legend
+											li
+												i.fa(class="fa-circle" aria-hidden="true" style="color: #1b7025;")
+												span Brak reklam
+												.clear
+											li
+												i.fa(class="fa-circle" aria-hidden="true" style="color: #f1c86f;")
+												span Może zawierać reklamy
+												.clear
+											li
+												i.fa(class="fa-circle" aria-hidden="true" style="color: #cc0000;")
+												span Zawiera denerwujące reklamy (wyskakujące okienka)
+												.clear
+
+							if seriess.length>0
+								section#recommended-series(style="margin-top: 26px;")
+									h2.sectionTitle(style="padding-bottom: 12px;") Polecane
+									.clear
+
+									.sectionBox(style="padding: 0px;")
+										each series in seriess
+											section.item
+												a(href="/serial/"+series.url+"/"+series.num)
+													.poster
+														img(src=IMG_HOSTNAME+series.poster width="86" height="86")
+												.block
+													a(href="/serial/"+series.url+"/"+series.num)
+														h3.title(title=series.title) !{series.title}
+													if series.title!=series.title_org
+														a(href="/serial/"+series.url+"/"+series.num)
+															h4.title_org(title=series.title_org) !{series.title_org}
+													a(href="/seriale?start_year="+series.year+"&end_year="+series.year)
+														span.year #{series.year}
+													if series.rate>0
+														span.rate
+															i(class="fa fa-star" aria-hidden="true")
+															span.num #{series.rate.toFixed(1)+' / 5'}
+													.clear
+												.clear
+										.clear
+
+								//- if !(user_status.code==3 && user_status.data.premium)
+								//- 	div(style="margin: 30px auto; width: 820px; overflow: hidden;" class="ad ads reklama")
+								//- 		center
+								//- 			div(class="spolecznoscinet" id="spolecznosci-3535")
+
+					#commentsBox(style="margin-top: 26px;")
+						.commentsCount Komentarze: #{commentsCount}
+
+						#addCommentBox
+							form#addComment
+								fieldset
+									img.avatar(src=(user_status.code==3?(user_status.data.avatar?IMG_HOSTNAME+user_status.data.avatar:IMG_HOSTNAME+'/assets/img/default_avatar.jpg'):IMG_HOSTNAME+'/assets/img/default_avatar.jpg') width="48" height="48" title="Twój avatar" alt="Avatar")
+									if user_status.code==3	
+										textarea.area(name="message" placeholder="Dodaj komentarz..." id="commentArea")
+									else
+										textarea.area(name="message" placeholder="Zaloguj sie, aby dodać komentarz." id="commentArea" disabled)
+									.clear
+									if user_status.code==3
+										if user_status.data.comment_captcha
+											.z(style="float: right; margin-top: 8px;")
+												div#recaptchaComment
+											.clear
+										input.but(type="submit" value="Wyślij" style="float: right; margin-top: 8px;")
+										.bos
+											span(class="cssload-loader")
+												span(class="cssload-loader-inner")
+										.err
+										
+										
+									else
+										.o_btn(style="float: right; margin-top: 8px;" class="loginBtn") Zaloguj
+									.clear
+						if commentsCount>0
+							ul#comments
+								each comment, index in episode.comments
+									li.comment(data-ref=""+comment._id)
+										a(href="/user/"+comment.user.username)
+											img.avatar(src=(comment.user.avatar?IMG_HOSTNAME+comment.user.avatar:IMG_HOSTNAME+'/assets/img/default_avatar.jpg') width="48" height="48" title="Użytkownik "+comment.user.username alt="Avatar")
+										.bo
+											a(href="/user/"+comment.user.username title="Użytkownik "+comment.user.username)
+												span.name(class=(comment.user.premium && PREMIUM?'premium':'')) #{comment.user.username}
+											if comment.spoilers
+												.spoil Ten komentarz może zawierać spoilery. 
+													span.greenLink(class="showComment") Pokaż.
+												p(style="display:none") !{comment.message}
+											else
+												p !{comment.message}
+											.rate
+												- glos = null;
+												- if(user_status.code==3){
+												- 	for(var i = 0, len = comment.vote_logs.length; i < len; i++){
+												- 		if(String(comment.vote_logs[i].user_id)==String(user_status.data._id)){
+												- 			glos = comment.vote_logs[i].vote; break;
+												- 		}
+												- 	}
+												- }
+												i.fa(class="fa-thumbs-up" class=(user_status.code!=3?'loginBtn':'likeUpCommentBtn') style=(glos==1?'color:#28aa31;margin-left: 0px;':'margin-left: 0px;') title="Jestem za")  
+													span.l #{comment.like_up}
+												i.fa(class="fa-thumbs-down" class=(user_status.code!=3?'loginBtn':'likeDownCommentBtn') style=(glos==0?'color:#e2391d;':'') title="Jestem przeciw") 
+													span.l #{comment.like_down}
+											.time #{MOMENT(comment.date).fromNow()}
+											if isModAdmin
+												i.fa(class="fa-remove delComment" title="Usuń komentarz")
+										.clear
+
+
+				#right_side
+					if(user_status.code==3 && series.votedByYou)
+						#rate_this(style="padding-top: 24px;") Twoja ocena: #{series.votedByYou}
+					else
+						#rate_this(style="padding-top: 24px;") Oceń ten serial:
+					- var rate = series.rate;
+					#star_rate2
+						- var fullStars = Math.floor(rate);
+						- var starsAdded = fullStars;
+						- var i_star = 1;
+
+						- for(var i = 0; i < fullStars; i++) {
+							i.fa(class="fa-star" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star" title="Oceń na "+i_star)
+							- i_star++;
+						- }
+
+						- if(starsAdded<5){
+							- var polowka = rate-fullStars;
+							- if(polowka>=0.5){
+								- starsAdded++;
+								i.fa(class="fa-star-half-o" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star-half-o" title="Oceń na "+i_star)
+								- i_star++;
+							- }else{
+								- starsAdded++;
+								i.fa(class="fa-star-o" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star-o" title="Oceń na "+i_star)
+								- i_star++;
+							- }
+						- }
+
+						- if(starsAdded<5){
+							- for(var i = 0; i < 5-starsAdded; i++) {
+								i.fa(class="fa-star-o" class=(user_status.code!=3?'loginBtn':'voteVideo') data-value=i_star data-default="fa-star-o" title="Oceń na "+i_star)
+								- i_star++;
+							- }
+						- }
+					#rate #{(Math.round(series.rate * 100)/100).toFixed(1)+' / 5.0'}
+					#votes Głosów: #{series.votes_count?series.votes_count:0}
+					.clear
+
+					#season
+						#h Oglądasz sezon #{season_num}
+						
+						.line(id="lineUp") Pokaż poprzednie odcinki
+						.overlay
+							ul#episodesList
+								each episode2 in episodes
+									a(href='/serial/'+series.url+'/s'+pad(season_num)+'e'+pad(episode2.episode_num)+(episode2.episode_num_alter?'-e'+pad(episode2.episode_num_alter):'')+'/'+episode2.url+'/'+episode2.num)
+										li.line(data-ref=""+episode2._id class=(episode2.episode_num==episode.episode_num?'l_active':(episode2.viewedByYou?'l_watched':''))) e#{pad(episode2.episode_num)}#{episode2.episode_num_alter?'-e'+pad(episode2.episode_num_alter):''} <span class="" style="font-size: 10px;">&bull;</span> !{episode2.title}
+						.line(id="lineDown") Pokaż następne odcinki
+						if(is_lower && is_higher)
+							a(href='/serial/'+lower_episode.url+'/s'+pad(lower_episode.season_num)+'e'+pad(lower_episode.episode_num)+(lower_episode.episode_num_alter?'-e'+pad(lower_episode.episode_num_alter):'')+'/'+lower_episode.url+'/'+lower_episode.num)
+								.line(style="width: 155px; float: left; text-align: center;" title="Przechodzi do poprzedniego sezonu") Poprzedni sezon (!{lower_episode.season_num})
+							a(href='/serial/'+higher_episode.url+'/s'+pad(higher_episode.season_num)+'e'+pad(higher_episode.episode_num)+(higher_episode.episode_num_alter?'-e'+pad(higher_episode.episode_num_alter):'')+'/'+higher_episode.url+'/'+higher_episode.num)
+								.line(style="width: 155px; float: right; text-align: center;" title="Przechodzi do następnego sezonu") Następny sezon (!{higher_episode.season_num})
+							.clear
+						else if(is_lower)
+							a(href='/serial/'+lower_episode.url+'/s'+pad(lower_episode.season_num)+'e'+pad(lower_episode.episode_num)+(lower_episode.episode_num_alter?'-e'+pad(lower_episode.episode_num_alter):'')+'/'+lower_episode.url+'/'+lower_episode.num)
+								.line(style="text-align: center;" title="Przechodzi do poprzedniego sezonu") Poprzedni sezon (!{lower_episode.season_num})
+						else if(is_higher)
+							a(href='/serial/'+higher_episode.url+'/s'+pad(higher_episode.season_num)+'e'+pad(higher_episode.episode_num)+(higher_episode.episode_num_alter?'-e'+pad(higher_episode.episode_num_alter):'')+'/'+higher_episode.url+'/'+higher_episode.num)
+								.line(style="text-align: center;" title="Przechodzi do następnego sezonu") Następny sezon (!{higher_episode.season_num})
+
+						if series.status!='COPY' && !series.promotion
+							.but(class=(user_status.code!=3?'loginBtn':'addLinkEpisodeBtn') style="margin-top: 12px; float: left") Dodaj linki
+							.but(style="margin-top: 12px; float: right; margin-right: 5px;" class=(user_status.code!=3?'loginBtn':'addEpisodeBtn')) Dodaj odcinek
+							.clear
+
+					//-if (episode.desc && episode.desc.length>0) || isModAdmin
+					//-	section#des
+					//-		h2#sub_title Opis odcinka:
+					//-		if isModAdmin
+					//-			.editDesc
+					//-				i.fa(class="fa-edit" title="Edytuj opis")
+					//-		.clear
+					//-		if isModAdmin
+					//-			textarea.area(id="areaDescEdit" onkeyup="MAIN.resizeArea(this)" onblur="MAIN.changeAreaDesc(this)")
+					//-		p#desc #{episode.desc?episode.desc:'Brak.'}
+
+					if episode.linksCount>0
+						if !(user_status.code==3 && user_status.data.premium)
+							div.sticky_ad(style="margin-top: 30px;" class="ad ads reklama")
+								center
+									div(class="spolecznoscinet" id="spolecznosci-3539")
+
+
+
+
+				.clear

@@ -1,0 +1,46 @@
+extend main
+block content
+	#add_links_mass_page.box
+		.container
+			section
+				h2.sectionTitle Dodaj linki masowo
+				.clear
+
+				.sectionBox
+					.inBox
+						if episodes.length==0
+							.err Brak odcinkow w tym sezonie.
+						else
+							.tit #{episodes[0].series_id.title} sezon #{pad(season)}
+							.err
+
+							form#addLinksMass
+								fieldset
+									.list
+										ul
+											each episode in episodes
+												li e#{pad(episode.episode_num)}#{episode.episode_num_alter?'-e'+pad(episode.episode_num_alter):''}
+									.right
+										textarea.area(name="links" spellcheck="false" onkeyup="MAIN.resizeArea(this)" style=('min-height: '+(episodes.length*20+12)+'px'))
+										
+										select.select(name="type" tabindex="3" style="margin-top: 10px; float: left;")
+											each val in VIDEO_TYPES_LIST.slice().reverse()
+												option(value=""+val[0]) #{val[1]}
+										select.select(name="quality" tabindex="4" style="margin-top: 10px; float: left; margin-left: 20px;")
+											each val in VIDEO_QUALITY_LIST.slice().reverse()
+												option(value=""+val[0]) #{val[1]}
+										input(type="hidden" name="code" value=""+series_id)
+										input(type="hidden" name="season" value=""+season)
+										input.o_btn(type="submit" style="margin-top: 10px;" value="Dodaj linki")
+										.clear
+										.checker(style="margin-top: 20px; margin-left: 3px;")
+											input(type="checkbox" id="checker" class="checkbox_s" name="premium")
+											label.checkbox(for="checker")
+												i.fa(class="fa-check")
+										.inf(style="margin-top: 22px;") Linki premium?
+										.clear
+									.clear
+
+							.tit(style="margin-top: 40px; text-align: left;" id="results2") Wyniki
+							ul#results
+

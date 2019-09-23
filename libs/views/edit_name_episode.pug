@@ -1,0 +1,15 @@
+#modalBG
+	#edit_link_page(style="margin-top: 128px;")
+		.form_step
+			.tit Edytuj tytuł odcinka
+			.err 
+			form#editNameEpisodeForm
+				fieldset
+					input.input(type="text" name="title" placeholder="Tytuł odcinka" tabindex="1" style="margin-top: 12px;" value=""+info)
+					input(type="hidden" name="code2" value=""+code2)
+					.bo
+						span(class="cssload-loader")
+							span(class="cssload-loader-inner")
+						input.btn(type="submit" value="Zapisz" tabindex="5" style="margin-top: 20px;")
+
+			

@@ -1,0 +1,25 @@
+extend main
+block content
+	.box
+		#remind_page
+			if data.error && data.code==1
+				.tit #{data.msg}
+			else if data.error && data.code==2
+				.tit Wystąpił błąd.
+			else 
+				.form_step
+					.tit Zmiana hasła
+					.err 
+					form#remindStep2UserForm
+						fieldset
+							input.input(type="password" name="pass" placeholder="Hasło" tabindex="2" autofocus style="margin-top: 15px;")
+							input.input(type="password" name="pass_rpt" placeholder="Powtórz hasło" tabindex="3" style="margin-top: 15px;")
+							input(type="hidden" name="code" value=data.data)
+							.bo
+								span(class="cssload-loader")
+									span(class="cssload-loader-inner")
+								input.btn(type="submit" value="Wyślij" tabindex="4" style="margin-top: 20px;")
+				.succes_step
+					.tit Hasło pomyślnie zmienione
+					.tit2 Możesz się teraz zalogować.
+			
