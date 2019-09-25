@@ -1,10 +1,9 @@
 process.env.NODE_ENV = 'development';
-global.is_dev_mode = process.env.NODE_ENV!='development';
+global.is_dev_mode = process.env.NODE_ENV=='development';
 
 var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-var lessMiddleware = require('less-middleware');
 var compress = require('compression');
 var helmet = require('helmet');
 var device = require('express-device');

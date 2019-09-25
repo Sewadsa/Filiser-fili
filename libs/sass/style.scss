@@ -1,0 +1,337 @@
+@import "normalize.scss";
+@import "pages/allneed.scss";
+@import "pages/home.scss";
+@import "pages/popup.scss";
+@import "pages/activate.scss";
+@import "pages/add_movie_series.scss";
+@import "pages/movie_episode.scss";
+@import "pages/series.scss";
+@import "pages/panel.scss";
+@import "pages/movies_series.scss";
+@import "pages/user_page.scss";
+@import "pages/infringements.scss";
+@import "pages/faq.scss";
+@import "pages/premium.scss";
+@import "pages/fav_series_movies.scss";
+
+
+.loginBtn, .registerBtn, .remindBtn, .addMovieSeriesBtn, 
+.addLinkBtn, .addLinkEpisodeBtn, .voteVideo, .likeUpCommentBtn, 
+.likeDownCommentBtn, .showComment, .reportLinkBtnMovie, .reportLinkBtnSeries, 
+.addEpisodeBtn, .setViewedBtn, .setFavBtn, .checkbox_s, #lineUp, #lineDown{
+	cursor: pointer;
+}
+
+.sticky_ad{
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	width: 330px;
+}
+
+.container{
+	width: 1170px;
+	margin: 0 auto;
+	position: relative;
+}
+
+#header{
+	width: 100%;
+	min-width: 1170px;
+	height: 56px;
+	background-color: #090909;
+
+	#logo{
+		float: left;
+		padding-top: 10px;
+		padding-right: 22px;
+		padding-bottom: 8px;
+		display: block;
+	}
+
+	ul#menu{
+		float: left;
+		li{
+			float: left;
+			a{
+				height: 56px;
+				line-height: 56px;
+				color: #fff;
+				font-size: 19px;
+				padding: 0 16px;
+				display: block;
+				transition: background .2s;
+				h2{
+					font-weight: 100;
+				}
+			}
+			a:hover{
+				background-color: #1e1e1e;
+			}
+		}
+	}
+
+	#searchbox{
+		float: right;
+		margin-top: 15px;
+		position: relative;
+
+		.bt{
+			width: 24px;
+			height: 24px;
+			background: url(../img/search_icon.png) no-repeat #282828;
+			background-position: 5px 4px;
+			position: absolute;
+			top: 1px;
+			right: 1px;
+			border-radius: 3px;
+			border: none;
+			outline: none;
+			cursor: pointer;
+		}
+
+		.results_box{
+			display:none;
+			position: absolute;
+			top: 40px;
+			right: 0px;
+			min-width: 37px;
+			min-height: 37px;
+			background-color: rgba(24, 24, 24, .9);
+			border: 1px solid #2a2a2a;
+			z-index: 5;
+			border-radius: 4px;
+
+			.no_result{
+				width: 266px;
+				height: 37px;
+				text-align: center;
+
+				.t{
+					font-size: 13px;
+					color: #a2a2a2;
+					padding-top: 10px;
+				}
+			}
+
+			.results{
+				width: 440px;
+
+				.more{
+					width: 100%;
+					text-align: center;
+					padding-bottom: 10px;
+					display: block;
+				}
+
+				li{
+					width: 440px;
+					padding: 10px 12px;
+					box-sizing: border-box;
+
+					.poster{
+						border-radius: 3px;
+						margin-right: 10px;
+						float: left;
+						width: 60px;
+						height: 60px;
+						overflow: hidden;
+					}
+
+					.title{
+						font-size: 14px;
+						color: #fdd275;
+						padding-top: 4px;
+						width: 336px;
+						float: left;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						height: 16px;
+					}
+
+					.title_org{
+						font-size: 13px;
+						color: #a5a5a5;
+						padding-top: 4px;
+						width: 336px;
+						float: left;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						height: 15px;
+					}
+
+					.info{
+						font-size: 12px;
+						color: #939393;
+						padding-top: 8px;
+						width: 336px;
+						float: left;
+					}
+				}
+				li:hover{
+					background-color: #313131;
+				}
+				.liActive{
+					background-color: #313131 !important;
+				}
+			}
+		}
+	}
+
+	#reghbox{
+		float: right;
+		margin-right: 15px;
+
+		h2{
+			color: #20da24;
+			font-size: 12px;
+			float: left;
+			line-height: 56px;
+			cursor: pointer;
+			transition: color .2s;
+
+			a{
+				line-height: 56px;
+				display: block;
+			}
+		}
+		h2:hover{
+			color: #d3da21;
+		}
+
+		.spn{
+			float: left;
+			padding: 0 4px;
+			line-height: 56px;
+			color: #767676;
+		}
+	}
+}
+
+#regLine{
+	width: 100%;
+	min-width: 1170px;
+	height: 32px;
+	background-color: #101010;
+
+	h2{
+		color: #20da24;
+		font-size: 12px;
+		float: left;
+		line-height: 32px;
+		cursor: pointer;
+		transition: color .2s;
+
+		a{
+			line-height: 32px;
+			display: block;
+		}
+	}
+	h2:hover{
+		color: #d3da21;
+	}
+
+	.spn{
+		float: left;
+		padding: 0 4px;
+		line-height: 32px;
+		color: #767676;
+	}
+
+	.right{
+		float: right;
+	}
+}
+
+#userLine{
+	width: 100%;
+	min-width: 1170px;
+	height: 32px;
+	background-color: #101010;
+
+	h2{
+		color: #20da24;
+		font-size: 12px;
+		float: left;
+		line-height: 32px;
+		cursor: pointer;
+		transition: color .2s;
+		padding: 0 8px;
+
+		a{
+			line-height: 32px;
+			display: block;
+		}
+	}
+	h2:hover{
+		color: #d3da21;
+	}
+
+	.premiumColor{
+		color: #fdd275;
+	}
+
+	.premiumColor:hover{
+		color: #fddb93;
+	}
+
+	.span{
+		font-size: 12px;
+		line-height: 32px;
+	}
+
+	.spn{
+		float: left;
+		padding: 4px;
+	}
+
+	.right{
+		float: right;
+	}
+
+	.left{
+		float: left;
+	}
+}
+
+#footer{
+	width: 100%;
+	min-width: 1170px;
+	background-color: #0f0f0f;
+
+	span{
+		width: 100%;
+		display: block;
+		font-size: 11px;
+		color: #919191;
+		line-height: 15px;
+		text-align: justify;
+		padding-bottom: 20px;
+	}
+
+	ul li{
+		float: right;
+		padding-left: 10px;
+
+		a, .z{
+			line-height: 36px;
+			height: 36px;
+			font-size: 12px;
+			color: #919191;
+			display: block;
+			transition: color .2s;
+		}
+		.z{
+			cursor: default;
+			transition: none;
+		}
+		a:hover{
+			color: #adadad; 
+		}
+	}
+	ul li:first-child{
+		padding-left: 0px;
+	}
+}

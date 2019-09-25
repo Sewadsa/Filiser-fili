@@ -1,0 +1,137 @@
+#infringements_page, #privacy_policy_page, #rules_page, #contact_page{
+	#infringements, #contactForm{
+		input{
+			float: right;
+		}
+
+		textarea.area{
+			width: 408px;
+			margin-left: 10px;
+			float: right;
+			max-width: 408px;
+			min-height: 200px;
+		}
+
+		
+
+		input.input{
+			width: 400px;
+			height: 30px;
+			margin-left: 10px;
+		}
+
+		.formTitle{
+			font-size: 13px;
+			color: #c0c0c0;
+			float: left;
+			line-height: 32px;
+			width: 238px;
+
+		}
+
+		.line{
+			margin-bottom: 18px;
+
+		}
+	}
+
+	.container{
+		background-color: #242424;
+		min-height: 400px;
+		box-sizing: border-box;
+		padding: 50px 250px;
+	}
+
+	h2.title{
+		color: #eaeaea;
+		font-size: 18px;
+		padding-bottom: 26px;
+	}
+
+	
+
+	h3.subTitle{
+		color: #d6d6d6;
+		font-size: 15px;
+		padding-bottom: 6px;
+	}
+
+	p{
+		font-size: 13px;
+		color: #a4a4a4;
+		line-height: 19px;
+		padding-bottom: 14px;
+		text-align: justify;
+	}
+
+	p.smallLne{
+		font-size: 13px;
+		color: #a4a4a4;
+		line-height: 19px;
+		padding-bottom: 7px !important;
+		text-align: justify;
+	}
+	ul{
+		list-style-type: square;
+		padding-left: 20px;
+	}
+	ul li{
+		font-size: 13px;
+		color: #a4a4a4;
+		line-height: 19px;
+		text-align: justify;
+		padding: 2px 0;
+	}
+}
+#privacy_policy_page, #rules_page{
+	p{
+		padding-bottom: 20px !important;
+	}
+}
+
+#hosts_page{
+	.container{
+		background-color: #242424;
+		min-height: 400px;
+		box-sizing: border-box;
+		padding: 30px 100px;
+	}
+
+	h2.title{
+		color: #eaeaea;
+		font-size: 16px;
+		padding-bottom: 26px;
+	}
+
+
+	h3.host{
+		color: #d6d6d6;
+		font-size: 14px;
+		padding-bottom: 6px;
+	}
+
+	ul{
+		padding-left: 14px;
+		padding-bottom: 20px;
+		li{
+			padding: 3px 0;
+		}
+	}
+}
+
+#http_err_page{
+	text-align: center;
+
+	span.t{
+		font-size: 18px;
+		display: block;
+		padding-bottom: 15px;
+	}
+
+	span.err_code{
+		font-size:100px;
+		display: block;
+		padding-bottom: 15px;
+	}
+
+}

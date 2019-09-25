@@ -1,0 +1,39 @@
+#faq_page{
+	li.questionBox{
+		background-color: #202020;
+		margin-bottom: 16px;
+
+		.clickableBox{
+			height: 40px;
+			width: 100%;
+			background-color: #2e2e2e;
+			cursor: pointer;
+
+			span.qText{
+				font-size: 13px;
+				color: #c2c2c2;
+				float: left;
+				padding: 13px 0;
+				margin-left: 12px;
+			}
+		}
+
+		.answerBox{
+			padding: 12px;
+			span.aText{
+				font-size: 13px;
+				color: #939393;
+				line-height: 20px;
+			}
+		}
+
+		.tabelka1{
+			padding: 10px 0px;
+		}
+
+	}
+
+
+
+
+}

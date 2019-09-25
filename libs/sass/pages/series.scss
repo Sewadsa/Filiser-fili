@@ -1,0 +1,502 @@
+#series_page{
+
+	#left_side{
+		width: 820px;
+		float: left;
+		margin-right: 10px;
+
+		#poster{
+			float: left;
+			margin-right: 12px;
+		}
+
+		h2.title{
+			font-size: 26px;
+			line-height: 31px;
+			color: #fdd275;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			width: 755px;
+			float: left;
+		}
+
+		h3.title_org{
+			padding-top: 2px;
+			font-size: 14px;
+			line-height: 20px;
+			color: #cacaca;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			font-weight: 100;
+			width: 755px;
+			float: left;
+		}
+
+		input#titleEdit{
+			width: 755px;
+			height: 31px;
+			border: none;
+			background-color: transparent;
+			font-size: 26px;
+			line-height: 31px;
+			color: #fdd275;
+			outline: none;
+			display: none;
+			letter-spacing: 0px;
+			padding: 0px;
+			margin: 0px;
+			font-family: 'Open Sans', sans-serif;
+		}
+
+		input#titleOrgEdit{
+			width: 755px;
+			height: 20px;
+			border: none;
+			background-color: transparent;
+			font-size: 14px;
+			line-height: 20px;
+			color: #cacaca;
+			outline: none;
+			display: none;
+			letter-spacing: 0px;
+			padding: 0px;
+			padding-top: 2px;
+			margin: 0px;
+			font-family: 'Open Sans', sans-serif;
+			font-weight: 100;
+		}
+
+		.favBtn{
+			height: 22px;
+			background-color: #1c5f70;
+			float: left;
+			cursor: pointer;
+			padding: 0 12px 0 8px;
+			transition: background-color .2s;
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+
+			.info{
+				color: #c5c5c5;
+				font-size: 11px;
+				float: left;
+				line-height: 22px;
+				padding-left: 4px;
+			}
+
+			i{
+				color: #c9c9c9;
+				font-size: 14px;
+				padding: 4px;
+				cursor: pointer;
+				transition: all .3s;
+				float: left;
+			}
+
+			.fa-heart{
+				display: none;
+			}
+
+			.fa-heart-o{
+				display: block;
+			}
+
+		}
+
+		.favBtn:hover{
+			background-color: #206c7f;
+		}
+
+		.favBtn[selected]{
+			padding: 0px !important;
+			.info{
+				display: none !important;
+			}
+			.fa-heart{
+				display: block !important;
+			}
+
+			.fa-heart-o{
+				display: none !important;
+			}
+		}
+
+		.favBtn:disabled, .favBtn[disabled]{
+			background-color: #252525 !important;
+			cursor: wait !important;
+			
+			.info{
+				color: #999999 !important;
+			}
+
+			i{
+				cursor: wait !important;
+				color: #999999 !important;
+			}
+		}
+		.favBtn:active{
+			background-color: #1c5f70;
+		}
+
+		#trailer_player{
+			width: 820px;
+
+			img{
+				height: 100%;
+				display: block;
+				margin: 0 auto;
+			}
+		}
+
+		#photo_list{
+			margin-top: 25px;
+
+			ul{
+				li.photo{
+					width: 164px;
+					height: 164px;
+					overflow: hidden;
+					float: left;
+					cursor: pointer;
+					position: relative;
+
+					img{
+						transition: all .3s;
+					}
+					
+				}
+				li.photo:hover{
+					img{
+						-ms-transform: scale(1.10, 1.10);
+						-webkit-transform: scale(1.10, 1.10);
+						transform: scale(1.10, 1.10);
+					}
+
+				}
+			}
+		}
+
+		#seasons_list{
+			margin-top: 25px;
+
+			.selectSeason{
+				color: #adadad;
+				font-size: 13px;
+				padding-bottom: 8px;
+			}
+
+			.no_data{
+				color: #c5c5c5;
+				font-size: 13px;
+			}
+
+			#btns{
+				.l_btn:first-child{
+					margin-left: 0px;
+				}
+				.l_btn{
+					height: 36px;
+					line-height: 36px;
+					font-size: 14px;
+					padding: 0 14px;
+					background-color: #3b3b3b;
+					color: #adadad;
+					cursor: pointer;
+					float: left;
+					margin-left: 3px;
+					transition: all .3s;
+					-webkit-touch-callout: none;
+					-webkit-user-select: none;
+					-khtml-user-select: none;
+					-moz-user-select: none;
+					-ms-user-select: none;
+					user-select: none;
+				}
+				.l_btn:hover{
+					background-color: #555555;
+					color: #d1d1d1;
+				}
+
+				.l_active{
+					background-color: #1b7025 !important;
+					color: #c5c5c5 !important;
+					cursor: default;
+				}
+			}
+
+			#episodes{
+				border-top: 1px solid #1b7025;
+
+				ul{
+					li.firstLine{
+						padding: 0 15px;
+						height: 34px;
+						border-bottom: 1px dashed #2e2e2e;
+
+						.addLinksMass{
+							font-size: 13px;
+							line-height: 13px;
+							display: inline-block;
+							padding: 5px 0;
+							margin: 6px 0;
+						}
+
+						.importLinksMass{
+							font-size: 13px;
+							line-height: 13px;
+							display: inline-block;
+							padding: 5px 0;
+							margin: 6px 0;
+							margin-right: 15px;
+						}
+					}
+
+					li.line{
+						padding: 0 15px;
+						height: 34px;
+						line-height: 34px;
+						transition: background-color .1s;
+						border-bottom: 1px dashed #2e2e2e;
+
+						.checker{
+							margin-right: 10px;
+							float: left;
+
+							input[type="checkbox"] {
+								display:none;
+							}
+
+							input[type="checkbox"] + label.checkbox{
+								position: relative;
+								width: 14px;
+								height: 14px;
+								background-color: #242424;
+								border: 1px solid #454545;
+								border-radius: 3px;
+								display: block;
+								margin: 9px 0;
+								cursor: pointer;
+								transition: all .2s;
+								-webkit-touch-callout: none;
+								-webkit-user-select: none;
+								-khtml-user-select: none;
+								-moz-user-select: none;
+								-ms-user-select: none;
+								user-select: none;
+
+								.fa{
+									opacity: 0;
+									position: absolute;
+									top: -1px;
+									left: 0px;
+									color: #2ec238;
+									transition: all .2s;
+									padding: 0;
+									font-size: 14px;
+								}
+							}
+
+							input[type="checkbox"]:checked + label.checkbox{
+								.fa{
+									opacity: 1;
+								}
+							}
+						}
+
+						.episodeNum{
+							color: #adadad;
+							font-size: 13px;
+							float: left;
+							width: 100px;
+						}
+
+						.episodeName{
+							color: #adadad;
+							font-size: 13px;
+							padding-left: 8px;
+							float: left;
+							width: 500px;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							white-space: nowrap;
+						}
+						
+						.fa{
+							float: left;
+							font-size: 16px;
+							padding: 9px 0;
+
+						}
+
+						.fa:active{
+							-ms-transform: scale(.95, .95);
+							-webkit-transform: scale(.95, .95);
+							transform: scale(.95, .95);
+						}
+
+						.fa-user{
+							cursor: pointer;
+							padding-right: 12px;
+						}
+
+						.fa-circle-o, .fa-edit, .fa-remove, .fa-warning, .fa-dot-circle-o{
+							cursor: pointer;
+							padding: 9px 6px;
+							color: #adadad;
+						}
+
+						.fa-remove{
+							color: #cc0000 !important;
+						}
+
+						.rightSide{
+							float: right;
+						}
+					}
+					li.line:hover{
+						background-color: #1e1e1e;
+					}
+					li.active{
+						background-color: #404040 !important;
+					}
+				}
+
+			}
+
+		}
+	}
+	#right_side{
+		width: 336px;
+		float: left;
+		margin-left: 7px;
+
+		#info_box{
+			width: 330px;
+
+			#rate_this{
+				font-size: 15px;
+				color: #cacaca;
+				padding-top: 12px;
+			}
+
+			#star_rate2{
+				width: 147px;
+				float: left;
+				margin-top: 8px;
+
+				.fa{
+					color: #e0c50d;
+					font-size: 23px;
+					padding: 0 4px;
+					cursor: pointer;
+					transition: color .2s;
+				}
+			}
+
+			span#genres, span#year{
+				width: 100%;
+				display: block;
+				text-align: center;
+				padding-top: 6px;
+				font-size: 13px;
+				color: #cacaca;
+				font-weight: 100;
+			}
+		}
+
+		#rate{
+			font-size: 14px;
+			color: #cacaca;
+			margin-top: 12px;
+			margin-left: 15px;
+			float: left;
+		}
+
+		#votes{
+			font-size: 14px;
+			color: #cacaca;
+			margin-top: 12px;
+			float: right;
+		}
+
+		span#genres2{
+			width: 100%;
+			display: block;
+			text-align: center;
+			padding-top: 14px;
+			font-size: 13px;
+			color: #cacaca;
+			font-weight: 100;
+		}
+
+		span#date{
+			width: 100%;
+			display: block;
+			text-align: center;
+			padding-top: 7px;
+			font-size: 13px;
+			color: #cacaca;
+			font-weight: 100;
+		}
+		
+		#desc_box{
+			margin-top: 25px;
+			width: 330px;
+			margin-right: 15px;
+			float: left;
+
+			h3#sub_title{
+				font-size: 15px;
+				float: left;
+			}
+
+			p#desc{
+				padding-top: 8px;
+				font-size: 13px;
+				color: #c5c5c5;
+				line-height: 20px;
+				font-weight: 100;
+				white-space: pre-wrap;
+			}
+
+			.area{
+				width: 330px;
+				max-width: 330px;
+				padding: 0px;
+				border: none;
+				font-size: 13px;
+				color: #e1e1e1;
+				line-height: 20px;
+				font-weight: 100;
+				white-space: pre-wrap;
+		
+				margin-top: 12px;
+				height: auto;
+				resize: none;
+				overflow: hidden;
+				display: none;
+				background-color: transparent;
+			}
+
+			.editDesc{
+				float: right;
+				cursor: pointer;
+				color: #adadad;
+				font-size: 16px;
+			}
+
+			.editDesc:active{
+				-ms-transform: scale(.95, .95);
+				-webkit-transform: scale(.95, .95);
+				transform: scale(.95, .95);
+			}
+		}
+
+	}
+}

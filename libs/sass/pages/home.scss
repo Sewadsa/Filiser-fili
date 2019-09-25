@@ -1,0 +1,531 @@
+#home_page{
+
+	.goodMes{
+		width: 100%;
+		padding: 15px;
+		box-sizing: border-box;
+		border: 1px solid #417022;
+		margin-bottom: 20px;
+		color: #d5d5d5;
+		font-size: 14px;
+	}
+
+	.badMes{
+		width: 100%;
+		padding: 15px;
+		box-sizing: border-box;
+		border: 1px solid #971414;
+		margin-bottom: 20px;
+		color: #d5d5d5;
+		font-size: 14px;
+	}
+
+	#slider{
+		width: 100%;
+		height: 450px;
+		position: relative;
+		margin-bottom: 40px;
+		overflow: hidden;
+		position: relative;
+
+		.item:before{
+			content: "";
+			display: block; 
+			width: 100%;
+			height: 450px;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			background: rgba(0, 0, 0, 0.35);
+		}
+
+		.item[data-active="true"]{
+			opacity: 1;
+		}
+
+		.item{
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			width: 100%;
+			height: 450px;
+			opacity: 0;
+			transition: opacity 2.6s;
+			z-index: -1;
+
+			.bg{
+				width: 100%;
+				height: 450px;
+				position: absolute;
+				left: -4000px;
+			}
+
+			.title{
+				font-size: 38px;
+				height: 42px;
+				color: #fff;
+				margin-top: 65px;
+				float: left;
+				margin-left: 30px;
+				max-width: 600px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				display: inline-block;
+			}
+
+			.title_org{
+				font-size: 24px;
+				height: 26px;
+				color: #fff;
+				margin-top: 10px;
+				float: left;
+				margin-left: 30px;
+				max-width: 600px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				display: inline-block;
+			}
+
+			.desc{
+				font-size: 15px;
+				line-height: 20px;
+				color: #fff;
+				margin-top: 16px;
+				width: 30%;
+				float: left;
+				margin-left: 30px;
+			}
+		}
+
+		.nav{
+			position: absolute;
+			bottom: 12px;
+			left: 50%;
+			margin-left: -100px;
+			height: 21px;
+			display: hidden;
+
+			li{
+				border-radius: 50%;
+				width: 21px;
+				height: 21px;
+				float: left;
+				background: #d5e1ee;
+				margin-right: 9px;
+				cursor: pointer;
+				opacity: .8;
+				position: relative;
+
+				.active{
+					border-radius: 50%;
+					width: 15px;
+					height: 15px;
+					position: absolute;
+					top: 3px;
+					left: 3px;
+					background-color: #202020;
+				}
+			}
+
+			li:last-child{
+				margin-right: 0px;
+			}
+
+		}
+	}
+	
+	#wide_view{
+		width: 100%;
+	}
+	
+	#left_side{
+		width: 820px;
+		float: left;
+		position: relative;
+		margin-right: 15px;
+	}
+
+	#right_side{
+		width: 335px;
+		float: left;
+		position: relative;
+	}
+
+	section#nowWatchingSeriesMovies{
+		ul{
+
+			li{
+				float: left;
+				
+			}
+		}
+
+	}
+
+	section#newSeriesMovies, section#premiereMovies, section#popularMoviesSeries{
+		ul#selectTime{
+			margin-bottom: 20px;
+			li{
+				float: left;
+				height: 26px;
+				padding: 0 12px;
+				background-color: #262626;
+				font-size: 14px;
+				text-transform: uppercase;
+				line-height: 26px;
+				cursor: pointer;
+				font-weight: 600;
+				color: #bdbdbd;
+			}
+
+			li:hover{
+				background-color: #2b2b2b;
+			}
+
+			li[active]{
+				color: #cbcbcb;
+				background-color: #1c5f70;
+			}
+		}
+
+		section.itemVideo:nth-child(3n){
+			margin-right: 0px;
+		}
+
+		section.itemVideo:nth-child(-n+3){
+			margin-top: 0px;
+		}
+
+		section.itemVideo{
+			width: 254px;
+			height: 190px;
+			overflow: hidden;
+			float: left;
+			margin-right: 0px;
+			margin-top: 20px;
+			margin-right: 14px;
+			position: relative;
+
+			.poster{
+				position: relative;
+				transition: opacity .2s;
+				width: 254px;
+				height: 143px;
+
+				span.rate{
+					position: absolute;
+					bottom: 0px;
+					left: 0px;
+					height: 17px;
+					line-height: 17px;
+					background-color: #1c4b70;
+					color: #bdbdbd;
+					padding: 0 6px;
+					font-size: 11px;
+					display: block;
+
+					i{
+						color: #e1be14;
+						padding-right: 4px;
+					}
+
+					span.num{
+
+					}
+				}
+
+				span.views{
+					position: absolute;
+					bottom: 0px;
+					right: 0px;
+					height: 17px;
+					line-height: 17px;
+					background-color: #1c4b70;
+					color: #bdbdbd;
+					padding: 0 6px;
+					font-size: 11px;
+					display: block;
+
+					i{
+						color: #bdbdbd;
+						padding-right: 4px;
+					}
+
+					span.num{
+
+					}
+				}
+			}
+
+			.poster:hover{
+				opacity: .8;
+			}
+
+			h3.title{
+				padding-top: 3px;
+				width: 100%;
+				overflow: hidden;
+				font-size: 13px;
+				color: #b4b4b4;
+				line-height: 16px;
+			}
+
+
+		}
+
+
+
+		section.item:nth-child(-n+2){
+			margin-top: 0px;
+		}
+
+		section.item{
+			width: 390px;
+			height: 120px;
+			background-color: #191919;
+			overflow: hidden;
+			float: left;
+			margin-right: 0px;
+			margin-top: 20px;
+
+
+			.poster{
+				width: 120px;
+				height: 120px;
+				float: left;
+				transition: opacity .2s;
+			}
+
+			.poster:hover{
+				opacity: .8;
+			}
+
+			.block{
+				margin-top: 10px;
+				float: left;
+				margin-left: 10px;
+				width: 260px;
+
+				h3.title{
+					width: 100%;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					font-size: 15px;
+					color: #b4b4b4;
+					height: 17px;
+				}
+
+				h4.title_org{
+					width: 100%;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					font-size: 13px;
+					color: #949494;
+					height: 14px;
+					margin-top: 5px;
+					font-weight: 100;
+				}
+
+				span.time{
+					color: #8e8e8e;
+					font-size: 11px;
+					margin-top: 12px;
+					display: block;
+				}
+
+				span.event{
+					color: #8e8e8e;
+					font-size: 11px;
+					margin-top: 5px;
+					display: block;
+
+					a{
+						color: #c0c0c0;
+						cursor: pointer;
+					}
+					a:hover{
+						color: #d9d9d9;
+					}
+				}
+
+				span.year{
+					height: 17px;
+					line-height: 17px;
+					background-color: #1c5f70;
+					color: #bdbdbd;
+					padding: 0 6px;
+					font-size: 11px;
+					display: block;
+					float: left;
+					margin-top: 14px;
+					margin-right: 8px;
+				}
+
+				span.rate{
+					height: 17px;
+					line-height: 17px;
+					background-color: #1c4b70;
+					color: #bdbdbd;
+					padding: 0 6px;
+					font-size: 11px;
+					display: block;
+					float: left;
+					margin-top: 14px;
+					margin-right: 4px;
+
+					i{
+						color: #e1be14;
+						padding-right: 4px;
+					}
+
+					span.num{
+
+					}
+				}
+
+				span.seasons, span.type{
+					height: 17px;
+					line-height: 17px;
+					background-color: #1c4b70;
+					color: #bdbdbd;
+					padding: 0 6px;
+					font-size: 11px;
+					display: block;
+					float: left;
+					margin-top: 14px;
+					text-transform: uppercase;
+				}
+			}
+
+		}
+	}
+
+	section#popular-videos{
+
+		section.item:last-child{
+			margin-bottom: 0px;
+		}
+		section.item{
+			margin-bottom: 12px;
+
+			.poster{
+				float: left;
+				margin-right: 8px;
+				transition: opacity .2s;
+			}
+
+			.poster:hover{
+				opacity: .8;
+			}
+
+			.block{
+				width: 169px;
+				float: left;
+
+				h3{
+					overflow: hidden;
+					font-size: 13px;
+					line-height: 16px;
+					color: #b4b4b4;
+					min-height: 16px;
+					max-height: 32px;
+					margin-bottom: 4px;
+				}
+
+				.views{
+					font-size: 11px;
+					color: #949494;
+				}
+			}
+		}
+	}
+
+	section#favSeries, section#randomSeries, section#randomMovies{
+
+
+
+		section.item2x2{
+			float: left;
+			margin-right: 0px;
+
+			.poster{
+				width: 150px;
+				height: 150px;
+				transition: opacity .2s;
+			}
+
+			.poster:hover{
+				opacity: .8;
+			}
+		}
+
+		section.item3x3:nth-child(3n){
+			margin-left: 2px;
+		}
+
+		section.item3x3:nth-child(3n-1){
+			margin-left: 2px;
+		}
+
+		section.item3x3:nth-child(-n+3){
+			margin-top: 0px;
+		}
+
+
+		section.item3x3{
+			float: left;
+			margin-right: 0px;
+			margin-top: 2px;
+
+			.poster{
+				width: 100px;
+				height: 100px;
+				transition: opacity .2s;
+			}
+
+			.poster:hover{
+				opacity: .8;
+			}
+		}
+
+		section.item4x4:nth-child(4n){
+			margin-left: 2px;
+		}
+
+		section.item4x4:nth-child(4n-1){
+			margin-left: 1px;
+		}
+
+		section.item4x4:nth-child(4n-2){
+			margin-left: 2px;
+		}
+
+		section.item4x4:nth-child(-n+4){
+			margin-top: 0px;
+		}
+
+
+		section.item4x4{
+			float: left;
+			margin-right: 0px;
+			margin-top: 2px;
+
+			.poster{
+				width: 75px;
+				height: 75px;
+				transition: opacity .2s;
+			}
+
+			.poster:hover{
+				opacity: .8;
+			}
+		}
+
+
+	}
+
+}

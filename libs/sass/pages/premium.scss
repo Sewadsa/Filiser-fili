@@ -1,0 +1,245 @@
+#premium_page{
+
+	.lft{
+		float: left;
+	}
+
+	.rght{
+		float: left;
+		margin-left: 20px;
+		padding-top: 15px;
+	}
+	
+	span.titl{
+		font-size: 16px;
+		color: #aeaeae;
+		display: block;
+	}
+
+	span.ex{
+		font-size: 14px;
+		color: #9c9c9c;
+		line-height: 19px;
+	}
+
+	span.uwaga{
+		margin-top: 22px;
+		font-size: 13px;
+		color: #fc4646;
+		line-height: 18px;
+		display: block;
+	}
+
+	span.exz{
+		font-size: 12px;
+		color: #9c9c9c;
+		line-height: 16px;
+	}
+
+	#przelewBox, #directBillingBox, #smsBox, #checkout, #additionalInfo{
+		margin-top: 12px;
+		margin-bottom: 20px;
+	}
+
+	#checkout, #additionalInfo{
+		background-color: #191919;
+		padding: 20px 10px;
+	}
+
+	#additionalInfo{
+		color: #aeaeae;
+		font-size: 12px;
+		line-height: 16px;
+		text-align: center;
+
+	}
+
+	.payBtn{
+		float: right;
+
+		.but{
+			height: 30px;
+			line-height: 30px;
+			padding: 0 36px;
+			font-size: 16px;
+		}
+	}
+
+	.checkerBox{
+		float: left;
+
+		.inf{
+			font-size: 12px;
+			color: #aeaeae;
+			float: left;
+			height: 30px;
+			width: 750px;
+			padding-left: 12px;
+			line-height: 16px;
+		}
+
+		.checker{
+			float: left;
+			padding-top: 2px;
+
+			input[type="checkbox"] {
+				display:none;
+			}
+
+			input[type="checkbox"] + label.checkbox{
+				position: relative;
+				width: 16px;
+				height: 16px;
+				background-color: #1c5f70;
+				border: 2px solid #267f96;
+				display: block;
+				cursor: pointer;
+				transition: all .2s;
+				-webkit-touch-callout: none;
+				-webkit-user-select: none;
+				-khtml-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+
+				.fa{
+					opacity: 0;
+					position: absolute;
+					top: -1px;
+					left: 0px;
+					color: #c2c2c2;
+					transition: all .2s;
+					padding: 0;
+					font-size: 16px;
+				}
+			}
+
+			input[type="checkbox"]:checked + label.checkbox{
+				.fa{
+					opacity: 1;
+				}
+			}
+		}
+	}
+
+	.activeItem{
+		border: 1px solid #877957!important;
+	}
+
+	.item:nth-child(odd){
+		margin-right: 20px;
+	}
+
+	p{
+		line-height: 16px;
+	}
+
+	.item{
+		width: 560px;
+		height: 120px;
+		padding: 10px;
+		box-sizing: border-box;
+		background-color: #191919;
+		border: 1px solid #191919;
+		transition: border .4s;
+		float: left;
+		margin-bottom: 20px;
+		margin-right: 0px;
+
+		.codeBlock{
+			width: 170px;
+			font-size: 14px;
+			color: #a4a4a4;
+			line-height: 18px;
+			text-align: center;
+			float: left;
+
+			.t{
+				padding-bottom: 12px;
+				padding-top: 12px;
+			}
+
+			.input{
+				width: 80px;
+				margin: 0 auto;
+			}
+
+			.select{
+				width: 140px;
+				height: 26px;
+				margin: 0 auto;
+			}
+		}
+
+		.daysBox{
+			width: 100px;
+			height: 100px;
+			background-color: #272727;
+			float: left;
+			color: #a4a4a4;
+
+			.num{
+				padding-top: 12px;
+				width: 100%;
+				text-align: center;
+				font-size: 50px;
+			}
+
+			.type{
+				width: 100%;
+				text-align: center;
+				font-size: 16px;
+			}
+		}
+
+		.costT{
+			font-size: 16px;
+			color: #a4a4a4;
+			padding: 42px 30px;
+			float: left;
+		}
+
+		.cost{
+			font-size: 16px;
+			color: #3790df;
+			padding: 42px 15px;
+			float: left;
+		}
+
+		.selectz{
+			padding: 35px 0;
+			margin-right: 25px;
+			float: right;
+		}
+
+		.sms{
+			color: #a4a4a4;
+			font-size: 15px;
+			text-align: center;
+			padding-top: 20px;
+
+			.line1{
+				padding-bottom: 6px;
+			}
+			.line2{
+				padding-bottom: 6px;
+				color: #20da24;
+			}
+			.gree{
+				color: #20da24;
+			}
+		}
+
+		.but{
+			height: 30px;
+			line-height: 30px;
+			padding: 0 36px;
+			font-size: 16px;
+		}
+
+	}
+
+
+
+
+}

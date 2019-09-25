@@ -1,0 +1,75 @@
+#fav_series_movies{
+	
+	ul#favList{
+		display: flex;
+		flex-wrap: wrap;
+		
+		> div{
+			display: flex;
+		}
+
+		li{
+			flex: 1 0 306px;
+			float: left;
+			margin-bottom: 20px;
+			
+			.poster{
+				float: left;
+				width: 80px;
+				height: 80px;
+			}
+
+			.title{
+				font-size: 14px;
+				color: #fdd275;
+				padding-top: 4px;
+				width: 100%;
+				max-width: 200px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				height: 16px;
+			}
+
+			.title_org{
+				font-size: 12px;
+				color: #a5a5a5;
+				padding-top: 4px;
+				width: 100%;
+				max-width: 200px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				height: 13px;
+			}
+
+			.block{
+				float: left;
+				margin-left: 6px;
+				flex: 1;
+				box-sizing: border-box;
+			}
+
+			span.time{
+				color: #8e8e8e;
+				font-size: 11px;
+				margin-top: 12px;
+				display: block;
+			}
+
+			span.event{
+				color: #8e8e8e;
+				font-size: 11px;
+				margin-top: 5px;
+				display: block;
+
+				a{
+					color: #c0c0c0;
+					cursor: pointer;
+				}
+			}
+		}
+	}
+
+
+}

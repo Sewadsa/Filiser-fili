@@ -3769,25 +3769,77 @@ app.get('/modals/:name', function(req, res){
 	}
 });
 
+var CACHE_SCRIPTS1 = null;
 
 app.get('/assets/js/scripts.'+VERSION+'.js', function(req, res){
-	res.setHeader('Cache-Control', 'public, max-age=2678400');
-	res.sendFile(PATH.join(PUBLIC_PATH, 'assets/js/scripts.js'));
+	if(is_dev_mode) res.setHeader('Cache-Control', 'public, no-cache');
+	else res.setHeader('Cache-Control', 'public, max-age=2678400');
+
+	res.set('content-type', 'application/javascript; charset=UTF-8');
+
+	if(CACHE_SCRIPTS1!=null){ res.send(CACHE_SCRIPTS1); return; }
+
+	FS.readFile(PATH.join(PUBLIC_PATH, 'assets/js/scripts.js'), 'utf8', function(err, content) {
+		if(err){ res.status(500).end('Internal Error'); return; }
+
+		CACHE_SCRIPTS1 = content;
+		res.send(content);
+	});
 });
+
+var CACHE_SCRIPTS2 = null;
 
 app.get('/assets/js/scripts.panel.'+VERSION+'.js', function(req, res){
-	res.setHeader('Cache-Control', 'public, max-age=2678400');
-	res.sendFile(PATH.join(PUBLIC_PATH, 'assets/js/scripts.panel.js'));
+	if(is_dev_mode) res.setHeader('Cache-Control', 'public, no-cache');
+	else res.setHeader('Cache-Control', 'public, max-age=2678400');
+
+
+	res.set('content-type', 'application/javascript; charset=UTF-8');
+
+	if(CACHE_SCRIPTS2!=null){ res.send(CACHE_SCRIPTS2); return; }
+
+	FS.readFile(PATH.join(PUBLIC_PATH, 'assets/js/scripts.panel.js'), 'utf8', function(err, content) {
+		if(err){ res.status(500).end('Internal Error'); return; }
+
+		CACHE_SCRIPTS2 = content;
+		res.send(content);
+	});
 });
+
+var CACHE_CSS1 = null;
 
 app.get('/assets/css/style.'+VERSION+'.css', function(req, res){
-	res.setHeader('Cache-Control', 'public, max-age=2678400');
-	res.sendFile(PATH.join(PUBLIC_PATH, 'assets/css/style.css'));
+	if(is_dev_mode) res.setHeader('Cache-Control', 'public, no-cache');
+	else res.setHeader('Cache-Control', 'public, max-age=2678400');
+
+	res.set('content-type', 'text/css; charset=UTF-8');
+
+	if(CACHE_CSS1!=null){ res.send(CACHE_CSS1); return; }
+
+	FS.readFile(PATH.join(PUBLIC_PATH, 'assets/css/style.css'), 'utf8', function(err, content) {
+		if(err){ res.status(500).end('Internal Error'); return; }
+
+		CACHE_CSS1 = content;
+		res.send(content);
+	});
 });
 
+var CACHE_CSS2 = null;
+
 app.get('/assets/css/style.mobile.'+VERSION+'.css', function(req, res){
-	res.setHeader('Cache-Control', 'public, max-age=2678400');
-	res.sendFile(PATH.join(PUBLIC_PATH, 'assets/css/style_mobile.css'));
+	if(is_dev_mode) res.setHeader('Cache-Control', 'public, no-cache');
+	else res.setHeader('Cache-Control', 'public, max-age=2678400');
+
+	res.set('content-type', 'text/css; charset=UTF-8');
+
+	if(CACHE_CSS2!=null){ res.send(CACHE_CSS2); return; }
+
+	FS.readFile(PATH.join(PUBLIC_PATH, 'assets/css/style_mobile.css'), 'utf8', function(err, content) {
+		if(err){ res.status(500).end('Internal Error'); return; }
+
+		CACHE_CSS2 = content;
+		res.send(content);
+	});
 });
 
 

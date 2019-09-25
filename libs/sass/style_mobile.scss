@@ -1,0 +1,200 @@
+@import "normalize.scss";
+@import "mpages/m_allneed.scss";
+@import "mpages/m_home.scss";
+@import "mpages/m_movies_series.scss";
+@import "mpages/m_movie_episode.scss";
+@import "mpages/m_series.scss";
+@import "mpages/m_popup.scss";
+@import "mpages/m_add_movie_series.scss";
+@import "mpages/m_infringements.scss";
+@import "mpages/m_faq.scss";
+@import "pages/panel.scss";
+@import "mpages/m_user_page.scss";
+@import "mpages/m_premium.scss";
+@import "mpages/m_fav_series_movies.scss";
+
+
+
+.loginBtn, .registerBtn, .remindBtn, .addMovieSeriesBtn, 
+.addLinkBtn, .addLinkEpisodeBtn, .voteVideo, .likeUpCommentBtn, 
+.likeDownCommentBtn, .showComment, .reportLinkBtnMovie, .reportLinkBtnSeries, 
+.addEpisodeBtn, .setViewedBtn, .setFavBtn, .checkbox_s, #lineUp, #lineDown{
+	cursor: pointer;
+}
+
+
+.container{
+	width: 100%;
+	position: relative;
+}
+
+#searchbox{
+	padding: 16px 16px 8px 16px;
+	position: relative;
+	
+	input.input{
+		line-height: 25px;
+		height: 39px;
+		padding: 7px 0 7px 16px;
+		font-size: 16px;
+		width: 100%;
+		box-sizing: border-box;
+		flex: 1;
+		border-radius: 10px 0px 0 0;
+	}
+
+	.bt{
+		width: 40px;
+		height: 40px;
+		background: url(../img/search_icon.png) no-repeat #282828;
+		background-position: 12px 12px;
+		border-radius: 0px 10px 0 0;
+		border: none;
+		outline: none;
+		cursor: pointer;
+		flex: 0 0 auto;
+	}
+}
+
+#header{
+	width: 100%;
+	min-width: 100%;
+	height: 56px;
+	background-color: #090909;
+
+	#logo{
+		padding: 12px 0px;
+		position: absolute;
+		left: 50%;
+		margin-left: -26px;
+	}
+
+	#hamburger-menu{
+		font-size: 1.5rem;
+		padding: 16px;
+		float: left;
+		cursor: pointer;
+	}
+
+	#menu-bg{
+		display: none;
+		background-color: rgba(0, 0, 0, 0);
+		height: 100%;
+		overflow: hidden;
+		position: fixed;
+		top: 0;
+		width: 100vw;
+		z-index: 199;
+		cursor: pointer;
+	}
+
+	#menu-bg.active{
+		background-color: rgba(255, 255, 255, 0.2)!important;
+		display: block!important;
+	}
+
+	#menu{
+		background-color: #181818;
+		height: 100%;
+		left: -200px;
+		outline: none;
+		position: fixed;
+		top: 0;
+		transition: 0.5s;
+		width: 200px;
+		z-index: 200;
+		overflow-y: auto;
+		-webkit-transform: translateX(0px);
+		-ms-transform: translateX(0px);
+	    transform: translateX(0px);
+		
+		.logo{
+			width: 52px;
+			height: 32px;
+			padding: 12px 14px;
+		}
+
+		a{
+			display: inline-table;
+			width: 100%;
+			height: 48px;
+			border-bottom: 1px solid #222222;
+			
+			span{
+				display: table-cell;
+				padding-left: 15px;
+				width: 24px;
+				vertical-align: middle;
+				font-size: 16px;
+			}
+			
+			h2{
+				vertical-align: middle;
+				display: table-cell;
+				font-size: 16px;
+				padding-left: 4px;
+			}
+		}
+	}
+
+	#menu.active{
+		-webkit-transform: translateX(200px)!important;
+		-ms-transform: translateX(200px)!important;
+		transform: translateX(200px)!important;
+	}
+}
+
+#userLine{
+	padding: 0 16px;
+	position: relative;
+
+	.premiumColor{
+		color: #fdd275;
+	}
+
+	.span{
+		padding-left: 8px;
+		font-size: 12px;
+		line-height: 15px;
+	}
+}
+
+#footer{
+	width: 100%;
+	padding: 0 6px;
+	box-sizing: border-box;
+	
+	background-color: #0f0f0f;
+
+	span{
+		width: 100%;
+		display: block;
+		font-size: 11px;
+		color: #919191;
+		line-height: 15px;
+		text-align: justify;
+		padding: 20px 0;
+	}
+
+	.z{
+		line-height: 36px;
+		height: 36px;
+		font-size: 12px;
+		color: #919191;
+		display: block;
+	}
+
+	ul li{
+		a{
+			line-height: 30px;
+			height: 30px;
+			border-bottom: 1px solid #232323;
+			font-size: 12px;
+			color: #919191;
+			display: block;
+			text-align: center;
+		}
+
+	}
+
+}

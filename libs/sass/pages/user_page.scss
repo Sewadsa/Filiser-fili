@@ -1,0 +1,124 @@
+#user_page{
+	.profile_bg{
+		width: 100%;
+		height: 200px;
+		background: url(/assets/img/profile_bg.png);
+		border-radius: 5px 5px 0 0;
+		padding: 50px;
+		box-sizing: border-box;
+
+		.avatar{
+			width: 100px;
+			height: 100px;
+			overflow: hidden;
+			border-radius: 15%;
+			border: 3px solid #b3b3b3;
+			box-sizing: border-box;
+			float: left;
+		}
+
+		.name{
+			font-size: 26px;
+			font-weight: 600px;
+			color: #fdd275;
+			padding-left: 30px;
+			padding-top: 20px;
+			float: left;
+			width: 930px;
+		}
+
+		.tim{
+			font-size: 13px;
+			color: #d7d7d7;
+			padding-left: 30px;
+			float: left;
+			padding-top: 8px;
+			width: 930px;
+		}
+		.type{
+			font-size: 12px;
+			color: #c0c0c0;
+			margin-left: 30px;
+			float: left;
+			margin-top: 8px;
+		}
+
+		.adm{
+			color: #ebe310 !important;
+		}
+
+		.mod{
+			color: #20da24 !important;
+		}
+
+	}
+	.movies_bg, .series_bg, .stats_bg, .change_av_bg{
+		width: 100%;
+		background-color: #1f1f1f;
+		box-sizing: border-box;
+		padding: 20px 15px 3px 15px;
+
+		.sec_title{
+			font-size: 16px;
+			display: inline-block;
+			border-bottom: 1px dashed #626262;
+			padding-bottom: 6px;
+		}
+
+		ul{
+			padding-top: 20px;
+			li{
+				width: 132px;
+				width: 132px;
+				overflow: hidden;
+				float: left;
+				margin-left: 12px;
+				cursor: pointer;
+				margin-bottom: 12px;
+
+				.poster{
+					width: 132px;
+					height: 132px;
+					border-radius: 5px;
+
+					img{
+						transition: .3s;
+					}
+					img:hover{
+						-ms-transform: scale(1.15, 1.15);
+						-webkit-transform: scale(1.15, 1.15);
+						transform: scale(1.15, 1.15);
+					}
+				}
+			}
+			li:first-child, li:nth-child(8n+1){
+				margin-left: 0px;
+			}
+		} 
+	}
+
+	.stats_bg{
+		padding-bottom: 20px;
+		.t{
+			width: 285px;
+			display: inline-block;
+		}
+	}
+
+	.change_av_bg{
+		padding-bottom: 20px;
+		height: 134px;
+		border-bottom: 1px solid #333333;
+
+		.t{
+			padding-top: 20px;
+			font-size: 12px;
+			color: #aeaeae;
+		}
+
+		.btn{
+			margin-top: 12px;
+		}
+	}
+
+}
