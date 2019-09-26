@@ -4,7 +4,7 @@
   "description": "Filiser - backend",
   "main": "./libs/start.js",
   "scripts": {
-    "dev": "nodemon ./libs/start.js -i data/public",
+    "dev": "nodemon ./libs/start.js -i data/public -i node_modules",
     "sassw": "sass -s compressed --watch libs/sass/style_mobile.scss:data/public/assets/css/style_mobile.css libs/sass/style.scss:data/public/assets/css/style.css --no-source-map"
   },
   "author": "Adam Sewastianiuk",
@@ -50,5 +50,11 @@
     "validator": "*",
     "winston": "*",
     "xml": "*"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.4",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-uglify": "^4.0.1",
+    "grunt-contrib-watch": "^1.1.0"
   }
 }
