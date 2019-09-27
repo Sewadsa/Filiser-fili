@@ -1,6 +1,6 @@
 process.env.NODE_ENV = 'development';
 global.is_dev_mode = process.env.NODE_ENV=='development';
-
+s = 1;
 CLUSTER = require('cluster');
 PATH = require('path');
 ASYNC = require('async');
