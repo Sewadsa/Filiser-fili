@@ -1,3 +1,6 @@
+process.env.NODE_ENV = 'development';
+global.is_dev_mode = process.env.NODE_ENV=='development';
+
 CLUSTER = require('cluster');
 PATH = require('path');
 ASYNC = require('async');
@@ -41,7 +44,7 @@ if(CLUSTER.isMaster){
 					}else{
 						if(needMain){
 							needMain = false;
-							console.log('URUCHAMIAM NOWEGO MAINA')
+							console.log('Starting new main')
 
 							for(var i = 0; i < workers.length; i++){
 								if(workers[i].id==worker.id){
@@ -51,7 +54,7 @@ if(CLUSTER.isMaster){
 								}
 							}
 						}else{
-							console.log('URUCHAMIAM NIE MAINA')
+							console.log('Starting new worker')
 							worker.send({type: 'newWorker'});
 						}
 
@@ -68,6 +71,13 @@ if(CLUSTER.isMaster){
 					break;
 				case 'checkPaymentAppliedEnded':
 					LOCK_FACTURING = false;
+					break;
+				case 'CLOSING':
+					for(var i = 0; i < workers.length; i++){
+						if(workers[i].id==worker.id){
+							workers[i].closed = true;
+						}
+					}
 					break;
 				default:
 					break;
@@ -106,21 +116,40 @@ if(CLUSTER.isMaster){
 	}
 
 	process.on('SIGINT', function(){
+		if(SHUTTING_DOWN) return;
+
 		MAINTAINCE = true;
+		SHUTTING_DOWN = true;
+
+		console.log('Rozpoczynam procedure zamykania');
+		broadcast({type: 'CLOSE'});
+		
+		var secs = 0;
+		setInterval(function(){
+			secs++;
+			var canShuttdown = true;
+			for(var i = 0; i < workers.length; i++){
+				if(!workers[i].closed){ canShuttdown = false; break; }
+			}
+			console.log(`Minęło ${secs} sekund`)
+			if(canShuttdown){ console.log('Zamykanie mistrza'); process.exit(0); return; }
+			else if(secs>30){ console.log('Zamykanie mistrza'); process.exit(0); return; }
+		}, 1000);
+		
+
+/*		console.log('MASTER SHUTTING DOWN')
 
 		setTimeout(function(){
-			console.log('MASTER SHUTED DOWN')
+			
 			process.exit(0);
-		}, 1000);
+		}, 10000);*/
 	});
 }else{
 	require(PATH.join(BASE_PATH, 'libs/app.js'));
 
 	process.on('SIGINT', function(){
+		if(SHUTTING_DOWN) return;
 		MAINTAINCE = true;
-
-		setTimeout(function(){
-			CLOSE();
-		}, 1000);
+		SHUTTING_DOWN = true;
 	});
 }

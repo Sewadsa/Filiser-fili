@@ -48,13 +48,13 @@ homeFunctions = function(CB)
 	if(CLUSTER.worker.id==1){
 		seriesModel.countDocuments({ viewed_day: { $gt: 0 } }, function(err, count){
 			if(err || count>0){
-				log('MAIN READY')
+				console.log('Main ready');
 				CB();
 			}else{
 				UTILS.createPopularDay(function(){
 					UTILS.createPopularWeek(function(){
 						UTILS.createPopularMonth(function(){
-							log('MAIN READY')
+							console.log('Main ready');
 							CB();
 						});
 					});
@@ -62,7 +62,7 @@ homeFunctions = function(CB)
 			}
 		});
 	}else{
-		log('MAIN READY')
+		console.log('Main ready');
 		CB();
 	}
 
@@ -80,6 +80,23 @@ updateOn330 = function()
 			});
 		});
 	});
+}
+
+CLOSE = function()
+{
+	MAINTAINCE = true;
+	SHUTTING_DOWN = true;
+	var time = 13000;
+	if(is_dev_mode) time = 300;
+	setTimeout(function(){
+		httpServer.close();
+		httpsServer.close();
+		MONGO.connection.close(function(){
+			process.send({type:'CLOSING'});
+			console.log(`Niewolnik ${CLUSTER.worker.id} jest zamykany`)
+			process.exit(0);
+		});
+	}, time);
 }
 
 
@@ -101,14 +118,13 @@ process.on('message', function(msg){
 		case 'youAreMainFirst':
 
 			homeFunctions(function(){
-				console.log("YOU ARE MAINE")
 				process.send({type: 'dataFirst'});
 			});
 			break;
 		case 'newWorker':
-				log(CLUSTER.worker.id+' start listening.');
 				httpServer.listen(PORT);
 				httpsServer.listen(PORT_SSL);
+				console.log(`Worker ${CLUSTER.worker.id} started listening`)
 			break;
 		case 'updateOn330':
 			updateOn330();
@@ -133,17 +149,15 @@ process.on('message', function(msg){
 				log('Popular Month updated.')
 			});
 			break;
+		case 'CLOSE':
+			CLOSE();
+			break;
 		default:
 			break;
 	}
 
 });
 
-CLOSE = function()
-{
-	MONGO.connection.close(function(){
-		process.exit(0);
-	});
-}
+
 
 

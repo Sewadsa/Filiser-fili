@@ -4,8 +4,7 @@
   "description": "Filiser - backend",
   "main": "./libs/start.js",
   "scripts": {
-    "dev": "nodemon ./libs/start.js -i data/public -i node_modules",
-    "sassw": "sass -s compressed --watch libs/sass/style_mobile.scss:data/public/assets/css/style_mobile.css libs/sass/style.scss:data/public/assets/css/style.css --no-source-map"
+    "dev": "nodemon ./libs/start.js -i data/public -i node_modules --signal SIGINT"
   },
   "author": "Adam Sewastianiuk",
   "license": "ISC",
