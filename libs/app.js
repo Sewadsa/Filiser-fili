@@ -65,7 +65,12 @@ app.use(bodyParser.urlencoded({'extended':'true', limit: '10mb'}));
 app.use(bodyParser.json({limit: '10mb', type: '*/json', strict: false}));
 app.use(expressSanitized());
 app.use(cookieParser());
-app.use(helmet());
+app.use(helmet({
+	frameguard: false,
+	hsts: false,
+	noSniff: false,
+	xssFilter: false,
+}))
 app.use(device.capture());
 
 //app.enable('trust proxy', true);

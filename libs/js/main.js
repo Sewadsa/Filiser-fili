@@ -24,9 +24,6 @@ MAIN.init = function()
 
 	MAIN.episodesList('NORM');
 	//MAIN.sliderInit();
-	var lazyLoadInstance = new LazyLoad({
-   
-});
 
 }
 
