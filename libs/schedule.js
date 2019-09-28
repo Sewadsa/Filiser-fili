@@ -4,7 +4,7 @@ var every3Sec = SCHEDULE.scheduleJob('*/2 * * * * *', function(){
 
 	for(var i = 0; i < workers.length; i++){
 		if(workers[i].main){
-			//workers[i].send({type: 'checkLink'});
+			workers[i].send({type: 'checkLink'});
 		}
 	}
 });
@@ -15,7 +15,7 @@ SCHEDULE.scheduleJob('*/5 * * * * *', function(){ // PREMIUM PAID CHECKER
 
 	for(var i = 0; i < workers.length; i++){
 		if(workers[i].main){
-		//	workers[i].send({type: 'checkPaymentPaid'});
+			workers[i].send({type: 'checkPaymentPaid'});
 		}
 	}
 });
@@ -29,7 +29,7 @@ SCHEDULE.scheduleJob('*/10 * * * * *', function(){ // PREMIUM APPLIED CHECKER
 
 	for(var i = 0; i < workers.length; i++){
 		if(workers[i].main){
-		//	workers[i].send({type: 'checkPaymentApplied'});
+			workers[i].send({type: 'checkPaymentApplied'});
 		}
 	}
 });
@@ -39,11 +39,11 @@ var everyDayAt330 = SCHEDULE.scheduleJob({hour: 3, minute: 30}, function(){
 	if(!initRuned) return;
 	if(MAINTAINCE || SHUTTING_DOWN) return;
 
-/*	for(var i = 0; i < workers.length; i++){
+	for(var i = 0; i < workers.length; i++){
 		if(workers[i].main){
 			workers[i].send({type: 'updateOn330'});
 		}
-	}*/
+	}
 });
 
 SCHEDULE.scheduleJob({minute: 15}, function(){
@@ -52,7 +52,7 @@ SCHEDULE.scheduleJob({minute: 15}, function(){
 
 	for(var i = 0; i < workers.length; i++){
 		if(workers[i].main){
-			//workers[i].send({type: 'updateRandomSeriesMovies'});
+			workers[i].send({type: 'updateRandomSeriesMovies'});
 		}
 	}
 });
@@ -68,7 +68,7 @@ SCHEDULE.scheduleJob(rule, function(){
 
 	for(var i = 0; i < workers.length; i++){
 		if(workers[i].main){
-		//	workers[i].send({type: 'updatePopularDay'});
+			workers[i].send({type: 'updatePopularDay'});
 		}
 	}
 });
@@ -79,7 +79,7 @@ SCHEDULE.scheduleJob({hour: 6, minute: 0, dayOfWeek: 0}, function(){
 
 	for(var i = 0; i < workers.length; i++){
 		if(workers[i].main){
-			//workers[i].send({type: 'updatePopularWeek'});
+			workers[i].send({type: 'updatePopularWeek'});
 		}
 	}
 });
@@ -90,7 +90,7 @@ SCHEDULE.scheduleJob({hour: 6, minute: 0, dayOfWeek: 4}, function(){
 
 	for(var i = 0; i < workers.length; i++){
 		if(workers[i].main){
-	//		workers[i].send({type: 'updatePopularWeek'});
+			workers[i].send({type: 'updatePopularWeek'});
 		}
 	}
 });
@@ -102,7 +102,7 @@ SCHEDULE.scheduleJob({hour: 7, minute: 0, dayOfWeek: 6}, function(){
 
 	for(var i = 0; i < workers.length; i++){
 		if(workers[i].main){
-		//	workers[i].send({type: 'updatePopularMonth'});
+			workers[i].send({type: 'updatePopularMonth'});
 		}
 	}
 });

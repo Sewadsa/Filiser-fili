@@ -1,4 +1,4 @@
-process.env.NODE_ENV = 'development';
+process.env.NODE_ENV = 'production';
 global.is_dev_mode = process.env.NODE_ENV=='development';
 
 CLUSTER = require('cluster');

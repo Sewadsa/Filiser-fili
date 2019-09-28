@@ -1065,7 +1065,7 @@ UTILS.editPoster = function(req, res, CB)
 				translator.on('end', function(){
 					FS.unlinkSync(path);
 
-					var pathOld = PATH.join(BASE_PATH, 'app/public/'+item.poster);
+					var pathOld = PATH.join(BASE_PATH, 'data/public/'+item.poster);
 
 					FS.unlinkSync(pathOld);
 
@@ -1321,7 +1321,7 @@ UTILS.removeViewedLogs = function(cb)
 	var now = new MOMENT();
 	var date = now.subtract(30, 'd');
 
-	viewedModel.remove({ date: { $lt: date.toDate() } })
+	viewedModel.deleteMany({ date: { $lt: date.toDate() } })
 	.exec(function(err, removed){
 		if(err) err_log('UTILS.removeViewedLogs');
 		else{
@@ -1338,7 +1338,7 @@ UTILS.removeLinkLogs = function(cb)
 	var now = new MOMENT();
 	var date = now.subtract(8, 'h');
 
-	linkLogsModel.remove({ $and: [ {first_get: { $lt: date.toDate() }}, {captcha: false} ]})
+	linkLogsModel.deleteMany({ $and: [ {first_get: { $lt: date.toDate() }}, {captcha: false} ]})
 	.exec(function(err, removed){
 		if(err) err_log('UTILS.removeLinkLogs');
 		else{
@@ -1427,7 +1427,7 @@ UTILS.doBackup = function(cb)
 		if(err){ cb(); return; }
 
 		exec('sudo /usr/bin/mongodump --host 192.168.0.105 --db filiser --port 17027 -u sarda -p Pb4NAYmuZF1tBNujlkYowSax --authenticationDatabase filiser --out '+now_path, function(e, stdout, stderr){
-			exec('sudo tar -cf '+PATH.join(now_path, 'uploads.tar')+' '+PATH.join('app/public/uploads'), function(e, stdout, stderr){
+			exec('sudo tar -cf '+PATH.join(now_path, 'uploads.tar')+' '+PATH.join('data/public/uploads'), function(e, stdout, stderr){
 				exec('sudo tar -cf '+PATH.join(BASE_PATH, 'data/backup/'+now+'.tar')+' '+PATH.join(BASE_PATH, 'data/backup/'+now), function(e, stdout, stderr){
 					exec('sudo rm -R '+PATH.join(BASE_PATH, 'data/backup/'+now), function(e, stdout, stderr){
 						exec('rclone sync '+PATH.join(BASE_PATH, 'data/backup/')+' remote:web_backup', function(e, stdout, stderr){
@@ -1549,7 +1549,7 @@ UTILS.createRandomSeriesMovies = function(CB)
 					});
 				}
 
-				seriesModel.updatMany({ drawn_num: { $gt: 0 } }, { $set: {drawn_num: 0}}, {multi: true}, function(err){
+				seriesModel.updateMany({ drawn_num: { $gt: 0 } }, { $set: {drawn_num: 0}}, {multi: true}, function(err){
 					if(err){ callback(true); return; }
 					queue(aggregated, 0, function(){
 						callback(null);

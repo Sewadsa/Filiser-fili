@@ -572,13 +572,14 @@ USER.remind = function(req, res, CB)
 					//var transport = NODEMAILER.createTransport(smtpConfig);
 
 					var data = {
-						from : HOSTNAME+' kontakt@'+HOSTNAME,
+						from : 'noreply@'+HOSTNAME,
 						to :  user.email,
 						subject : 'Zmiana hasła',
-						message  : html,
+						text : html,
+						html  : html,
 					}
 
-					GMAIL.sendEmail(data, function(err){
+					SENDGRID.sendEmail(data, function(err){
 						if(err){ self.send(); return; }
 						self.send(0);
 					});
