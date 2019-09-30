@@ -1,3 +1,5 @@
+process.env.NODE_ENV = 'production';  // production or development
+
 NUM_OF_PROCESS = 2;
 
 HOST = IP = '';

@@ -1,6 +1,3 @@
-process.env.NODE_ENV = 'production';
-global.is_dev_mode = process.env.NODE_ENV=='development';
-
 CLUSTER = require('cluster');
 PATH = require('path');
 ASYNC = require('async');
@@ -14,6 +11,7 @@ BASE_PATH = PATH.resolve(__dirname, '..');
 PUBLIC_PATH = PATH.join(BASE_PATH, '/data/public');
 
 require(PATH.join(BASE_PATH, 'libs/config.js'));
+global.is_dev_mode = process.env.NODE_ENV=='development';
 
 if(CLUSTER.isMaster){
 	LOCK_FACTURING = false;
