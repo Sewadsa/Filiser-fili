@@ -999,7 +999,7 @@ USER.changeAvatar = function(req, res, CB)
 		if(base64ImageArray.length!=2){ self.send(); return; }
 
 		var base64Image = base64ImageArray.pop();
-		var imageBuffer = new Buffer(base64Image, 'base64');
+		var imageBuffer = new Buffer.from(base64Image, 'base64');
 
 		var tmp_filename = 'tmp_'+SHORT_ID.generate()+'.'+self.data.ext;
 		var tmp_path = PATH.join(PUBLIC_PATH, 'uploads/tmp/'+tmp_filename);

@@ -10,7 +10,7 @@ PORT_SSL = 443;
 SECRET = '';
 DATABASE = {
 	url: 'mongodb://[LOGIN]:[PASSWORD]@127.0.0.1:17027/filiser',
-	options: { useNewUrlParser: true, auto_reconnect: true, keepAlive: true, connectTimeoutMS: 5000, useCreateIndex: true, useUnifiedTopology: true },
+	options: { useNewUrlParser: true, auto_reconnect: true, keepAlive: true, connectTimeoutMS: 5000, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: false },
 }
 SMTP = {
 	host: '',

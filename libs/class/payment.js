@@ -230,7 +230,9 @@ PAYMENT.resTransfer = function(req, res, CB)
 
 
 	if(signature!=signatureReq){
-		err_log('signature nie jest takie samo')
+		err_log('przelew: signature nie jest takie samo');
+		console.log(self.data);
+		console.log(getIP(req));
 		self.send();
 		return;
 	}
@@ -802,7 +804,9 @@ PAYMENT.resTransferDirectBilling = function(req, res, CB)
 	var signature = CRYPTO.createHash('sha256').update(string).digest("hex");
 
 	if(signature!=signatureReq){
-		err_log('signature nie jest takie samo')
+		err_log('direct-billing: signature nie jest takie samo');
+		console.log(self.data);
+		console.log(getIP(req));
 		self.send();
 		return;
 	}
