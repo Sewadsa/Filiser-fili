@@ -251,13 +251,14 @@ PAYMENT.resTransfer = function(req, res, CB)
 
 		if(parseFloat(payment.cost)!==amountPaid){
 			var email_data = {
-				from : HOSTNAME+' noreply@'+HOSTNAME,
+				from : 'noreply@'+HOSTNAME,
 				to :  'sewadsa@hapz.pl',
 				subject : 'Wystąpił problem z kwotą wpłaty',
-				message  : 'Payment: '+transactionId+' '+payment.cost+'!='+amountPaid
+				text  : 'Payment: '+transactionId+' '+payment.cost+'!='+amountPaid,
+				html  : 'Payment: '+transactionId+' '+payment.cost+'!='+amountPaid,
 			}
 
-			GMAIL.sendEmail(email_data, function(err){ });
+			SENDGRID.sendEmail(email_data, function(err){ });
 			err_log('Payment: '+transactionId+' '+payment.cost+'!='+amountPaid);
 		}
 
@@ -367,13 +368,14 @@ PAYMENT.checkPaymentApplied = function(cb)
 		PAYMENT.postNewFacture(facture_data, function(err, data){
 			if(err){
 				var email_data = {
-					from : HOSTNAME+' noreply@'+HOSTNAME,
+					from : 'noreply@'+HOSTNAME,
 					to :  'sewadsa@hapz.pl',
 					subject : 'Wystąpił problem z fakturą',
-					message  : 'Podczas dodawania faktury wystapił błąd. Numer transakcji: '+payment.tr_id,
+					text  : 'Podczas dodawania faktury wystapił błąd. Numer transakcji: '+payment.tr_id,
+					html  : 'Podczas dodawania faktury wystapił błąd. Numer transakcji: '+payment.tr_id,
 				}
 
-				GMAIL.sendEmail(email_data, function(err){ });
+				SENDGRID.sendEmail(email_data, function(err){ });
 				cb(); 
 				return;
 			}
@@ -382,13 +384,14 @@ PAYMENT.checkPaymentApplied = function(cb)
 				var arr = JSON.parse(data);
 			}catch(e){
 				var email_data = {
-					from : HOSTNAME+' noreply@'+HOSTNAME,
+					from : 'noreply@'+HOSTNAME,
 					to :  'sewadsa@hapz.pl',
 					subject : 'Wystąpił problem z fakturą',
-					message  : 'Podczas parsowania faktury wystąpił błąd.',
+					text  : 'Podczas parsowania faktury wystąpił błąd.',
+					html  : 'Podczas parsowania faktury wystąpił błąd.',
 				}
 
-				GMAIL.sendEmail(email_data, function(err){ });
+				SENDGRID.sendEmail(email_data, function(err){ });
 				cb(); 
 				return;
 			}
@@ -400,39 +403,42 @@ PAYMENT.checkPaymentApplied = function(cb)
 			PAYMENT.setFacturePaid(date.format('YYYY-MM-DD'), id, function(err, data){
 /*				if(err){
 					var email_data = {
-						from : HOSTNAME+' noreply@'+HOSTNAME,
+						from : 'noreply@'+HOSTNAME,
 						to :  'sewadsa@hapz.pl',
 						subject : 'Wystąpił problem z fakturą',
-						message  : 'Podczas ustawiania faktury jako zapłacona wystapił błąd. Numer faktury: '+number,
+						text  : 'Podczas ustawiania faktury jako zapłacona wystapił błąd. Numer faktury: '+number,
+						html  : 'Podczas ustawiania faktury jako zapłacona wystapił błąd. Numer faktury: '+number,
 					}
 
-					GMAIL.sendEmail(email_data, function(err){ });
+					SENDGRID.sendEmail(email_data, function(err){ });
 					return;
 				}*/
 
 				paymentModel.updateOne({_id: payment._id}, { factured: true }, function(err, updated_doc){
 					if(err){
 						var email_data = {
-							from : HOSTNAME+' noreply@'+HOSTNAME,
+							from : 'noreply@'+HOSTNAME,
 							to :  'sewadsa@hapz.pl',
 							subject : 'Wystąpił problem z fakturą',
-							message  : 'Podczas ustawiania faktury jako zapłacona. Numer crc: '+payment.crc,
+							text  : 'Podczas ustawiania faktury jako zapłacona. Numer crc: '+payment.crc,
+							html  : 'Podczas ustawiania faktury jako zapłacona. Numer crc: '+payment.crc,
 						}
 
-						GMAIL.sendEmail(email_data, function(err){ });
+						SENDGRID.sendEmail(email_data, function(err){ });
 						cb(); 
 						return;
 					}
 					if(updated_doc.n!=1 && updated_doc.nModified!=1 && updated_doc.ok!=1){
 						err_log('PAYMENT.checkPaymentPaid while set factured'); 
 						var email_data = {
-							from : HOSTNAME+' noreply@'+HOSTNAME,
+							from : 'noreply@'+HOSTNAME,
 							to :  'sewadsa@hapz.pl',
 							subject : 'Wystąpił problem z fakturą',
-							message  : 'Podczas ustawiania faktury jako zapłacona. Numer crc: '+payment.crc,
+							text  : 'Podczas ustawiania faktury jako zapłacona. Numer crc: '+payment.crc,
+							html  : 'Podczas ustawiania faktury jako zapłacona. Numer crc: '+payment.crc,
 						}
 
-						GMAIL.sendEmail(email_data, function(err){ });
+						SENDGRID.sendEmail(email_data, function(err){ });
 						cb(); 
 						return;
 					}else{
@@ -818,19 +824,20 @@ PAYMENT.resTransferDirectBilling = function(req, res, CB)
 
 		if(parseFloat(payment.cost)!==brutto){
 			var email_data = {
-				from : HOSTNAME+' noreply@'+HOSTNAME,
+				from : 'noreply@'+HOSTNAME,
 				to :  'sewadsa@hapz.pl',
 				subject : 'Wystąpił problem z kwotą wpłaty',
-				message  : 'Payment: '+pid+' '+payment.cost+'!='+price
+				text  : 'Payment: '+pid+' '+payment.cost+'!='+price,
+				html : 'Payment: '+pid+' '+payment.cost+'!='+price,
 			}
 
-			GMAIL.sendEmail(email_data, function(err){ });
+			SENDGRID.sendEmail(email_data, function(err){ });
 			err_log('Payment: '+pid+' '+payment.cost+'!='+price);
 		}
 
 		var date = MOMENT();
 
-		paymentModel.update({crc: control}, { tr_id: pid, tr_date: date, paid: true }, function(err){
+		paymentModel.updateOne({crc: control}, { tr_id: pid, tr_date: date, paid: true }, function(err){
 			if(err){ self.send(); return; }
 			self.send(0);
 		});
