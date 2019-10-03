@@ -1976,7 +1976,7 @@ app.get('/embed', function(req, res){
 				return MOMENT.utc(left.date).diff(MOMENT.utc(right.date))
 			});
 
-			var num_block = 4;
+			var num_block = 2;
 			var viewedsCount = vieweds.length;
 
 			var need_check = true;
