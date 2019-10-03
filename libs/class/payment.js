@@ -27,22 +27,8 @@ PAYMENT.newTransfer = function(req, res, CB)
 	if(self.data.amount==null){ self.send(); return; }
 	else if(!VALIDATOR.isFloat(self.data.amount)){ self.send(); return; }
 
-/*	if(self.data.control==null){ self.send(); return; }
-	else if(self.data.control.length<3){ self.send(); return; }
-
-	if(self.data.signature==null){ self.send(); return; }
-	else if(!VALIDATOR.isMD5(self.data.signature)){ self.send(); return; }*/
-
-/*	var string = RUSHP_ID+RUSHP_HASH+self.data.amount;
-
-	var md5sum = CRYPTO.createHash('md5').update(string).digest("hex");
-	
-	if(self.data.signature!=md5sum){ self.send(); return; }*/
 
 	self.data.user_id = String(req.INJECT_DATA.user_status.data._id);
-
-/*	var kwota = (self.data.p24_amount/100).toFixed(2);
-	console.log(kwota)*/
 
 	var time = PREMIUM_TRANSFER_COST_TO_TIME[self.data.amount];
 	if(!time){ self.send(); return; }
@@ -69,35 +55,59 @@ PAYMENT.newTransfer = function(req, res, CB)
 		'signature': signature,
 	}
 
-	paymentModel.countDocuments({crc: crc})
-	.exec(function(err, len){
+	userModel.find({ _id: MONGO.Types.ObjectId(self.data.user_id) })
+	.limit(1)
+	.lean()
+	.select('premium_expire')
+	.exec(function(err, user){
 		if(err){ self.send(); return; }
+		if(user.length==0){ self.send(); return; }
+		var user = user[0];
 
-		if(len>0){ self.send(1, 'Proszę odswieżyć stronę i spróbować ponownie.'); return; }
-
-		requestPostJson('https', 'https://secure.rushpay.pl/api/v1/transfer/generate', query, function(err, answ){
-			if(err){ self.send(); return; }
-			if(answ.errorCode && answ.errorCode!=200){ self.send(1, 'Wystąpił błąd. Proszę spróbować później.'); return; }
-
-
-			var tr_id = answ.transactionId;
-			var redir = answ.url;
-
-			var query2 = {
-				_id : MONGO.Types.ObjectId(),
-				user : MONGO.Types.ObjectId(self.data.user_id),
-				cost : self.data.amount,
-				crc : crc,
-				tr_id : tr_id,
-				paid: false,
-				factured: false,
-				type: 0, // 0 - transfer 1 - direct billing
+		var premium_expire = user.premium_expire || null;
+		if(premium_expire){
+			var date = MOMENT(premium_expire);
+			var now = MOMENT();
+			if(date.isAfter(now)){
+				var days = date.diff(now, 'days');
+				var willbe = time+days;
+				if(willbe>45){
+					self.send(1, `Konto premium może być ważne maksymalnie przez 45 dni. Wróć za ${willbe-45} dni lub wybierz tańszy pakiet.`); return;
+				}
 			}
-			
-			paymentModel.create(query2, function(err, payment){
+		}
+
+
+		paymentModel.countDocuments({crc: crc})
+		.exec(function(err, len){
+			if(err){ self.send(); return; }
+
+			if(len>0){ self.send(1, 'Proszę odswieżyć stronę i spróbować ponownie.'); return; }
+
+			requestPostJson('https', 'https://secure.rushpay.pl/api/v1/transfer/generate', query, function(err, answ){
 				if(err){ self.send(); return; }
+				if(answ.errorCode && answ.errorCode!=200){ self.send(1, 'Wystąpił błąd. Proszę spróbować później.'); return; }
+
+
+				var tr_id = answ.transactionId;
+				var redir = answ.url;
+
+				var query2 = {
+					_id : MONGO.Types.ObjectId(),
+					user : MONGO.Types.ObjectId(self.data.user_id),
+					cost : self.data.amount,
+					crc : crc,
+					tr_id : tr_id,
+					paid: false,
+					factured: false,
+					type: 0, // 0 - transfer 1 - direct billing
+				}
 				
-				self.send(0, {url:redir});
+				paymentModel.create(query2, function(err, payment){
+					if(err){ self.send(); return; }
+					
+					self.send(0, {url:redir});
+				});
 			});
 		});
 	});
@@ -685,47 +695,69 @@ PAYMENT.newTransferDirectBilling = function(req, res, CB)
 		'signature': signature,
 	}
 
-
-	paymentModel.countDocuments({crc: crc})
-	.exec(function(err, len){
+	userModel.find({ _id: MONGO.Types.ObjectId(self.data.user_id) })
+	.limit(1)
+	.lean()
+	.select('premium_expire')
+	.exec(function(err, user){
 		if(err){ self.send(); return; }
+		if(user.length==0){ self.send(); return; }
+		var user = user[0];
 
-		if(len>0){ self.send(1, 'Proszę odswieżyć stronę i spróbować ponownie.'); return; }
-
-
-		var auth = 'Basic ' + Buffer.from(RUSHP_LOGIN_DIRECT_BILLING + ':' + RUSHP_PASS_DIRECT_BILLING).toString('base64');
-
-		var add_headers = {
-			'Authorization': auth,
+		var premium_expire = user.premium_expire || null;
+		if(premium_expire){
+			var date = MOMENT(premium_expire);
+			var now = MOMENT();
+			if(date.isAfter(now)){
+				var days = date.diff(now, 'days');
+				var willbe = time+days;
+				if(willbe>45){
+					self.send(1, `Konto premium może być ważne maksymalnie przez 45 dni. Wróć za ${willbe-45} dni lub wybierz tańszy pakiet.`); return;
+				}
+			}
 		}
 
-		requestPostJson('https', 'https://www.rushpay.pl/direct-biling/', query, function(err, answ){
+		paymentModel.countDocuments({crc: crc})
+		.exec(function(err, len){
 			if(err){ self.send(); return; }
-			if(answ.status=='error'){ console.error(answ.message); self.send(1, 'Wystąpił błąd. Proszę spróbować później.'); return; }
-			else if(answ.status=='success' && answ.code==200){
-				var clientURL = answ.clientURL
 
-			//	var tr_id = answ.transactionId;
+			if(len>0){ self.send(1, 'Proszę odswieżyć stronę i spróbować ponownie.'); return; }
 
-				var query2 = {
-					_id : MONGO.Types.ObjectId(),
-					user : MONGO.Types.ObjectId(self.data.user_id),
-					cost : self.data.amount,
-					crc : crc,
-					//tr_id : tr_id,
-					paid: false,
-					applied: false,
-					type: 1, // 0 - transfer 1 - direct billing
-				}
-				
-				paymentModel.create(query2, function(err, payment){
-					if(err){ self.send(); return; }
-					
-					self.send(0, {url:clientURL});
-				});
 
+			var auth = 'Basic ' + Buffer.from(RUSHP_LOGIN_DIRECT_BILLING + ':' + RUSHP_PASS_DIRECT_BILLING).toString('base64');
+
+			var add_headers = {
+				'Authorization': auth,
 			}
-		}, add_headers);
+
+			requestPostJson('https', 'https://www.rushpay.pl/direct-biling/', query, function(err, answ){
+				if(err){ self.send(); return; }
+				if(answ.status=='error'){ console.error(answ.message); self.send(1, 'Wystąpił błąd. Proszę spróbować później.'); return; }
+				else if(answ.status=='success' && answ.code==200){
+					var clientURL = answ.clientURL
+
+				//	var tr_id = answ.transactionId;
+
+					var query2 = {
+						_id : MONGO.Types.ObjectId(),
+						user : MONGO.Types.ObjectId(self.data.user_id),
+						cost : self.data.amount,
+						crc : crc,
+						//tr_id : tr_id,
+						paid: false,
+						applied: false,
+						type: 1, // 0 - transfer 1 - direct billing
+					}
+					
+					paymentModel.create(query2, function(err, payment){
+						if(err){ self.send(); return; }
+						
+						self.send(0, {url:clientURL});
+					});
+
+				}
+			}, add_headers);
+		});
 	});
 }
 
