@@ -3777,7 +3777,7 @@ app.get('/assets/js/scripts.'+VERSION+'.js', function(req, res){
 
 	res.set('content-type', 'application/javascript; charset=UTF-8');
 
-	if(CACHE_SCRIPTS1!=null){ res.send(CACHE_SCRIPTS1); return; }
+	if(CACHE_SCRIPTS1!=null && !is_dev_mode){ res.send(CACHE_SCRIPTS1); return; }
 
 	FS.readFile(PATH.join(PUBLIC_PATH, 'assets/js/scripts.js'), 'utf8', function(err, content) {
 		if(err){ res.status(500).end('Internal Error'); return; }
@@ -3796,7 +3796,7 @@ app.get('/assets/js/scripts.panel.'+VERSION+'.js', function(req, res){
 
 	res.set('content-type', 'application/javascript; charset=UTF-8');
 
-	if(CACHE_SCRIPTS2!=null){ res.send(CACHE_SCRIPTS2); return; }
+	if(CACHE_SCRIPTS2!=null && !is_dev_mode){ res.send(CACHE_SCRIPTS2); return; }
 
 	FS.readFile(PATH.join(PUBLIC_PATH, 'assets/js/scripts.panel.js'), 'utf8', function(err, content) {
 		if(err){ res.status(500).end('Internal Error'); return; }
@@ -3814,7 +3814,7 @@ app.get('/assets/css/style.'+VERSION+'.css', function(req, res){
 
 	res.set('content-type', 'text/css; charset=UTF-8');
 
-	if(CACHE_CSS1!=null){ res.send(CACHE_CSS1); return; }
+	if(CACHE_CSS1!=null && !is_dev_mode){ res.send(CACHE_CSS1); return; }
 
 	FS.readFile(PATH.join(PUBLIC_PATH, 'assets/css/style.css'), 'utf8', function(err, content) {
 		if(err){ res.status(500).end('Internal Error'); return; }
@@ -3832,7 +3832,7 @@ app.get('/assets/css/style.mobile.'+VERSION+'.css', function(req, res){
 
 	res.set('content-type', 'text/css; charset=UTF-8');
 
-	if(CACHE_CSS2!=null){ res.send(CACHE_CSS2); return; }
+	if(CACHE_CSS2!=null && !is_dev_mode){ res.send(CACHE_CSS2); return; }
 
 	FS.readFile(PATH.join(PUBLIC_PATH, 'assets/css/style_mobile.css'), 'utf8', function(err, content) {
 		if(err){ res.status(500).end('Internal Error'); return; }
