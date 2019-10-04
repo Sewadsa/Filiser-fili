@@ -1751,8 +1751,6 @@ SERIES.addLink = function(req, res, CB)
 							for(var j = 0, len2 = episode.links.length; j < len2; j++){
 								if(link.hosting==episode.links[j].hosting && self.data.type==episode.links[j].type && quality==episode.links[j].quality && String(self.data.user_id)==String(episode.links[j].user._id)){
 									self.send(1, 'Dodałeś/aś już link '+link.hosting+' do '+VIDEO_TYPES_LIST_ASSOCIATE[self.data.type]+'<br> w jakości '+VIDEO_QUALITY_ASSOCIATE[quality]+'.'); return;
-								}else if(link.hosting==episode.links[j].hosting && self.data.type==episode.links[j].type && quality==episode.links[j].quality && ip==(episode.links[j].user.ip?episode.links[j].user.ip:user.ip)){
-									self.send(1, 'Z twojego adresu IP dodano już link '+link.hosting+' do '+VIDEO_TYPES_LIST_ASSOCIATE[self.data.type]+'<br> w jakości '+VIDEO_QUALITY_ASSOCIATE[quality]+'.'); return;
 								}
 							}
 
@@ -1777,7 +1775,6 @@ SERIES.addLink = function(req, res, CB)
 							video_id : link.id,
 							status : status,
 							user : MONGO.Types.ObjectId(self.data.user_id),
-							ip : ip,
 							premium : premium_link,
 							last_check : MOMENT("2000-01-01T00:00").toISOString(),
 							series_id : MONGO.Types.ObjectId(episode.series_id._id),

@@ -1023,8 +1023,6 @@ MOVIE.addLink = function(req, res, CB)
 							for(var j = 0, len2 = movie.links.length; j < len2; j++){
 								if(link.hosting==movie.links[j].hosting && self.data.type==movie.links[j].type && quality==movie.links[j].quality && String(self.data.user_id)==String(movie.links[j].user._id)){
 									self.send(1, 'Dodałeś/aś już link '+link.hosting+' do '+VIDEO_TYPES_LIST_ASSOCIATE[self.data.type]+'<br> w jakości '+VIDEO_QUALITY_ASSOCIATE[quality]+'.'); return;
-								}else if(link.hosting==movie.links[j].hosting && self.data.type==movie.links[j].type && quality==movie.links[j].quality && ip==(movie.links[j].user.ip?movie.links[j].user.ip:user.ip)){
-									self.send(1, 'Z twojego adresu IP dodano już link '+link.hosting+' do '+VIDEO_TYPES_LIST_ASSOCIATE[self.data.type]+'<br> w jakości '+VIDEO_QUALITY_ASSOCIATE[quality]+'.'); return;
 								}
 							}
 
@@ -1049,7 +1047,6 @@ MOVIE.addLink = function(req, res, CB)
 							video_id : link.id,
 							status : status,
 							user : MONGO.Types.ObjectId(self.data.user_id),
-							ip : ip,
 							premium : premium_link,
 							last_check : MOMENT("2000-01-01T00:00").toISOString(),
 							movie_id : MONGO.Types.ObjectId(movie._id),

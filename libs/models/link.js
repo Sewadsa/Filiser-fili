@@ -10,7 +10,6 @@ var schema = new MONGO.Schema({
 	report : { type: String, default: '' },
 	report_desc : { type: String, default: '' },
 	user : { type: MONGO.Schema.Types.ObjectId, ref: 'User'},
-	ip : { type: String, default: '' },
 	premium : { type: Boolean, default: false },
 
 	status : { type: String, default: 'WAIT' },
@@ -25,7 +24,6 @@ schema.index({ date: -1 });
 schema.index({ video_id: 1 });
 schema.index({ hosting: 1 });
 schema.index({ last_check: 1 });
-schema.index({ ip: 1 });
 schema.index({ status: -1});
 schema.index({ series_id: 1 });
 schema.index({ movie_id: 1 });
