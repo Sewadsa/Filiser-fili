@@ -1791,7 +1791,7 @@ app.get('/embed', function(req, res){
 				}
 
 				if(link.premium && link.hosting=='premium'){
-					var hosts_list = ['zgdat02', 'zgdat08', 'zgdat09', 'xdat01', 'xdat04']
+					var hosts_list = ['zgdat02', 'zgdat08', 'zgdat09']
 					var rand = Math.floor(Math.random() * hosts_list.length);
 					var dm = hosts_list[rand];
 
