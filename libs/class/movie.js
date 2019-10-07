@@ -964,6 +964,7 @@ MOVIE.countView = function(req, res, CB)
 
 		movieModel.countDocuments({ _id: MONGO.Types.ObjectId(self.data.code)})
 		.exec(function(err, movies){
+
 			if(err){ self.send(); return; }
 			if(movies==0){ self.send(); return; }
 
