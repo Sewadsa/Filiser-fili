@@ -641,7 +641,7 @@ app.post('/viewed', function(req, res){
 		res.cookie('adbdotc', value, { maxAge: 60*60*24*365*1000, httpOnly: true });
 	}*/
 
-	if(req.body.code2==''){
+	if(!req.body.code2 || req.body.code2==''){
 		MOVIE.countView(req, res, function(answer){
 			res.json(answer);
 		});

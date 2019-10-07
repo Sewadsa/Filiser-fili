@@ -1,3 +1,0 @@
-Remove ip from links
-
-db.getCollection('links').update({}, {$unset: {ip: 1}}, {multi: true})
