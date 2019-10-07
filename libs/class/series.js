@@ -2229,12 +2229,12 @@ SERIES.countView = function(req, res, CB)
 		else if(typeof self.data.code2!='string'){ self.send(); return; }
 		else if(!VALIDATOR.isMongoId(self.data.code2)){ self.send(); return; }
 
-		if(self.data.adb==null){ self.send(); return; }
-		else if(typeof self.data.adb!='string'){ self.send(); return; }
-		else if(self.data.adb!='true' && self.data.adb!='false'){ self.send(); return; }
+		//if(self.data.adb==null){ self.send(); return; }
+		//else if(typeof self.data.adb!='string'){ self.send(); return; }
+		//else if(self.data.adb!='true' && self.data.adb!='false'){ self.send(); return; }
 
-		var adb = false;
-		if(self.data.adb=='true') adb = true;
+		//var adb = false;
+		//if(self.data.adb=='true') adb = true;
 
 		var ip = getIP(req);
 		if(!ip || ip.length==0){ self.send(); return; }
@@ -2270,7 +2270,7 @@ SERIES.countView = function(req, res, CB)
 						ip : ip,
 						episode_id : MONGO.Types.ObjectId(self.data.code2),
 						series_id: MONGO.Types.ObjectId(self.data.code),
-						adb: adb,
+						//adb: adb,
 					}
 
 					viewedModel.create(query, function(view){

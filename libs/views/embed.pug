@@ -476,36 +476,11 @@ html
 
 			script.
 				var setViewed = function(){
-					adb = false;
-					var ifr = document.createElement('iframe');
-					ifr.height = '1px';
-					ifr.width = '1px';
-					ifr.id = 'ads-iframe';
-					ifr.src = 'https://s.spolecznosci.net/js/core2-min.js';
-
-					document.body.appendChild(ifr);
-
-					var dv = document.createElement('div');
-					dv.style.height = '1px';
-					dv.style.width = '1px';
-					dv.id = 'ads-iframe2';
-					dv.className = 'ad reklama';
-
-					document.body.appendChild(dv);
-
-					setTimeout(function(){
-						var ifr = document.getElementById('ads-iframe');
-						if(ifr.style.display=='none' || ifr.style.display=='hidden' || ifr.style.visibility=='hidden' || ifr.offsetHeight==0) adb = true;
-
-						var dv = document.getElementById('ads-iframe2');
-						if(dv.style.display=='none' || dv.style.display=='hidden' || dv.style.visibility=='hidden' || dv.offsetHeight==0) adb = true;
-
-						$.post('/viewed', {code:'!{code}', code2:'!{code2}', adb: adb}, function(res){
-							if(res.data.setViewed){
-								$('.setViewedBtn', window.parent.document).closest('.m_btn').addClass('m_btnActive')
-							}
-						}).fail(function(){});
-					}, 500);
+					$.post('/viewed', {code:'!{code}', code2:'!{code2}'}, function(res){
+						if(res.data.setViewed){
+							$('.setViewedBtn', window.parent.document).closest('.m_btn').addClass('m_btnActive')
+						}
+					}).fail(function(){});
 				}
 
 				setTimeout(setViewed, 10*60*1000);
