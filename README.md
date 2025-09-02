@@ -14,3 +14,8 @@ rozwiązania techniczne stosowane w tamtym okresie, takie jak:
 - katalogowanie treści,
 - odtwarzacz wideo osadzony w przeglądarce,
 - panel administracyjny do zarządzania bazą danych.
+
+- Backend: Node.js v12
+- Frontend: PUG, SASS
+- Baza danych: MongoDB
+==
