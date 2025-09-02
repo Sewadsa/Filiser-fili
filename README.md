@@ -14,6 +14,9 @@ rozwiązania techniczne stosowane w tamtym okresie, takie jak:
 - katalogowanie treści,
 - odtwarzacz wideo osadzony w przeglądarce,
 - panel administracyjny do zarządzania bazą danych.
+- profile użytkowników
+- system przyjmowania płatności / konta premium
+- oraz wiele wiele więcej ciekawostek
 
 ## Technologie
 
