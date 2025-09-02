@@ -21,3 +21,10 @@ rozwiązania techniczne stosowane w tamtym okresie, takie jak:
 - Frontend: PUG, SASS
 - Baza danych: MongoDB
 ==
+
+## Od autora
+
+To był mój pierwszy projekt w Node.js. Tworzyłem go jednocześnie się ucząc, 
+jest tu wiele rzeczy, które dziś można nazwać anty pattern. 
+Jak callback hell czy brak async await.
+
